@@ -1,0 +1,1472 @@
+<?php require_once dirname(__DIR__) . '/php/portal_guard.php'; requirePortalRole('employee'); ?>
+<!DOCTYPE html>
+<html lang="en" data-portal-role="employee">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../js/portal-security.js" defer></script>
+
+<title>Quadra Cafe HRMS - Employee Portal</title>
+
+<link rel="stylesheet" href="../css/Employee.css?v=20260716-documents1">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles">
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+</div>
+
+<!-- Decorative corner accents -->
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<div class="dashboard-wrapper">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-wrapper">
+        <div class="sidebar-logo-glow"></div>
+        <img src="../images/logo.png" class="sidebar-logo" alt="Quadra Cafe">
+      </div>
+      <h3 class="sidebar-brand">Quadra Cafe</h3>
+      <span class="sidebar-sub">Employee Portal</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-page="timeclock">
+        <i class="fas fa-clock"></i>
+        <span>Time In / Time Out</span>
+      </a>
+      <a href="#" class="nav-item" data-page="payslip">
+        <i class="fas fa-file-invoice"></i>
+        <span>Payslip</span>
+      </a>
+      <a href="#" class="nav-item" data-page="leave">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Leave Form</span>
+      </a>
+      <a href="#" class="nav-item" data-page="profile">
+        <i class="fas fa-user-edit"></i>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name" id="empSideName">Employee</span>
+          <span class="sidebar-user-role" id="empSideRole">Employee</span>
+        </div>
+      </div>
+      <a href="#" class="sidebar-logout" title="Sign Out" onclick="showSignoutModal(); return false;">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="topbar-info">
+        <i class="fas fa-building"></i>
+        <span>Quadra Cafe HRMS — Employee Portal</span>
+      </div>
+
+      <div class="topbar-right">
+        <div class="topbar-date">
+          <i class="fas fa-calendar-day"></i>
+          <span id="currentDate"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================================ -->
+    <!-- DASHBOARD                                                        -->
+    <!-- ================================================================ -->
+    <div class="page-content active" id="page-dashboard">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Dashboard</h1>
+          <p class="page-subtitle" id="dashGreeting">Loading your account...</p>
+        </div>
+      </div>
+
+      <!-- Employee Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-green">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Days Present This Month</span>
+            <span class="stat-value" id="daysPresent">0</span>
+            <span class="stat-change stat-up" id="attendanceRate">No attendance records yet</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-red">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Lates This Month</span>
+            <span class="stat-value" id="latesCount">0</span>
+            <span class="stat-change stat-down" id="lastLate">No late records</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-gold">
+            <i class="fas fa-coffee"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Work Hours This Week</span>
+            <span class="stat-value" id="workHours">0</span>
+            <span class="stat-change stat-up">hrs logged</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-blue">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Leave Credits Remaining</span>
+            <span class="stat-value" id="leaveCredits">0</span>
+            <span class="stat-change stat-up">No leave-credit record</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Row -->
+      <div class="card" style="margin-bottom: 30px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+        </div>
+        <div class="card-body" style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <button class="btn btn-green" onclick="switchPage('timeclock')">
+            <i class="fas fa-clock"></i> Time In / Out
+          </button>
+          <button class="btn btn-gold" onclick="switchPage('payslip')">
+            <i class="fas fa-file-invoice"></i> View Payslip
+          </button>
+          <button class="btn btn-outline" onclick="switchPage('leave')">
+            <i class="fas fa-calendar-plus"></i> Request Leave
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Activity & Schedule -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+
+        <!-- My Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-history"></i> My Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <div class="activity-list" id="employeeRecentActivity">
+              <div class="activity-item"><div class="activity-info"><span class="activity-text">No attendance activity yet.</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Schedule -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-calendar-week"></i> This Week's Schedule</h3>
+          </div>
+          <div class="card-body">
+            <div class="event-list" id="employeeScheduleList">
+              <div class="event-item"><div class="event-info"><span class="event-title">No schedule assigned</span><span class="event-desc">Assigned shifts will appear here when available.</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- TIME IN / TIME OUT                                                -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-timeclock">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Time In / Time Out</h1>
+          <p class="page-subtitle">Track your attendance and work hours</p>
+        </div>
+      </div>
+
+      <!-- Time Clock -->
+      <div class="time-clock-section">
+        <div class="time-clock-card">
+          <div class="time-display" id="liveTime">--:--:--</div>
+          <div class="time-date-display" id="liveDate">Loading current date...</div>
+
+          <div class="shift-schedule">
+            <span><i class="fas fa-briefcase"></i> Shift: 8:00 AM - 5:00 PM</span>
+            <span><i class="fas fa-mug-hot"></i> Break: 12:00 PM - 1:00 PM</span>
+            <span><i class="fas fa-calendar-day"></i> Day Off: Tuesday</span>
+          </div>
+
+          <div class="time-clock-status clocked-out" id="clockStatus">
+            <span class="status-dot red"></span>
+            <span>Currently Clocked Out</span>
+          </div>
+
+          <button type="button" class="time-clock-btn btn-clock-in" id="clockBtn">
+            <i class="fas fa-fingerprint"></i>
+            <span id="clockBtnText">CLOCK IN</span>
+          </button>
+          <div class="time-clock-meta">
+            <div class="time-meta-item">
+              <span class="time-meta-label">Today's Total</span>
+              <span class="time-meta-value" id="todayTotal">0h 0m</span>
+            </div>
+            <div class="time-meta-item">
+              <span class="time-meta-label">This Week</span>
+              <span class="time-meta-value" id="weekTotal">0h 0m</span>
+            </div>
+            <div class="time-meta-item">
+              <span class="time-meta-label">This Month</span>
+              <span class="time-meta-value" id="monthTotal">0h 0m</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Time Logs -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-list"></i> Recent Time Logs</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;">This week</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time In</th>
+                  <th>Lunch Out</th>
+                  <th>Lunch In</th>
+                  <th>Time Out</th>
+                  <th>Total Hours</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="employeeAttendanceBody">
+                <tr><td colspan="7" style="text-align:center;">No attendance records yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- PAYSLIP                                                           -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-payslip">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Payslip</h1>
+          <p class="page-subtitle">View your salary details and payment history</p>
+        </div>
+        <div class="page-actions">
+          <select class="filter-select" id="payslipPeriod" style="padding:10px 16px;border-radius:10px;border:1px solid rgba(214,174,98,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.7);font-size:13px;font-family:'Poppins',sans-serif;outline:none;cursor:pointer;">
+            <option>No payslip issued</option>
+          </select>
+          <button class="btn btn-gold" id="printPayslipBtn" onclick="window.print()" disabled title="No payslip has been issued for this employee.">
+            <i class="fas fa-download"></i> Print Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Payslip Summary -->
+      <div class="payslip-summary">
+        <div class="payslip-card">
+          <div class="payslip-icon payslip-icon-green"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="payslip-info">
+            <span class="payslip-label">Basic Salary</span>
+            <span class="payslip-amount" id="payslipBasicSummary">₱0.00</span>
+          </div>
+        </div>
+        <div class="payslip-card">
+          <div class="payslip-icon payslip-icon-gold"><i class="fas fa-plus-circle"></i></div>
+          <div class="payslip-info">
+            <span class="payslip-label">Total Allowances</span>
+            <span class="payslip-amount" id="payslipAllowanceSummary">₱0.00</span>
+          </div>
+        </div>
+        <div class="payslip-card">
+          <div class="payslip-icon payslip-icon-blue"><i class="fas fa-minus-circle"></i></div>
+          <div class="payslip-info">
+            <span class="payslip-label">Total Deductions</span>
+            <span class="payslip-amount" id="payslipDeductionSummary">₱0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Payslip -->
+      <div class="card">
+        <div class="card-body">
+
+          <!-- Payslip Header -->
+          <div class="payslip-header">
+            <div class="payslip-company">
+              <img src="../images/logo.png" alt="Quadra Cafe">
+              <div>
+                <h4>Quadra Cafe</h4>
+                <span>Human Resources Management System</span>
+              </div>
+            </div>
+            <div class="payslip-period-text">
+              <strong id="payslipPeriodTitle">No payslip issued</strong>
+              <span>Pay Period</span>
+            </div>
+          </div>
+
+          <!-- Employee Info -->
+          <div style="margin-bottom: 20px;padding-bottom:16px;border-bottom:1px solid rgba(214,174,98,0.06);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div>
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;">Employee Name</span>
+                <span style="color:rgba(255,255,255,0.8);font-size:14px;display:block;" id="payslipEmpName">Employee</span>
+              </div>
+              <div>
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;">Position</span>
+                <span style="color:rgba(255,255,255,0.8);font-size:14px;display:block;" id="payslipEmpRole">Employee</span>
+              </div>
+              <div>
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;">Department</span>
+                <span style="color:rgba(255,255,255,0.8);font-size:14px;display:block;" id="payslipEmpDept">Operations</span>
+              </div>
+              <div>
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;">Employee ID</span>
+                <span style="color:rgba(255,255,255,0.8);font-size:14px;display:block;" id="payslipEmpId">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Earnings -->
+          <h4 style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:12px;font-weight:500;">
+            <i class="fas fa-arrow-up" style="color:#34A853;"></i> Earnings
+          </h4>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Basic Salary</span>
+            <span class="payslip-detail-value" id="payslipBasicPay">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Rice Allowance</span>
+            <span class="payslip-detail-value" id="payslipRice">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Transportation Allowance</span>
+            <span class="payslip-detail-value" id="payslipTransport">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">OT Pay (0 hrs)</span>
+            <span class="payslip-detail-value" id="payslipOvertime">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row" style="font-weight:600;">
+            <span class="payslip-detail-label">Gross Pay</span>
+            <span class="payslip-detail-value" id="payslipGross">₱0.00</span>
+          </div>
+
+          <!-- Deductions -->
+          <h4 style="color:rgba(255,255,255,0.7);font-size:14px;margin:20px 0 12px;font-weight:500;">
+            <i class="fas fa-arrow-down" style="color:#EA4335;"></i> Deductions
+          </h4>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">SSS Contribution</span>
+            <span class="payslip-detail-value" id="payslipSss">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">PhilHealth</span>
+            <span class="payslip-detail-value" id="payslipPhilhealth">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Pag-IBIG</span>
+            <span class="payslip-detail-value" id="payslipPagibig">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Withholding Tax</span>
+            <span class="payslip-detail-value" id="payslipTax">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Absence Deduction</span>
+            <span class="payslip-detail-value" id="payslipAbsences">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Unpaid Leave Deduction</span>
+            <span class="payslip-detail-value" id="payslipUnpaidLeave">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row">
+            <span class="payslip-detail-label">Late Deduction</span>
+            <span class="payslip-detail-value" id="payslipLates">₱0.00</span>
+          </div>
+          <div class="payslip-detail-row" style="font-weight:600;">
+            <span class="payslip-detail-label">Total Deductions</span>
+            <span class="payslip-detail-value" id="payslipTotalDeductions">₱0.00</span>
+          </div>
+
+          <!-- Total -->
+          <div class="payslip-detail-row total-row">
+            <span class="payslip-detail-label" style="font-size:16px;font-weight:600;">Net Pay</span>
+            <span class="payslip-detail-value" id="payslipNet">₱0.00</span>
+          </div>
+
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(214,174,98,0.06);text-align:center;">
+            <span style="color:rgba(255,255,255,0.2);font-size:12px;">
+              This is a computer-generated payslip. No signature required.
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- LEAVE FORM                                                        -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-leave">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Leave Form</h1>
+          <p class="page-subtitle">Submit a leave request for approval</p>
+        </div>
+      </div>
+
+      <!-- Leave Balances -->
+      <div class="leave-balance-grid">
+        <div class="leave-balance-item lb-green">
+          <span class="leave-balance-count" id="leaveApprovedCount">0</span>
+          <span class="leave-balance-label">Approved Requests</span>
+        </div>
+        <div class="leave-balance-item lb-gold">
+          <span class="leave-balance-count" id="leavePendingCount">0</span>
+          <span class="leave-balance-label">Pending Requests</span>
+        </div>
+        <div class="leave-balance-item lb-blue">
+          <span class="leave-balance-count" id="leaveTotalCount">0</span>
+          <span class="leave-balance-label">Total Requests</span>
+        </div>
+        <div class="leave-balance-item lb-red">
+          <span class="leave-balance-count" id="leaveRejectedCount">0</span>
+          <span class="leave-balance-label">Rejected Requests</span>
+        </div>
+      </div>
+
+      <!-- Leave Form -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-file-alt"></i> Leave Application Form</h3>
+        </div>
+        <div class="card-body">
+          <div class="leave-form-card" style="border:none;padding:0;background:none;">
+
+            <form id="leaveForm" onsubmit="submitLeave(event)">
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Employee Name <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="leaveEmpName" value="" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Department <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="leaveDept" value="Operations" readonly>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Leave Type <span class="required">*</span></label>
+                  <select class="form-control" id="leaveType" required>
+                    <option value="" disabled selected>Select leave type</option>
+                    <option value="vacation">Vacation Leave</option>
+                    <option value="sick">Sick Leave</option>
+                    <option value="personal">Personal Leave</option>
+                    <option value="emergency">Emergency Leave</option>
+                    <option value="maternity">Maternity Leave</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Type of Leave <span class="required">*</span></label>
+                  <select class="form-control" id="leaveTypeDetail" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="with-pay">With Pay</option>
+                    <option value="without-pay">Without Pay</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Start Date <span class="required">*</span></label>
+                  <input type="date" class="form-control" id="leaveStart" required onchange="computeLeaveDays()">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">End Date <span class="required">*</span></label>
+                  <input type="date" class="form-control" id="leaveEnd" required onchange="computeLeaveDays()">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Number of Days</label>
+                  <input type="text" class="form-control" id="leaveDays" value="0" readonly style="font-weight:600;color:#E9C27D;">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Contact Number <span class="required">*</span></label>
+                  <input type="tel" class="form-control" id="leaveContact" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" placeholder="e.g. 09171234567" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Reason for Leave <span class="required">*</span></label>
+                <textarea class="form-control" id="leaveReason" rows="3" placeholder="Please provide a detailed reason for your leave request..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Leave During? <span class="required">*</span></label>
+                <select class="form-control" id="leaveDuring" required>
+                  <option value="" disabled selected>Select when</option>
+                  <option value="whole-day">Whole Day</option>
+                  <option value="half-day-am">Half Day (AM)</option>
+                  <option value="half-day-pm">Half Day (PM)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Comments <span class="optional-tag" style="color:rgba(255,255,255,0.3);font-size:11px;font-weight:400;text-transform:none;">(Optional)</span></label>
+                <textarea class="form-control" id="leaveComments" rows="2" placeholder="Any additional information..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="reset" class="btn btn-sm btn-outline">Clear Form</button>
+                <button type="submit" class="btn btn-gold">
+                  <i class="fas fa-paper-plane"></i> Submit Leave Request
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Leave Requests -->
+      <div class="card" style="margin-top:30px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-history"></i> My Leave History</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Leave Type</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Days</th>
+                  <th>Status</th>
+                  <th>Filed On</th>
+                </tr>
+              </thead>
+              <tbody id="employeeLeaveBody">
+                <tr><td colspan="6" style="text-align:center;">No leave requests yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="page-content" id="page-profile">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Profile</h1>
+          <p class="page-subtitle">Manage your personal account information</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-id-card"></i> Personal Information</h3>
+        </div>
+        <div class="card-body">
+          <form id="employeeProfileForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Full Name <span class="required">*</span></label>
+                <input type="text" class="form-control" id="profileFullName" name="full_name" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address <span class="required">*</span></label>
+                <input type="email" class="form-control" id="profileEmail" name="email" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Contact Number <span class="required">*</span></label>
+                <input type="tel" class="form-control" id="profileContact" name="contact_no" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" required placeholder="e.g. 09171234567">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Position</label>
+                <input type="text" class="form-control" id="profilePosition" readonly>
+              </div>
+            </div>
+            <div class="form-actions">
+              <div class="form-group" style="flex:1;margin:0;">
+                <label class="form-label">Verify Current Access PIN <span class="required">*</span></label>
+                <input type="password" class="form-control" id="profileCurrentPin" name="current_pin" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="off" required placeholder="Current 6-digit PIN">
+                <small style="display:block;margin-top:7px;color:rgba(255,255,255,.48);">Required whenever you change your personal information.</small>
+              </div>
+              <button type="submit" class="btn btn-gold"><i class="fas fa-shield-halved"></i> Verify &amp; Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:30px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-key"></i> Account PIN</h3>
+        </div>
+        <div class="card-body">
+          <p style="color:rgba(255,255,255,0.58);font-size:14px;line-height:1.7;margin-bottom:18px;">
+            Request a PIN change confirmation by email. After you click the confirmation link, your new PIN will be emailed to you separately.
+          </p>
+          <button type="button" class="btn btn-gold" onclick="regenerateEmployeePin()"><i class="fas fa-paper-plane"></i> Request PIN Change</button>
+        </div>
+      </div>
+
+      <div class="card government-documents-card" style="margin-top:30px;">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title"><i class="fas fa-folder-open"></i> Government Documents</h3>
+            <p class="government-documents-note">Upload PDF, JPG, JPEG, or PNG files up to 10 MB. Valid ID is optional.</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="employeeDocumentsGrid" class="government-documents-grid">
+            <div class="document-loading"><i class="fas fa-spinner fa-spin"></i> Loading your documents...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<div class="signout-modal-overlay" id="employeeAlertModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon" id="employeeAlertIcon">
+      <i class="fas fa-check-circle" id="employeeAlertIconTag"></i>
+    </div>
+    <h2 class="signout-modal-title" id="employeeAlertTitle">Success</h2>
+    <p class="signout-modal-desc" id="employeeAlertDesc"></p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-confirm" onclick="closeEmployeeAlert()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="signout-modal-overlay" id="pinConfirmModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon">
+      <i class="fas fa-key"></i>
+    </div>
+    <h2 class="signout-modal-title">Request PIN Change</h2>
+    <p class="signout-modal-desc">Send a PIN change confirmation link to your registered email?</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closePinConfirm()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="confirmRegenerateEmployeePin()">Send Confirmation</button>
+    </div>
+  </div>
+</div>
+
+<div class="signout-modal-overlay" id="attendanceChoiceModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon"><i class="fas fa-clock"></i></div>
+    <h2 class="signout-modal-title">Time Out Option</h2>
+    <p class="signout-modal-desc">Choose Lunch Out to start lunch, or End Shift to clock out. Undertime, overtime, missing lunch, and automatic clock-out records require Admin review.</p>
+    <div class="signout-modal-actions attendance-choice-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="chooseAttendanceAction('break_start')"><i class="fas fa-mug-hot"></i> Lunch Out</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="chooseAttendanceAction('clock_out')"><i class="fas fa-sign-out-alt"></i> End Shift</button>
+    </div>
+    <button class="attendance-choice-close" onclick="closeAttendanceChoice()">Cancel</button>
+  </div>
+</div>
+
+<!-- Sign-Out Confirmation Modal -->
+<div class="signout-modal-overlay" id="signoutModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon">
+      <i class="fas fa-sign-out-alt"></i>
+    </div>
+    <h2 class="signout-modal-title">Sign Out</h2>
+    <p class="signout-modal-desc">Are you sure you want to sign out of your account? You will be redirected to the login page.</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="hideSignoutModal()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="confirmSignout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentEmployeeProfile = null;
+let employeeAttendanceState = null;
+let attendanceLoadedAt = Date.now();
+
+function inferEmployeeDepartment(position) {
+  const value = (position || '').toLowerCase();
+  if (value.includes('cook') || value.includes('chef') || value.includes('kitchen')) return 'Kitchen';
+  if (value.includes('manager') || value.includes('supervisor')) return 'Management';
+  if (value.includes('finance') || value.includes('admin')) return 'Admin & Finance';
+  if (value.includes('maintenance')) return 'Maintenance';
+  return 'Operations';
+}
+
+function employeeFirstName(fullName) {
+  return (fullName || 'Employee').trim().split(/\s+/)[0];
+}
+
+function applyEmployeeProfile(user) {
+  currentEmployeeProfile = user;
+  const name = user.full_name || 'Employee';
+  const role = user.position || 'Employee';
+  const dept = inferEmployeeDepartment(role);
+  document.getElementById('empSideName').textContent = name;
+  document.getElementById('empSideRole').textContent = role;
+  document.getElementById('dashGreeting').textContent = 'Hi, ' + employeeFirstName(name) + '!';
+  const leaveName = document.getElementById('leaveEmpName');
+  if (leaveName) leaveName.value = name;
+  const leaveDept = document.getElementById('leaveDept');
+  if (leaveDept) leaveDept.value = dept;
+  const leaveContact = document.getElementById('leaveContact');
+  if (leaveContact) leaveContact.value = user.contact_no || '';
+  document.getElementById('payslipEmpName').textContent = name;
+  document.getElementById('payslipEmpRole').textContent = role;
+  document.getElementById('payslipEmpDept').textContent = dept;
+  document.getElementById('payslipEmpId').textContent = 'EMP-' + String(user.id).padStart(4, '0');
+  document.getElementById('profileFullName').value = name;
+  document.getElementById('profileEmail').value = user.email || '';
+  document.getElementById('profileContact').value = user.contact_no || '';
+  document.getElementById('profilePosition').value = role;
+}
+
+let employeePayslipRecords = [];
+
+function employeeMoney(value) {
+  return '₱' + Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function employeePayslipPeriod(period) {
+  const parts = String(period || '').match(/^(\d{4}-\d{2})(?:-(15|30))?$/);
+  if (!parts) return period;
+  const date = new Date(parts[1] + '-01T00:00:00');
+  if (Number.isNaN(date.getTime())) return period;
+  const month = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  if (parts[2] === '15') return month + ' (1-15)';
+  if (parts[2] === '30') {
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    return month + ' (16-' + lastDay + ')';
+  }
+  return month;
+}
+
+function renderEmployeePayslip(record) {
+  document.getElementById('payslipPeriodTitle').textContent = employeePayslipPeriod(record.period);
+  document.getElementById('payslipBasicSummary').textContent = employeeMoney(record.basic_pay);
+  document.getElementById('payslipAllowanceSummary').textContent = employeeMoney(Number(record.rice_allowance) + Number(record.transport_allowance) + Number(record.overtime_pay));
+  document.getElementById('payslipDeductionSummary').textContent = employeeMoney(record.total_deductions);
+  document.getElementById('payslipBasicPay').textContent = employeeMoney(record.basic_pay);
+  document.getElementById('payslipRice').textContent = employeeMoney(record.rice_allowance);
+  document.getElementById('payslipTransport').textContent = employeeMoney(record.transport_allowance);
+  document.getElementById('payslipOvertime').textContent = employeeMoney(record.overtime_pay);
+  document.getElementById('payslipGross').textContent = employeeMoney(record.gross_pay);
+  document.getElementById('payslipSss').textContent = employeeMoney(record.sss);
+  document.getElementById('payslipPhilhealth').textContent = employeeMoney(record.philhealth);
+  document.getElementById('payslipPagibig').textContent = employeeMoney(record.pagibig);
+  document.getElementById('payslipTax').textContent = employeeMoney(record.withholding_tax);
+  document.getElementById('payslipAbsences').textContent = employeeMoney(record.absence_deduction);
+  document.getElementById('payslipUnpaidLeave').textContent = employeeMoney(record.unpaid_leave_deduction);
+  document.getElementById('payslipLates').textContent = employeeMoney(record.late_deduction);
+  document.getElementById('payslipTotalDeductions').textContent = employeeMoney(record.total_deductions);
+  document.getElementById('payslipNet').textContent = employeeMoney(record.net_pay);
+  document.getElementById('printPayslipBtn').disabled = false;
+  document.getElementById('printPayslipBtn').title = 'Print this payslip copy';
+}
+
+function clearEmployeePayslip() {
+  document.getElementById('payslipPeriodTitle').textContent = 'No payslip issued';
+  document.getElementById('payslipBasicSummary').textContent = employeeMoney(0);
+  document.getElementById('payslipAllowanceSummary').textContent = employeeMoney(0);
+  document.getElementById('payslipDeductionSummary').textContent = employeeMoney(0);
+  ['payslipBasicPay', 'payslipRice', 'payslipTransport', 'payslipOvertime', 'payslipGross', 'payslipSss', 'payslipPhilhealth', 'payslipPagibig', 'payslipTax', 'payslipAbsences', 'payslipUnpaidLeave', 'payslipLates', 'payslipTotalDeductions', 'payslipNet'].forEach(id => {
+    document.getElementById(id).textContent = employeeMoney(0);
+  });
+  document.getElementById('printPayslipBtn').disabled = true;
+  document.getElementById('printPayslipBtn').title = 'Payslip can be printed only after Admin processes payroll on or after cutoff.';
+}
+
+async function loadEmployeePayslips(showEmptyAlert = false) {
+  try {
+    const response = await fetch('../php/payroll.php?action=mine', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load payslips.');
+    employeePayslipRecords = result.records || [];
+    const select = document.getElementById('payslipPeriod');
+    select.innerHTML = '';
+    if (!employeePayslipRecords.length) {
+      select.innerHTML = '<option>No payslip issued</option>';
+      clearEmployeePayslip();
+      if (showEmptyAlert) showEmployeeAlert('No Payslip Yet', 'Your payslip copy will appear here after Admin processes payroll.', false);
+      return;
+    }
+    employeePayslipRecords.forEach((record, index) => {
+      const option = document.createElement('option');
+      option.value = String(index);
+      option.textContent = employeePayslipPeriod(record.period);
+      select.appendChild(option);
+    });
+    renderEmployeePayslip(employeePayslipRecords[0]);
+  } catch (error) {
+    if (showEmptyAlert) showEmployeeAlert('Payslip Not Loaded', error.message, false);
+  }
+}
+
+document.getElementById('payslipPeriod')?.addEventListener('change', function() {
+  const record = employeePayslipRecords[Number(this.value)];
+  if (record) renderEmployeePayslip(record);
+});
+
+async function loadEmployeeProfile() {
+  try {
+    const response = await fetch('../php/profile.php');
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || 'Account does not exist.');
+    applyEmployeeProfile(result.user);
+  } catch (error) {
+    showEmployeeAlert('Account Not Available', error.message || 'Account does not exist.', false);
+    setTimeout(() => { window.location.href = 'Login.html'; }, 1800);
+  }
+}
+
+function showEmployeeAlert(title, message, success = true) {
+  const icon = document.getElementById('employeeAlertIcon');
+  const iconTag = document.getElementById('employeeAlertIconTag');
+  icon.style.background = success ? 'rgba(52,168,83,0.15)' : 'rgba(234,67,53,0.15)';
+  icon.style.borderColor = success ? 'rgba(52,168,83,0.25)' : 'rgba(234,67,53,0.25)';
+  iconTag.className = success ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  iconTag.style.color = success ? '#34A853' : '#EA4335';
+  document.getElementById('employeeAlertTitle').textContent = title;
+  document.getElementById('employeeAlertDesc').textContent = message;
+  document.getElementById('employeeAlertModal').classList.add('show');
+}
+
+function closeEmployeeAlert() {
+  document.getElementById('employeeAlertModal').classList.remove('show');
+}
+
+function enforceElevenDigitPhone(input) {
+  if (!input) return;
+  input.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 11);
+  });
+}
+
+enforceElevenDigitPhone(document.getElementById('profileContact'));
+enforceElevenDigitPhone(document.getElementById('profileCurrentPin'));
+
+document.getElementById('employeeProfileForm')?.addEventListener('submit', async function(event) {
+  event.preventDefault();
+  const contact = document.getElementById('profileContact').value.trim();
+  if (!/^\d{11}$/.test(contact)) {
+    showEmployeeAlert('Invalid Contact Number', 'Contact number must be exactly 11 digits.', false);
+    return;
+  }
+  if (!/^\d{6}$/.test(document.getElementById('profileCurrentPin').value.trim())) {
+    showEmployeeAlert('PIN Verification Required', 'Enter your current 6-digit access PIN before saving profile changes.', false);
+    return;
+  }
+  try {
+    const body = new FormData(this);
+    body.append('action', 'update');
+    const response = await fetch('../php/profile.php', { method: 'POST', body });
+    const result = await response.json();
+    if (!result.success) return showEmployeeAlert('Profile Not Saved', result.message, false);
+    document.getElementById('profileCurrentPin').value = '';
+    await loadEmployeeProfile();
+    showEmployeeAlert('Profile Updated', result.message, true);
+  } catch (error) {
+    showEmployeeAlert('Profile Not Saved', 'Unable to update your profile information.', false);
+  }
+});
+
+async function regenerateEmployeePin() {
+  document.getElementById('pinConfirmModal').classList.add('show');
+}
+
+function closePinConfirm() {
+  document.getElementById('pinConfirmModal').classList.remove('show');
+}
+
+async function confirmRegenerateEmployeePin() {
+  closePinConfirm();
+  try {
+    const body = new URLSearchParams({ action: 'regenerate_pin' });
+    const response = await fetch('../php/profile.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    showEmployeeAlert(result.success ? 'Confirmation Sent' : 'Confirmation Not Sent', result.message, result.success);
+  } catch (error) {
+    showEmployeeAlert('Confirmation Not Sent', 'Unable to request a new PIN right now.', false);
+  }
+}
+
+const employeeDocumentTypes = [
+  { key: 'sss', label: 'SSS', optional: false, icon: 'fa-id-card' },
+  { key: 'philhealth', label: 'PhilHealth', optional: false, icon: 'fa-heart-pulse' },
+  { key: 'pagibig', label: 'Pag-IBIG', optional: false, icon: 'fa-house' },
+  { key: 'tin', label: 'TIN', optional: false, icon: 'fa-file-invoice-dollar' },
+  { key: 'valid_id', label: 'Valid ID', optional: true, icon: 'fa-address-card' }
+];
+let employeeDocuments = [];
+
+function employeeDocumentStatus(document) {
+  if (!document) return { label: 'Missing', className: 'document-status-missing' };
+  if (document.verification_status === 'verified') return { label: 'Verified', className: 'document-status-verified' };
+  if (document.verification_status === 'rejected') return { label: 'Rejected', className: 'document-status-rejected' };
+  return { label: 'Pending Review', className: 'document-status-pending' };
+}
+
+function renderEmployeeDocuments() {
+  const grid = document.getElementById('employeeDocumentsGrid');
+  grid.innerHTML = employeeDocumentTypes.map(type => {
+    const document = employeeDocuments.find(item => item.document_type === type.key);
+    const status = employeeDocumentStatus(document);
+    const reason = document?.verification_status === 'rejected' && document.rejection_reason
+      ? '<div class="document-rejection"><i class="fas fa-circle-exclamation"></i><span><strong>HR reason:</strong> ' + escapeEmployeeDocumentHtml(document.rejection_reason) + '</span></div>' : '';
+    const file = document
+      ? '<a class="document-file-link" href="../php/employee_documents.php?action=file&document_id=' + Number(document.document_id) + '" target="_blank" rel="noopener"><i class="fas fa-paperclip"></i> ' + escapeEmployeeDocumentHtml(document.file_name) + '</a>'
+      : '<span class="document-file-missing">No file uploaded</span>';
+    return '<article class="government-document-item">' +
+      '<div class="document-item-main"><div class="document-type-icon"><i class="fas ' + type.icon + '"></i></div><div><h4>' + type.label + (type.optional ? ' <small>Optional</small>' : '') + '</h4>' + file + '</div></div>' +
+      '<div class="document-item-actions"><span class="document-status ' + status.className + '">' + status.label + '</span>' +
+      '<input type="file" id="employeeDocumentFile-' + type.key + '" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" hidden onchange="uploadEmployeeDocument(\'' + type.key + '\', this)">' +
+      '<button type="button" class="btn btn-gold document-upload-btn" onclick="document.getElementById(\'employeeDocumentFile-' + type.key + '\').click()"><i class="fas fa-upload"></i> ' + (document ? 'Replace File' : 'Upload') + '</button></div>' + reason + '</article>';
+  }).join('');
+}
+
+function escapeEmployeeDocumentHtml(value) {
+  return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+async function loadEmployeeDocuments() {
+  try {
+    const response = await fetch('../php/employee_documents.php?action=mine', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load your documents.');
+    employeeDocuments = result.documents || [];
+    renderEmployeeDocuments();
+  } catch (error) {
+    document.getElementById('employeeDocumentsGrid').innerHTML = '<div class="document-loading document-error"><i class="fas fa-circle-exclamation"></i> ' + escapeEmployeeDocumentHtml(error.message) + '</div>';
+  }
+}
+
+async function uploadEmployeeDocument(type, input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    input.value = '';
+    return showEmployeeAlert('File Too Large', 'Document file must not exceed 10 MB.', false);
+  }
+  const form = new FormData();
+  form.append('action', 'upload');
+  form.append('document_type', type);
+  form.append('document', file);
+  const buttons = document.querySelectorAll('.document-upload-btn');
+  buttons.forEach(button => button.disabled = true);
+  try {
+    const response = await fetch('../php/employee_documents.php', { method: 'POST', body: form });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to upload this document.');
+    await loadEmployeeDocuments();
+    showEmployeeAlert('Document Uploaded', result.message, true);
+  } catch (error) {
+    showEmployeeAlert('Document Not Uploaded', error.message, false);
+  } finally {
+    input.value = '';
+    document.querySelectorAll('.document-upload-btn').forEach(button => button.disabled = false);
+  }
+}
+
+// ============================================
+// SIGN-OUT CONFIRMATION MODAL
+// ============================================
+function showSignoutModal() {
+  document.getElementById('signoutModal').classList.add('show');
+}
+
+function hideSignoutModal() {
+  document.getElementById('signoutModal').classList.remove('show');
+}
+
+function confirmSignout() {
+  securePortalLogout();
+}
+
+// Close modal on overlay click
+document.getElementById('signoutModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    hideSignoutModal();
+  }
+});
+document.getElementById('employeeAlertModal').addEventListener('click', function(e) {
+  if (e.target === this) closeEmployeeAlert();
+});
+document.getElementById('pinConfirmModal').addEventListener('click', function(e) {
+  if (e.target === this) closePinConfirm();
+});
+document.getElementById('attendanceChoiceModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAttendanceChoice();
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    hideSignoutModal();
+    closeEmployeeAlert();
+    closePinConfirm();
+    closeAttendanceChoice();
+  }
+});
+
+// ============================================
+// SET CURRENT DATE
+// ============================================
+function updateDate() {
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+
+  if (currentEmployeeProfile) {
+    document.getElementById('dashGreeting').textContent = 'Hi, ' + employeeFirstName(currentEmployeeProfile.full_name) + '!';
+  }
+}
+updateDate();
+loadEmployeeProfile();
+loadEmployeeDocuments();
+
+// ============================================
+// LIVE CLOCK
+// ============================================
+function updateClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('liveTime').textContent = time;
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', options);
+  if (employeeAttendanceState?.today && !employeeAttendanceState.today.clock_out && !(employeeAttendanceState.today.break_start && !employeeAttendanceState.today.break_end)) {
+    const elapsed = Math.max(0, Math.floor((Date.now() - attendanceLoadedAt) / 1000));
+    const todaySeconds = Number(employeeAttendanceState.today.duration_seconds || 0) + elapsed;
+    const weekSeconds = Number(employeeAttendanceState.stats.week_seconds || 0) + elapsed;
+    const monthSeconds = Number(employeeAttendanceState.stats.month_seconds || 0) + elapsed;
+    document.getElementById('todayTotal').textContent = attendanceDuration(todaySeconds);
+    document.getElementById('weekTotal').textContent = attendanceDuration(weekSeconds);
+    document.getElementById('monthTotal').textContent = attendanceDuration(monthSeconds);
+    document.getElementById('workHours').textContent = (weekSeconds / 3600).toFixed(1).replace('.0', '');
+  }
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ============================================
+// TIME CLOCK FUNCTIONALITY
+// ============================================
+let isClockedIn = false;
+
+function attendanceDate(value) {
+  return value ? new Date(String(value).replace(' ', 'T')) : null;
+}
+
+function attendanceTime(value) {
+  const date = attendanceDate(value);
+  return date && !Number.isNaN(date.getTime()) ? date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '—';
+}
+
+function attendanceDuration(seconds) {
+  const totalMinutes = Math.max(0, Math.floor(Number(seconds || 0) / 60));
+  return Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm';
+}
+
+function renderEmployeeAttendance(data) {
+  attendanceLoadedAt = Date.now();
+  const btn = document.getElementById('clockBtn');
+  const status = document.getElementById('clockStatus');
+  const btnText = document.getElementById('clockBtnText');
+  const today = data.today;
+  const schedule = data.schedule || {};
+  isClockedIn = Boolean(today && !today.clock_out);
+  const onBreak = Boolean(isClockedIn && today.break_start && !today.break_end);
+  btn.disabled = Boolean(today && today.clock_out);
+  if (isClockedIn) {
+    btn.className = 'time-clock-btn ' + (onBreak ? 'btn-clock-in' : 'btn-clock-out');
+    btnText.textContent = onBreak ? 'RESUME WORK' : 'TIME OUT';
+    status.className = 'time-clock-status clocked-in';
+    status.innerHTML = onBreak
+      ? '<span class="status-dot gold"></span> At Lunch since ' + attendanceTime(today.break_start) + ' (work timer paused)'
+      : '<span class="status-dot green"></span> Currently Working (in at ' + attendanceTime(today.clock_in) + ')' + (Number(today.late_minutes) > 0 ? ' — Late ' + Number(today.late_minutes) + ' min(s)' : '');
+  } else {
+    btn.className = 'time-clock-btn btn-clock-in';
+    btn.disabled = Boolean(today && today.clock_out) || (!today && !schedule.can_clock_in);
+    const afterShift = !today && new Date().getHours() >= 17;
+    btnText.textContent = today && today.clock_out ? 'COMPLETED TODAY' : (schedule.is_day_off ? 'DAY OFF' : (afterShift ? 'OPERATIONS CLOSED' : (!schedule.can_clock_in ? 'SHIFT STARTS AT 8' : 'CLOCK IN')));
+    status.className = 'time-clock-status clocked-out';
+    status.innerHTML = '<span class="status-dot ' + (schedule.is_day_off ? 'gold' : 'red') + '"></span> ' + (today && today.clock_out ? 'Today\'s attendance is complete' : (schedule.is_day_off ? 'Tuesday is your scheduled day off' : (afterShift ? 'Operations ended at 5:00 PM. Time in is closed for today.' : (!schedule.can_clock_in ? 'Your shift has not started yet. Time in opens at 8:00 AM.' : 'Ready to clock in'))));
+  }
+  document.getElementById('todayTotal').textContent = today ? attendanceDuration(today.duration_seconds) : '0h 0m';
+  document.getElementById('weekTotal').textContent = attendanceDuration(data.stats.week_seconds);
+  document.getElementById('monthTotal').textContent = attendanceDuration(data.stats.month_seconds);
+  document.getElementById('daysPresent').textContent = data.stats.days_present;
+  document.getElementById('latesCount').textContent = data.stats.lates;
+  document.getElementById('workHours').textContent = (Number(data.stats.week_seconds || 0) / 3600).toFixed(1).replace('.0', '');
+  document.getElementById('attendanceRate').textContent = data.stats.days_present ? data.stats.days_present + ' recorded day' + (data.stats.days_present === 1 ? '' : 's') : 'No attendance records yet';
+  document.getElementById('lastLate').textContent = data.stats.lates ? data.stats.lates + ' late record' + (data.stats.lates === 1 ? '' : 's') : 'No late records';
+
+  const tbody = document.getElementById('employeeAttendanceBody');
+  tbody.innerHTML = data.logs.length ? data.logs.map(log => {
+    const day = attendanceDate(log.work_date + ' 00:00:00');
+    const dateText = day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    let approval = log.clock_out ? 'Approved' : 'In Progress';
+    if (log.approval_status === 'pending') approval = 'Pending Admin Review';
+    if (log.approval_status === 'rejected') approval = 'Rejected';
+    const stateClass = log.approval_status === 'rejected' ? 'status-late' : (log.approval_status === 'pending' ? 'status-pending' : 'status-ontime');
+    const metrics = log.clock_out ? '<small style="display:block;margin-top:5px;color:rgba(255,255,255,.42)">' + escapeEmployeeDocumentHtml(log.attendance_remark || '') + (Number(log.late_minutes) ? ' • Late ' + Number(log.late_minutes) + 'm' : '') + (Number(log.undertime_minutes) ? ' • Undertime ' + Number(log.undertime_minutes) + 'm' : '') + (Number(log.overtime_minutes) ? ' • Overtime ' + Number(log.overtime_minutes) + 'm' : '') + '</small>' : '';
+    const adminNote = log.admin_note ? '<small style="display:block;margin-top:4px;color:#E9C27D">Admin: ' + escapeEmployeeDocumentHtml(log.admin_note) + '</small>' : '';
+    return '<tr><td>' + dateText + '</td><td>' + attendanceTime(log.clock_in) + '</td><td>' + attendanceTime(log.break_start) + '</td><td>' + attendanceTime(log.break_end) + '</td><td>' + attendanceTime(log.clock_out) + '</td><td>' + attendanceDuration(log.duration_seconds) + '</td><td><span class="status-badge ' + stateClass + '">' + approval + '</span>' + metrics + adminNote + '</td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;">No attendance records yet.</td></tr>';
+
+  const activity = document.getElementById('employeeRecentActivity');
+  activity.innerHTML = data.activities.length ? data.activities.map(item => {
+    const late = item.type === 'late_clock_in';
+    const out = item.type === 'clock_out';
+    const label = item.type === 'break_start' ? 'Lunch Out at ' : (item.type === 'break_end' ? 'Lunch In at ' : (out ? 'Ended shift at ' : (late ? 'Late time in at ' : 'Timed in at ')));
+    const occurred = attendanceDate(item.occurred_at);
+    return '<div class="activity-item"><div class="activity-dot ' + (late ? 'activity-dot-red' : 'activity-dot-green') + '"></div><div class="activity-info"><span class="activity-text">' + label + attendanceTime(item.occurred_at) + '</span><span class="activity-time">' + occurred.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</span></div></div>';
+  }).join('') : '<div class="activity-item"><div class="activity-info"><span class="activity-text">No attendance activity yet.</span></div></div>';
+}
+
+async function loadEmployeeAttendance() {
+  try {
+    const response = await fetch('../php/attendance.php?action=mine', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load attendance.');
+    employeeAttendanceState = result;
+    renderEmployeeAttendance(result);
+  } catch (error) {
+    document.getElementById('clockBtn').disabled = true;
+    showEmployeeAlert('Attendance Not Available', error.message, false);
+  }
+}
+
+async function toggleClock() {
+  const today = employeeAttendanceState?.today;
+  if (!today) return recordAttendanceAction('clock');
+  if (today.break_start && !today.break_end) return recordAttendanceAction('break_end');
+  if (new Date().getHours() >= 17) return recordAttendanceAction('clock_out');
+  openAttendanceChoice();
+}
+
+document.getElementById('clockBtn').addEventListener('click', toggleClock);
+
+function openAttendanceChoice() {
+  document.getElementById('attendanceChoiceModal').classList.add('show');
+}
+
+function closeAttendanceChoice() {
+  document.getElementById('attendanceChoiceModal').classList.remove('show');
+}
+
+function chooseAttendanceAction(action) {
+  closeAttendanceChoice();
+  recordAttendanceAction(action);
+}
+
+async function recordAttendanceAction(action) {
+  const btn = document.getElementById('clockBtn');
+  if (btn.disabled) return;
+  btn.disabled = true;
+  const originalText = document.getElementById('clockBtnText').textContent;
+  document.getElementById('clockBtnText').textContent = 'SAVING...';
+  try {
+    const response = await fetch('../php/attendance.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'action=' + encodeURIComponent(action) });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to save attendance.');
+    await loadEmployeeAttendance();
+    const titles = { clock_in: 'Time In Recorded', break_start: 'Lunch Out Recorded', break_end: 'Lunch In Recorded', clock_out: 'Time Out Recorded' };
+    showEmployeeAlert(titles[result.event] || 'Attendance Recorded', result.message, true);
+  } catch (error) {
+    btn.disabled = false;
+    document.getElementById('clockBtnText').textContent = originalText;
+    showEmployeeAlert('Attendance Not Saved', error.message, false);
+  }
+}
+
+loadEmployeeAttendance();
+
+// ============================================
+// SIDEBAR NAVIGATION
+// ============================================
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    this.classList.add('active');
+    const page = this.dataset.page;
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+    if (page === 'dashboard' || page === 'timeclock') loadEmployeeAttendance();
+    if (page === 'profile') loadEmployeeDocuments();
+    if (page === 'payslip') loadEmployeePayslips(true);
+    if (page === 'leave') loadEmployeeLeaves();
+    if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('show');
+  });
+});
+
+function switchPage(page) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (navItem) navItem.classList.add('active');
+  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  if (page === 'dashboard' || page === 'timeclock') loadEmployeeAttendance();
+  if (page === 'payslip') loadEmployeePayslips(true);
+  if (page === 'leave') loadEmployeeLeaves();
+}
+
+setInterval(() => {
+  if (document.getElementById('page-dashboard')?.classList.contains('active') || document.getElementById('page-timeclock')?.classList.contains('active')) {
+    loadEmployeeAttendance();
+  }
+}, 30000);
+
+// ============================================
+// MOBILE MENU TOGGLE
+// ============================================
+document.getElementById('menuToggle').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('show');
+});
+
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menuToggle');
+  if (window.innerWidth <= 992) {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('show');
+    }
+  }
+});
+
+// ============================================
+// LEAVE FORM FUNCTIONS
+// ============================================
+function computeLeaveDays() {
+  const start = document.getElementById('leaveStart').value;
+  const end = document.getElementById('leaveEnd').value;
+  const daysField = document.getElementById('leaveDays');
+
+  if (start && end) {
+    const startDate = new Date(start + 'T00:00:00');
+    const endDate = new Date(end + 'T00:00:00');
+    const during = document.getElementById('leaveDuring').value;
+    if (endDate < startDate || (during && during !== 'whole-day' && start !== end)) {
+      daysField.value = '0';
+      return;
+    }
+    daysField.value = during && during !== 'whole-day' ? '0.5' : String(Math.round((endDate - startDate) / 86400000) + 1);
+  } else {
+    daysField.value = '0';
+  }
+}
+
+document.getElementById('leaveDuring')?.addEventListener('change', computeLeaveDays);
+const employeeToday = new Date().toLocaleDateString('en-CA');
+document.getElementById('leaveStart').min = employeeToday;
+document.getElementById('leaveEnd').min = employeeToday;
+
+document.getElementById('leaveContact')?.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 11);
+});
+
+function leaveDate(value) {
+  const date = new Date(String(value).replace(' ', 'T'));
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function leaveTypeLabel(value) {
+  return ({ vacation: 'Vacation Leave', sick: 'Sick Leave', personal: 'Personal Leave', emergency: 'Emergency Leave', maternity: 'Maternity Leave' })[value] || value;
+}
+
+function employeeEscapeHtml(value) {
+  const span = document.createElement('span');
+  span.textContent = String(value ?? '');
+  return span.innerHTML;
+}
+
+function renderEmployeeLeaves(data) {
+  document.getElementById('leaveApprovedCount').textContent = data.stats.approved;
+  document.getElementById('leavePendingCount').textContent = data.stats.pending;
+  document.getElementById('leaveTotalCount').textContent = data.stats.total;
+  document.getElementById('leaveRejectedCount').textContent = data.stats.rejected;
+  const body = document.getElementById('employeeLeaveBody');
+  body.innerHTML = data.requests.length ? data.requests.map(request => {
+    const status = employeeEscapeHtml(request.status);
+    const days = Number(request.days) % 1 ? Number(request.days).toFixed(1) : String(Number(request.days));
+    return '<tr title="Reference: ' + employeeEscapeHtml(request.reference_code) + '"><td>' + employeeEscapeHtml(leaveTypeLabel(request.leave_type)) + '</td><td>' + leaveDate(request.start_date + ' 00:00:00') + '</td><td>' + leaveDate(request.end_date + ' 00:00:00') + '</td><td>' + days + '</td><td><span class="status-badge status-' + status + '">' + status.charAt(0).toUpperCase() + status.slice(1) + '</span></td><td>' + leaveDate(request.created_at) + '</td></tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;">No leave requests yet.</td></tr>';
+}
+
+async function loadEmployeeLeaves() {
+  try {
+    const response = await fetch('../php/leave_requests.php?action=mine', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load leave requests.');
+    renderEmployeeLeaves(result);
+  } catch (error) {
+    document.getElementById('employeeLeaveBody').innerHTML = '<tr><td colspan="6" style="text-align:center;">Leave requests could not be loaded.</td></tr>';
+  }
+}
+
+async function submitLeave(e) {
+  e.preventDefault();
+
+  const type = document.getElementById('leaveType');
+  const payType = document.getElementById('leaveTypeDetail');
+  const start = document.getElementById('leaveStart');
+  const end = document.getElementById('leaveEnd');
+  const contact = document.getElementById('leaveContact');
+  const reason = document.getElementById('leaveReason');
+  const during = document.getElementById('leaveDuring');
+
+  if (!type.value || !payType.value || !start.value || !end.value || !contact.value || !reason.value.trim() || !during.value) {
+    showEmployeeAlert('Incomplete Leave Request', 'Please fill in all required fields.', false);
+    return false;
+  }
+
+  if (!/^\d{11}$/.test(contact.value.trim())) {
+    showEmployeeAlert('Invalid Contact Number', 'Contact number must be exactly 11 digits.', false);
+    return false;
+  }
+
+  computeLeaveDays();
+  if (Number(document.getElementById('leaveDays').value) <= 0) {
+    showEmployeeAlert('Invalid Leave Dates', 'Please select a valid date range. Half-day leave must start and end on the same date.', false);
+    return false;
+  }
+
+  const submitButton = e.submitter;
+  if (submitButton) submitButton.disabled = true;
+  try {
+    const body = new URLSearchParams({
+      action: 'submit', leave_type: type.value, pay_type: payType.value,
+      start_date: start.value, end_date: end.value, contact_no: contact.value.trim(),
+      reason: reason.value.trim(), leave_during: during.value,
+      comments: document.getElementById('leaveComments').value.trim()
+    });
+    const response = await fetch('../php/leave_requests.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to submit leave request.');
+    closeLeaveModal();
+    if (currentEmployeeProfile) applyEmployeeProfile(currentEmployeeProfile);
+    await loadEmployeeLeaves();
+    showEmployeeAlert('Leave Request Submitted', result.message + ' Reference: ' + result.reference_code, true);
+  } catch (error) {
+    showEmployeeAlert('Leave Request Not Submitted', error.message, false);
+  } finally {
+    if (submitButton) submitButton.disabled = false;
+  }
+
+  return false;
+}
+
+function closeLeaveModal() {
+  document.getElementById('leaveForm').reset();
+  document.getElementById('leaveDays').value = '0';
+}
+
+loadEmployeeLeaves();
+
+// ============================================
+// ANIMATED COUNTERS
+// ============================================
+function animateCounters() {
+  document.querySelectorAll('#page-dashboard .stat-value').forEach(el => {
+    const target = parseFloat(el.textContent);
+    if (isNaN(target)) return;
+    const step = Math.ceil(target / 25);
+    let current = 0;
+    const isFloat = el.textContent.includes('.');
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = isFloat ? current.toFixed(1) : current.toLocaleString();
+    }, 800 / (target / step));
+  });
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateCounters(); observer.disconnect(); }
+  });
+});
+const dashPage = document.getElementById('page-dashboard');
+if (dashPage) observer.observe(dashPage);
+
+</script>
+
+</body>
+
+</html>

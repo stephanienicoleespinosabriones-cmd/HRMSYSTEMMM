@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quadra Cafe HRMS - Apply Now</title>
+
+<link rel="stylesheet" href="../css/Apply.css?v=20260713-3">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles">
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+</div>
+
+<div class="container">
+
+<div class="left">
+
+<div class="overlay"></div>
+
+<div class="deco-line dl-top"></div>
+<div class="deco-line dl-bottom"></div>
+
+<div class="content">
+
+<div class="brand-wrapper">
+  <div class="logo-glow"></div>
+  <img src="../images/logo.png" class="logo">
+</div>
+
+<h1>Join Us</h1>
+
+<h2>Career <br>Opportunities</h2>
+
+<div class="line"></div>
+
+<p class="tagline">
+  <span>✦</span> Be part of something great. <span>✦</span>
+</p>
+
+<div class="features">
+
+<div class="feature">
+  <div class="feature-icon">
+    <i class="fas fa-hand-holding-heart"></i>
+  </div>
+  <span>Great Culture</span>
+</div>
+
+<div class="feature">
+  <div class="feature-icon">
+    <i class="fas fa-chart-line"></i>
+  </div>
+  <span>Career Growth</span>
+</div>
+
+<div class="feature">
+  <div class="feature-icon">
+    <i class="fas fa-coffee"></i>
+  </div>
+  <span>Cafe Vibe</span>
+</div>
+
+</div>
+
+<div class="quote-line"></div>
+<p class="quote">"Choose a job you love, and you will never have to work a day in your life."</p>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="apply-form-container">
+
+<section id="vacancyView" class="vacancy-view">
+  <div class="apply-badge">
+    <i class="fas fa-briefcase"></i>
+    <span>Career Opportunities</span>
+  </div>
+  <h3>Job Vacancies</h3>
+  <p class="subtitle">Choose a published opening to view its details and apply.</p>
+
+  <div class="application-tracker">
+    <div class="tracker-heading"><i class="fas fa-magnifying-glass"></i><div><strong>Check Application Status</strong><span>Use your Application ID and registered email for the latest update.</span></div></div>
+    <form id="applicationTrackerForm" class="tracker-form">
+      <input name="action" type="hidden" value="track">
+      <input name="application_code" type="text" placeholder="Application ID (e.g. QC-2026-ABC123)" autocomplete="off" required>
+      <input name="email" type="email" placeholder="Email used in your application" autocomplete="email" required>
+      <button id="trackerButton" type="submit"><i class="fas fa-arrow-right"></i> Check Status</button>
+    </form>
+    <div id="trackerResult" class="tracker-result" aria-live="polite"></div>
+  </div>
+
+  <div id="vacancyList" class="vacancy-list" aria-live="polite">
+    <div class="vacancy-loading"><i class="fas fa-spinner fa-spin"></i><span>Loading published vacancies...</span></div>
+  </div>
+
+  <h4 class="back-link">
+    <a href="Login.html"><i class="fas fa-arrow-left"></i> Back to Sign In</a>
+  </h4>
+</section>
+
+<section id="applicationView" class="application-view" style="display:none;">
+
+<div class="selected-vacancy" id="selectedVacancyBanner">
+  <button type="button" class="change-vacancy-btn" onclick="showVacancies()"><i class="fas fa-arrow-left"></i> Vacancies</button>
+  <div><span>Applying for</span><strong id="selectedVacancyTitle">—</strong></div>
+</div>
+
+<div class="apply-badge">
+  <i class="fas fa-file-alt"></i>
+  <span>Application Form</span>
+</div>
+
+<h3>Apply Now</h3>
+
+<p class="subtitle">
+  Complete the steps below to submit your application
+</p>
+
+<!-- Progress Steps -->
+<div class="progress-steps">
+  <div class="step active" data-step="1">
+    <div class="step-circle">1</div>
+    <span class="step-label">Personal & Position</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step" data-step="2">
+    <div class="step-circle">2</div>
+    <span class="step-label">Education</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step" data-step="3">
+    <div class="step-circle">3</div>
+    <span class="step-label">Documents</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step" data-step="4">
+    <div class="step-circle">4</div>
+    <span class="step-label">Review</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step" data-step="5">
+    <div class="step-circle">5</div>
+    <span class="step-label">Submit</span>
+  </div>
+</div>
+
+<form id="applyForm">
+
+<!-- ====== STEP 1: PERSONAL INFORMATION & POSITION ====== -->
+<div class="form-step active" data-step="1">
+
+  <h5 class="step-heading"><i class="fas fa-user-circle"></i> Personal Information</h5>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="firstName">First Name</label>
+      <div class="input-wrapper">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="firstName" placeholder="First name" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="middleName">Middle Name</label>
+      <div class="input-wrapper">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="middleName" placeholder="Middle name (optional)">
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="lastName">Last Name</label>
+      <div class="input-wrapper">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="lastName" placeholder="Last name" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="birthdate">Date of Birth</label>
+      <div class="input-wrapper">
+        <i class="fas fa-calendar-alt input-icon"></i>
+        <input type="date" id="birthdate" max="" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="gender">Gender</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-venus-mars input-icon"></i>
+        <select id="gender" required>
+          <option value="" disabled selected>Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="prefer-not">Prefer not to say</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="civilStatus">Civil Status</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-heart input-icon"></i>
+        <select id="civilStatus" required>
+          <option value="" disabled selected>Select status</option>
+          <option value="single">Single</option>
+          <option value="married">Married</option>
+          <option value="widowed">Widowed</option>
+          <option value="separated">Separated</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="email">Email Address</label>
+      <div class="input-wrapper">
+        <i class="fas fa-envelope input-icon"></i>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Valid email required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="contactNo">Contact Number</label>
+      <div class="input-wrapper">
+        <i class="fas fa-phone input-icon"></i>
+        <input type="tel" id="contactNo" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" placeholder="e.g. 09171234567" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="input float-input">
+    <label for="address">Complete Address</label>
+    <div class="input-wrapper">
+      <i class="fas fa-home input-icon"></i>
+      <textarea id="address" rows="2" placeholder="House/Street, Barangay, City/Municipality, Province" required></textarea>
+      <div class="input-border"></div>
+    </div>
+    <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Address is required</span>
+  </div>
+
+  <input type="hidden" id="position" value="">
+  <input type="hidden" id="employmentType" value="full-time">
+  <input type="hidden" id="shift" value="8:00 AM - 5:00 PM">
+
+  <h5 class="step-heading" style="margin-top: 20px;"><i class="fas fa-briefcase"></i> Work Information</h5>
+  <div style="margin:12px 0 18px;padding:14px 16px;border:1px solid rgba(214,174,98,.35);border-radius:12px;background:rgba(214,174,98,.10);color:#2f281f;font-size:13px;font-weight:600;line-height:1.7;">
+    <i class="fas fa-clock" style="color:#D6AE62;margin-right:7px;"></i> Full-time position &nbsp;•&nbsp; Fixed schedule: 8:00 AM–5:00 PM
+  </div>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="yearsExp">Years of Experience</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-chart-line input-icon"></i>
+        <select id="yearsExp" required>
+          <option value="" disabled selected>Select years</option>
+          <option value="none">No experience</option>
+          <option value="less-1">Less than 1 year</option>
+          <option value="1-2">1 - 2 years</option>
+          <option value="3-5">3 - 5 years</option>
+          <option value="5-10">5 - 10 years</option>
+          <option value="10+">10+ years</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="form-nav">
+    <div></div>
+    <button type="button" class="btn-next" onclick="goToStep(2)">Next <i class="fas fa-arrow-right"></i></button>
+  </div>
+
+</div>
+
+<!-- ====== STEP 2: EDUCATION ====== -->
+<div class="form-step" data-step="2">
+
+  <h5 class="step-heading"><i class="fas fa-graduation-cap"></i> Educational Background</h5>
+  <p class="step-subtitle">Please provide your educational background.</p>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="education">Highest Educational Attainment *</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-graduation-cap input-icon"></i>
+        <select id="education" required>
+          <option value="" disabled selected>Select level</option>
+          <option value="senior-high">Senior High School</option>
+          <option value="vocational">Vocational / TESDA</option>
+          <option value="college-undergrad">College Undergraduate</option>
+          <option value="college-grad">College Graduate</option>
+          <option value="masters">Master's Degree</option>
+          <option value="doctorate">Doctorate Degree</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="school">School / University *</label>
+      <div class="input-wrapper">
+        <i class="fas fa-school input-icon"></i>
+        <input type="text" id="school" placeholder="Enter school / university name" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="course">Course / Program *</label>
+      <div class="input-wrapper">
+        <i class="fas fa-book input-icon"></i>
+        <input type="text" id="course" placeholder="Enter course / program" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="yearGrad">Year Graduated *</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-calendar input-icon"></i>
+        <select id="yearGrad" required>
+          <option value="" disabled selected>Select year graduated</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <div class="input float-input">
+    <label for="honors">Academic Honors <span class="optional-tag">(Optional)</span></label>
+    <div class="input-wrapper">
+      <i class="fas fa-award input-icon"></i>
+      <input type="text" id="honors" placeholder="e.g., With Honors, Cum Laude">
+      <div class="input-border"></div>
+    </div>
+  </div>
+
+  <h5 class="step-heading" style="margin-top: 20px;"><i class="fas fa-school"></i> Secondary Education</h5>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="highSchool">High School *</label>
+      <div class="input-wrapper">
+        <i class="fas fa-school input-icon"></i>
+        <input type="text" id="highSchool" placeholder="Enter high school name" required>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+    <div class="input float-input">
+      <label for="highSchoolYear">Year Graduated *</label>
+      <div class="input-wrapper select-wrapper">
+        <i class="fas fa-calendar input-icon"></i>
+        <select id="highSchoolYear" required>
+          <option value="" disabled selected>Select year graduated</option>
+        </select>
+        <i class="fas fa-chevron-down select-arrow"></i>
+        <div class="input-border"></div>
+      </div>
+      <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Required</span>
+    </div>
+
+  </div>
+
+  <h5 class="step-heading" style="margin-top: 20px;"><i class="fas fa-tools"></i> Vocational / TESDA <span class="optional-tag">(Optional)</span></h5>
+
+  <div class="row-2col">
+
+    <div class="input float-input">
+      <label for="vocSchool">School / Training Center</label>
+      <div class="input-wrapper">
+        <i class="fas fa-school input-icon"></i>
+        <input type="text" id="vocSchool" placeholder="Enter school / training center">
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="input float-input">
+      <label for="vocCourse">Course / Certification</label>
+      <div class="input-wrapper">
+        <i class="fas fa-certificate input-icon"></i>
+        <input type="text" id="vocCourse" placeholder="Enter course / certification">
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="input float-input">
+    <label for="vocYear">Year Completed</label>
+    <div class="input-wrapper select-wrapper">
+      <i class="fas fa-calendar input-icon"></i>
+      <select id="vocYear">
+        <option value="" disabled selected>Select year completed</option>
+      </select>
+      <i class="fas fa-chevron-down select-arrow"></i>
+      <div class="input-border"></div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button type="button" class="btn-back" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button type="button" class="btn-next" onclick="goToStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+  </div>
+
+</div>
+
+<!-- ====== STEP 3: UPLOAD DOCUMENTS ====== -->
+<div class="form-step" data-step="3">
+
+  <h5 class="step-heading"><i class="fas fa-folder-open"></i> Upload Required Documents</h5>
+  <p class="step-subtitle">Please upload the required documents to proceed with your application.</p>
+
+  <div class="input float-input">
+    <label>Resume / Curriculum Vitae *</label>
+    <div class="file-upload-wrapper">
+      <div class="file-upload-area" id="resumeArea">
+        <i class="fas fa-file-pdf file-upload-icon"></i>
+        <p class="file-upload-text">Upload Resume</p>
+        <p class="file-upload-hint">PDF, DOC, DOCX · Max 5 MB</p>
+        <input type="file" id="resume" accept=".pdf,.doc,.docx,.jpg,.jpeg,image/jpeg" hidden>
+        <p class="file-upload-hint">JPG and JPEG files are also accepted.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="agreement">
+    <label class="custom-checkbox">
+      <input type="checkbox" id="docCertify" required>
+      <span class="checkmark"></span>
+      I certify that all information and documents submitted are true, complete, and accurate.
+    </label>
+  </div>
+
+  <div class="form-nav">
+    <button type="button" class="btn-back" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button type="button" class="btn-next" onclick="goToStep(4)">Next <i class="fas fa-arrow-right"></i></button>
+  </div>
+
+</div>
+
+<!-- ====== STEP 4: REVIEW ====== -->
+<div class="form-step" data-step="4">
+
+  <h5 class="step-heading"><i class="fas fa-check-circle"></i> Review Your Application</h5>
+  <p class="step-subtitle">Please review all the information before submitting your application.</p>
+
+  <div class="review-section">
+    <h4 class="review-title"><i class="fas fa-user-circle"></i> Personal Information</h4>
+    <div class="review-item">
+      <span class="review-label">Full Name</span>
+      <span class="review-value" id="reviewName">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Date of Birth</span>
+      <span class="review-value" id="reviewBirthdate">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Gender</span>
+      <span class="review-value" id="reviewGender">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Civil Status</span>
+      <span class="review-value" id="reviewStatus">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Email Address</span>
+      <span class="review-value" id="reviewEmail">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Contact Number</span>
+      <span class="review-value" id="reviewContact">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Complete Address</span>
+      <span class="review-value" id="reviewAddress">—</span>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h4 class="review-title"><i class="fas fa-briefcase"></i> Position Information</h4>
+    <div class="review-item">
+      <span class="review-label">Position Applying For</span>
+      <span class="review-value" id="reviewPosition">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Employment Type</span>
+      <span class="review-value" id="reviewEmpType">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Years of Experience</span>
+      <span class="review-value" id="reviewExp">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Work Schedule</span>
+      <span class="review-value" id="reviewShift">—</span>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h4 class="review-title"><i class="fas fa-graduation-cap"></i> Educational Background</h4>
+    <div class="review-item">
+      <span class="review-label">Highest Attainment</span>
+      <span class="review-value" id="reviewEducation">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">School / University</span>
+      <span class="review-value" id="reviewSchool">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Course / Program</span>
+      <span class="review-value" id="reviewCourse">—</span>
+    </div>
+    <div class="review-item">
+      <span class="review-label">Year Graduated</span>
+      <span class="review-value" id="reviewYearGrad">—</span>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h4 class="review-title"><i class="fas fa-folder-open"></i> Uploaded Documents</h4>
+    <div class="review-item">
+      <span class="review-label">Resume / CV</span>
+      <span class="review-value" id="reviewResume">—</span>
+    </div>
+  </div>
+
+  <div class="agreement">
+    <label class="custom-checkbox">
+      <input type="checkbox" id="agreeCheck" required>
+      <span class="checkmark"></span>
+      I confirm that all the information provided is accurate and complete.
+    </label>
+  </div>
+
+  <div class="form-nav">
+    <button type="button" class="btn-back" onclick="goToStep(3)"><i class="fas fa-arrow-left"></i> Back</button>
+    <button type="submit" id="submitBtn">
+      <span id="btnText">SUBMIT APPLICATION</span>
+      <i class="fas fa-spinner fa-spin" id="btnSpinner" style="display:none;"></i>
+      <div class="btn-shine"></div>
+    </button>
+  </div>
+
+</div>
+
+<!-- ====== STEP 5: SUBMIT SUCCESS ====== -->
+<div class="form-step" data-step="5">
+
+  <div class="success-card">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h3 class="success-title">Application Submitted Successfully!</h3>
+    <p class="success-text">
+      Thank you for applying to <strong>Quadra Cafe</strong>. Your application has been successfully received by our Human Resources Department.
+    </p>
+    <p class="success-text">
+      Our recruitment team will carefully review your application. If your qualifications match our current hiring needs, we will contact you through your registered email address or mobile number.
+    </p>
+
+    <div class="success-status">
+      <div class="status-row">
+        <span class="status-label"><i class="fas fa-circle status-dot"></i> Status</span>
+        <span class="status-value pending">Pending Review</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label"><i class="fas fa-calendar"></i> Date Submitted</span>
+        <span class="status-value" id="submitDate">—</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label"><i class="fas fa-id-badge"></i> Application ID</span>
+        <span class="status-value" id="applicationId">—</span>
+      </div>
+    </div>
+
+    <div class="form-nav" style="justify-content: center;">
+      <a href="Login.html" class="btn-next" style="text-decoration: none; margin: 0;">Back to Sign In <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+</div>
+
+</form>
+
+</section>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Decorative corner accents -->
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<div id="applyAlertOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#17171d;border:1px solid rgba(214,174,98,.25);border-radius:18px;padding:28px;text-align:center;box-shadow:0 22px 60px rgba(0,0,0,.45);">
+    <div id="applyAlertIcon" style="width:70px;height:70px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(234,67,53,.15);border:1px solid rgba(234,67,53,.25);">
+      <i id="applyAlertIconTag" class="fas fa-exclamation-circle" style="font-size:30px;color:#EA4335;"></i>
+    </div>
+    <h3 id="applyAlertTitle" style="font-family:'Cormorant Garamond',serif;color:#fff;font-size:30px;margin:0 0 8px;">Application Alert</h3>
+    <p id="applyAlertMessage" style="color:rgba(255,255,255,.7);font-size:14px;line-height:1.6;margin:0 0 20px;"></p>
+    <button type="button" onclick="closeApplyAlert()" style="border:0;border-radius:12px;background:#D6AE62;color:#111;padding:12px 28px;font-weight:700;cursor:pointer;">Done</button>
+  </div>
+</div>
+
+<script>
+
+let currentStep = 1;
+
+function showApplyAlert(title, message, success = false) {
+  const icon = document.getElementById('applyAlertIcon');
+  const iconTag = document.getElementById('applyAlertIconTag');
+  icon.style.background = success ? 'rgba(52,168,83,.15)' : 'rgba(234,67,53,.15)';
+  icon.style.borderColor = success ? 'rgba(52,168,83,.25)' : 'rgba(234,67,53,.25)';
+  iconTag.className = success ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  iconTag.style.color = success ? '#34A853' : '#EA4335';
+  document.getElementById('applyAlertTitle').textContent = title;
+  document.getElementById('applyAlertMessage').textContent = message || 'Please check your application details.';
+  document.getElementById('applyAlertOverlay').style.display = 'flex';
+}
+
+function closeApplyAlert() {
+  document.getElementById('applyAlertOverlay').style.display = 'none';
+}
+
+document.getElementById('applyAlertOverlay').addEventListener('click', function(event) {
+  if (event.target === this) closeApplyAlert();
+});
+
+window.alert = function(message) {
+  showApplyAlert('Application Alert', message, false);
+};
+
+function trackerEscape(value) {
+  return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+document.getElementById('applicationTrackerForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+  const button = document.getElementById('trackerButton');
+  const box = document.getElementById('trackerResult');
+  button.disabled = true;
+  button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+  box.className = 'tracker-result';
+  box.innerHTML = '';
+  try {
+    const response = await fetch('../php/applicants.php', { method: 'POST', body: new FormData(this) });
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || 'Unable to find this application.');
+    const app = result.application;
+    const updated = new Date(String(app.updated_at).replace(' ', 'T'));
+    const updatedLabel = Number.isNaN(updated.getTime()) ? app.updated_at : updated.toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short' });
+    let schedule = '';
+    if (app.interview_date && app.interview_time) {
+      const interview = new Date(app.interview_date + 'T' + app.interview_time);
+      const interviewLabel = Number.isNaN(interview.getTime()) ? app.interview_date + ' ' + app.interview_time : interview.toLocaleString('en-PH', { dateStyle: 'full', timeStyle: 'short' });
+      schedule = '<div class="tracker-schedule"><i class="fas fa-calendar-check"></i><div><b>Interview schedule</b><span>' + trackerEscape(interviewLabel) + '</span><small>' + trackerEscape(app.interview_location || 'Venue will be provided by HR') + '</small></div></div>';
+    }
+    const waiting = Number(app.waiting_days) >= 7 ? '<div class="tracker-wait"><i class="fas fa-circle-info"></i> Waiting ' + Number(app.waiting_days) + ' days since the last update. HR has been flagged for follow-up.</div>' : '';
+    box.className = 'tracker-result show';
+    box.innerHTML = '<div class="tracker-status"><span>Application ' + trackerEscape(app.application_code) + '</span><strong>' + trackerEscape(app.status_label) + '</strong></div><p>' + trackerEscape(app.message) + '</p><div class="tracker-meta"><span><i class="fas fa-user"></i> ' + trackerEscape(app.applicant_name) + '</span><span><i class="fas fa-briefcase"></i> ' + trackerEscape(app.position) + '</span><span><i class="fas fa-clock"></i> Last updated: ' + trackerEscape(updatedLabel) + '</span></div>' + schedule + waiting;
+  } catch (error) {
+    box.className = 'tracker-result show error';
+    box.innerHTML = '<p><i class="fas fa-circle-exclamation"></i> ' + trackerEscape(error.message) + '</p>';
+  } finally {
+    button.disabled = false;
+    button.innerHTML = '<i class="fas fa-arrow-right"></i> Check Status';
+  }
+});
+
+// Floating label animation on focus
+document.querySelectorAll('.float-input input, .float-input textarea, .float-input select').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.closest('.input').classList.add('focused');
+    });
+    input.addEventListener('blur', function() {
+        if (!this.value) {
+            this.closest('.input').classList.remove('focused');
+        }
+    });
+});
+
+// Keep focused class if select has a value
+document.querySelectorAll('.float-input select').forEach(select => {
+    if (select.value) {
+        select.closest('.input').classList.add('focused');
+    }
+    select.addEventListener('change', function() {
+        if (this.value) {
+            this.closest('.input').classList.add('focused');
+        } else {
+            this.closest('.input').classList.remove('focused');
+        }
+    });
+});
+
+// Date input: keep focused if has value
+document.querySelectorAll('input[type="date"]').forEach(input => {
+    if (input.value) {
+        input.closest('.input').classList.add('focused');
+    }
+    input.addEventListener('change', function() {
+        if (this.value) {
+            this.closest('.input').classList.add('focused');
+        } else {
+            this.closest('.input').classList.remove('focused');
+        }
+    });
+});
+
+// File Upload Interaction
+function setupFileUpload(areaId, inputId) {
+  const area = document.getElementById(areaId);
+  const input = document.getElementById(inputId);
+
+  area.addEventListener('click', function() { input.click(); });
+
+  area.addEventListener('dragover', function(e) {
+    e.preventDefault(); this.classList.add('drag-over');
+  });
+
+  area.addEventListener('dragleave', function() {
+    this.classList.remove('drag-over');
+  });
+
+  area.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      updateFileText(area, e.dataTransfer.files[0].name);
+    }
+  });
+
+  input.addEventListener('change', function() {
+    if (this.files.length) updateFileText(area, this.files[0].name);
+  });
+}
+
+function updateFileText(area, filename) {
+  const text = area.querySelector('.file-upload-text');
+  text.innerHTML = `<i class="fas fa-check-circle" style="color: #D6AE62;"></i> ${filename}`;
+  area.style.borderColor = '#D6AE62';
+  area.style.background = 'rgba(214, 174, 98, 0.05)';
+}
+
+setupFileUpload('resumeArea', 'resume');
+
+document.getElementById('contactNo')?.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '').slice(0, 11);
+});
+
+let publishedJobPosts = [];
+
+function escapeApplyHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderPublishedVacancies() {
+  const list = document.getElementById('vacancyList');
+  if (!list) return;
+  if (!publishedJobPosts.length) {
+    list.innerHTML = '<div class="vacancy-empty"><i class="fas fa-briefcase"></i><h4>No Published Vacancies</h4><p>There are no job openings available right now. Please check again later.</p></div>';
+    return;
+  }
+
+  list.innerHTML = publishedJobPosts.map(post => {
+    const remaining = Number(post.remaining || 0);
+    const isFull = remaining < 1;
+    return '<article class="vacancy-card">' +
+      '<div class="vacancy-card-head"><div class="vacancy-card-title"><i class="fas fa-mug-hot"></i><div><h4>' + escapeApplyHtml(post.title) + '</h4><small>Quadra Cafe</small></div></div>' +
+      '<span class="vacancy-slots' + (isFull ? ' full' : '') + '">' + (isFull ? 'Currently Full' : remaining + ' slot' + (remaining === 1 ? '' : 's') + ' open') + '</span></div>' +
+      '<div class="vacancy-salary"><i class="fas fa-peso-sign"></i> ' + escapeApplyHtml(post.salary) + '</div>' +
+      '<div class="vacancy-detail"><strong>Qualifications</strong><p>' + escapeApplyHtml(post.qualification) + '</p></div>' +
+      '<div class="vacancy-detail"><strong>Job Description</strong><p>' + escapeApplyHtml(post.description) + '</p></div>' +
+      '<button type="button" class="vacancy-apply-btn" onclick="selectPublishedVacancy(' + Number(post.id) + ')"' + (isFull ? ' disabled' : '') + '>' +
+      '<i class="fas fa-paper-plane"></i> ' + (isFull ? 'Position Full' : 'Apply for this Job') + '</button></article>';
+  }).join('');
+}
+
+function selectPublishedVacancy(id) {
+  const post = publishedJobPosts.find(item => Number(item.id) === Number(id));
+  if (!post || Number(post.remaining) < 1) return;
+  document.getElementById('position').value = post.position_key;
+  document.getElementById('selectedVacancyTitle').textContent = post.title;
+  document.getElementById('vacancyView').style.display = 'none';
+  document.getElementById('applicationView').style.display = 'block';
+  document.querySelector('.right')?.scrollTo({ top: 0, behavior: 'smooth' });
+  history.replaceState(null, '', '#apply-' + post.position_key);
+}
+
+function showVacancies() {
+  document.getElementById('applicationView').style.display = 'none';
+  document.getElementById('vacancyView').style.display = 'block';
+  document.querySelector('.right')?.scrollTo({ top: 0, behavior: 'smooth' });
+  history.replaceState(null, '', location.pathname);
+}
+
+async function loadPublishedVacancies() {
+  const list = document.getElementById('vacancyList');
+  try {
+    const response = await fetch('../php/job_posts.php?action=open');
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || 'Unable to load job openings.');
+    publishedJobPosts = result.posts || [];
+    renderPublishedVacancies();
+  } catch (error) {
+    if (list) list.innerHTML = '<div class="vacancy-empty"><i class="fas fa-triangle-exclamation"></i><h4>Vacancies Unavailable</h4><p>Unable to load published job openings. Please refresh the page.</p></div>';
+  }
+}
+loadPublishedVacancies();
+
+// Populate year selects
+function populateYearSelects() {
+  const currentYear = new Date().getFullYear();
+  ['yearGrad', 'highSchoolYear', 'vocYear'].forEach(id => {
+    const select = document.getElementById(id);
+    if (!select) return;
+    for (let y = currentYear; y >= 1970; y--) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      select.appendChild(opt);
+    }
+  });
+}
+populateYearSelects();
+
+// Set max date for birthdate to enforce 18 years old minimum
+function setBirthdateMax() {
+  const today = new Date();
+  const minAge = 18;
+  const maxDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+  const maxDateStr = maxDate.toISOString().split('T')[0];
+  document.getElementById('birthdate').setAttribute('max', maxDateStr);
+}
+setBirthdateMax();
+
+// Go to Step
+function goToStep(step) {
+  if (step > currentStep) {
+    if (!validateStep(currentStep)) return;
+  }
+
+  currentStep = step;
+
+  document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+
+  document.querySelectorAll('.step').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'completed');
+    if (s === step) el.classList.add('active');
+    else if (s < step) el.classList.add('completed');
+  });
+
+  document.querySelectorAll('.step-connector').forEach((connector, index) => {
+    if (index + 1 < step) connector.classList.add('completed');
+    else connector.classList.remove('completed');
+  });
+
+  if (step === 4 || step === 5) updateReview();
+}
+
+// Validate
+function validateStep(step) {
+  let valid = true;
+
+  if (step === 1) {
+    const textFields = [
+      { el: document.getElementById('firstName'), min: 1 },
+      { el: document.getElementById('lastName'), min: 1 },
+      { el: document.getElementById('birthdate'), min: 1, isDate: true },
+      { el: document.getElementById('email'), min: 1 },
+      { el: document.getElementById('contactNo'), min: 11, isPhone: true },
+      { el: document.getElementById('address'), min: 5 },
+    ];
+
+    textFields.forEach(f => {
+      if (!f.el.value || f.el.value.trim().length < f.min) {
+        f.el.closest('.input').classList.add('error');
+        valid = false;
+      } else {
+        f.el.closest('.input').classList.remove('error');
+        if (f.isPhone && !/^\d{11}$/.test(f.el.value.trim())) {
+          f.el.closest('.input').classList.add('error');
+          const errorMsg = f.el.closest('.input').querySelector('.error-msg');
+          if (errorMsg) {
+            errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Must be exactly 11 digits';
+          }
+          valid = false;
+        }
+        // Check age if it's a date field
+        if (f.isDate) {
+          const birthDate = new Date(f.el.value);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          if (age < 18) {
+            f.el.closest('.input').classList.add('error');
+            // Show a custom error message
+            const errorMsg = f.el.closest('.input').querySelector('.error-msg');
+            if (errorMsg) {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Must be at least 18 years old';
+            }
+            valid = false;
+          } else {
+            // Reset error message back to default
+            const errorMsg = f.el.closest('.input').querySelector('.error-msg');
+            if (errorMsg) {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Required';
+            }
+          }
+        }
+      }
+    });
+
+    if (!document.getElementById('email').value.includes('@')) {
+      document.getElementById('email').closest('.input').classList.add('error');
+      valid = false;
+    }
+
+    ['gender', 'civilStatus', 'yearsExp'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value) { el.closest('.input').classList.add('error'); valid = false; }
+      else el.closest('.input').classList.remove('error');
+    });
+  }
+
+  if (step === 2) {
+    ['education', 'school', 'course', 'yearGrad', 'highSchool', 'highSchoolYear'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value || el.value.trim().length < 1) { el.closest('.input').classList.add('error'); valid = false; }
+      else el.closest('.input').classList.remove('error');
+    });
+  }
+
+  if (step === 3) {
+    const resume = document.getElementById('resume');
+    if (!resume.files || resume.files.length < 1) {
+      resume.closest('.input').classList.add('error');
+      valid = false;
+    } else {
+      const fileName = resume.files[0].name.toLowerCase();
+      if (!/\.(pdf|doc|docx|jpg|jpeg)$/.test(fileName)) {
+        resume.closest('.input').classList.add('error');
+        alert('Resume must be PDF, DOC, DOCX, JPG, or JPEG only.');
+        valid = false;
+      } else {
+        resume.closest('.input').classList.remove('error');
+      }
+    }
+
+    const certify = document.getElementById('docCertify');
+    if (!certify.checked) { certify.closest('.agreement').classList.add('error'); valid = false; }
+    else certify.closest('.agreement').classList.remove('error');
+  }
+
+  if (step === 4) {
+    const agree = document.getElementById('agreeCheck');
+    if (!agree.checked) { agree.closest('.agreement').classList.add('error'); valid = false; }
+    else agree.closest('.agreement').classList.remove('error');
+  }
+
+  if (!valid) {
+    const firstError = document.querySelector('.form-step.active .input.error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  return valid;
+}
+
+// Update Review
+function updateReview() {
+  const first = document.getElementById('firstName').value || '';
+  const middle = document.getElementById('middleName').value || '';
+  const last = document.getElementById('lastName').value || '';
+  document.getElementById('reviewName').textContent = `${first} ${middle} ${last}`.trim();
+
+  const gen = document.getElementById('gender');
+  document.getElementById('reviewGender').textContent = gen.options[gen.selectedIndex]?.text || '—';
+
+  const stat = document.getElementById('civilStatus');
+  document.getElementById('reviewStatus').textContent = stat.options[stat.selectedIndex]?.text || '—';
+
+  document.getElementById('reviewBirthdate').textContent = document.getElementById('birthdate').value || '—';
+  document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '—';
+  document.getElementById('reviewContact').textContent = document.getElementById('contactNo').value || '—';
+  document.getElementById('reviewAddress').textContent = document.getElementById('address').value || '—';
+
+  const edu = document.getElementById('education');
+  document.getElementById('reviewEducation').textContent = edu.options[edu.selectedIndex]?.text || '—';
+  document.getElementById('reviewSchool').textContent = document.getElementById('school').value || '—';
+  document.getElementById('reviewCourse').textContent = document.getElementById('course').value || '—';
+  document.getElementById('reviewYearGrad').textContent = document.getElementById('yearGrad').value || '—';
+
+  const pos = document.getElementById('position');
+  const selectedPost = publishedJobPosts.find(post => post.position_key === pos.value);
+  document.getElementById('reviewPosition').textContent = selectedPost?.title || '—';
+
+  document.getElementById('reviewEmpType').textContent = 'Full Time';
+
+  const exp = document.getElementById('yearsExp');
+  document.getElementById('reviewExp').textContent = exp.options[exp.selectedIndex]?.text || '—';
+
+  document.getElementById('reviewShift').textContent = '8:00 AM - 5:00 PM';
+
+  const resumeFile = document.getElementById('resume').files[0];
+  document.getElementById('reviewResume').textContent = resumeFile ? resumeFile.name : 'Not uploaded';
+}
+
+// Submit application to the database.
+async function saveApplication() {
+  const getVal = id => (document.getElementById(id)?.value || '').trim();
+  const data = new FormData();
+  const fields = { action: 'submit', first_name: getVal('firstName'), middle_name: getVal('middleName'), last_name: getVal('lastName'), birthdate: getVal('birthdate'), gender: getVal('gender'), civil_status: getVal('civilStatus'), email: getVal('email'), contact_no: getVal('contactNo'), address: getVal('address'), position: getVal('position'), employment_type: getVal('employmentType'), years_experience: getVal('yearsExp'), preferred_shift: getVal('shift'), education: getVal('education'), school: getVal('school'), course: getVal('course'), year_graduated: getVal('yearGrad'), high_school: getVal('highSchool'), high_school_year: getVal('highSchoolYear'), honors: getVal('honors') };
+  Object.entries(fields).forEach(([key, value]) => data.append(key, value));
+  data.append('resume', document.getElementById('resume').files[0]);
+  const response = await fetch('../php/applicants.php', { method: 'POST', body: data });
+  const result = await response.json();
+  if (!result.success) throw new Error(result.message || 'Unable to submit application.');
+  return result.application_code;
+}
+
+// Submit
+const form = document.getElementById('applyForm');
+const agreeCheck = document.getElementById('agreeCheck');
+const btnText = document.getElementById('btnText');
+const btnSpinner = document.getElementById('btnSpinner');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    if (!agreeCheck.checked) {
+        agreeCheck.closest('.agreement').classList.add('error');
+        valid = false;
+    } else agreeCheck.closest('.agreement').classList.remove('error');
+
+    if (valid) {
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline-block';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+
+        try {
+            const applicationCode = await saveApplication();
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+
+            const now = new Date();
+            document.getElementById('submitDate').textContent =
+                now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) +
+                ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('applicationId').textContent = applicationCode;
+
+            goToStep(5);
+            document.querySelectorAll('.float-input input, .float-input textarea, .float-input select').forEach(input => {
+                input.closest('.input').classList.remove('focused');
+            });
+        } catch (error) {
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+            alert(error.message);
+        }
+    }
+});
+
+// Remove error on input
+document.querySelectorAll('.float-input input, .float-input textarea, .float-input select').forEach(input => {
+    input.addEventListener('input', function() { this.closest('.input').classList.remove('error'); });
+    input.addEventListener('change', function() { this.closest('.input').classList.remove('error'); });
+});
+
+agreeCheck.addEventListener('change', function() { this.closest('.agreement').classList.remove('error'); });
+
+</script>
+
+</body>
+
+</html>

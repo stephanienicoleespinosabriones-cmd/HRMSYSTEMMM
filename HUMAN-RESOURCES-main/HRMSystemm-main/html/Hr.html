@@ -1,0 +1,2201 @@
+<?php require_once dirname(__DIR__) . '/php/portal_guard.php'; requirePortalRole('hr'); ?>
+<!DOCTYPE html>
+<html lang="en" data-portal-role="hr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../js/portal-security.js" defer></script>
+
+<title>Quadra Cafe HRMS - HR Dashboard</title>
+
+<link rel="stylesheet" href="../css/Hr.css?v=20260716-documents2">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles">
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+</div>
+
+<!-- Decorative corner accents -->
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<div class="dashboard-wrapper">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-wrapper">
+        <div class="sidebar-logo-glow"></div>
+        <img src="../images/logo.png" class="sidebar-logo" alt="Logo">
+      </div>
+      <h3 class="sidebar-brand">Quadra Cafe</h3>
+      <span class="sidebar-sub">HR PANEL</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-page="applicants">
+        <i class="fas fa-file-signature"></i>
+        <span>Applicants</span>
+      </a>
+      <a href="#" class="nav-item" data-page="employees">
+        <i class="fas fa-users"></i>
+        <span>Employees</span>
+      </a>
+      <a href="#" class="nav-item" data-page="employee-documents">
+        <i class="fas fa-folder-open"></i>
+        <span>Employee Documents</span>
+      </a>
+      <a href="#" class="nav-item" data-page="jobposting">
+        <i class="fas fa-briefcase"></i>
+        <span>Job Posting</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name">HR Admin</span>
+          <span class="sidebar-user-role">Human Resources</span>
+        </div>
+      </div>
+      <a href="#" class="sidebar-logout" title="Sign Out" onclick="showSignoutModal(); return false;">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="topbar-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search employees, reports..." id="globalSearch">
+      </div>
+
+      <div class="topbar-right">
+        <div class="topbar-notif" id="notifToggle">
+          <i class="fas fa-bell"></i>
+          <span class="notif-badge">3</span>
+        </div>
+        <div class="topbar-date">
+          <i class="fas fa-calendar-day"></i>
+          <span id="currentDate"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="page-content active" id="page-dashboard">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">HR Management Overview</p>
+        </div>
+       
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-employees">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Employees</span>
+            <span class="stat-value" id="totalEmployees">0</span>
+          
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-present">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Present Today</span>
+            <span class="stat-value" id="presentToday">0</span>
+            
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-leave">
+            <i class="fas fa-calendar-minus"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">On Leave</span>
+            <span class="stat-value" id="onLeave">0</span>
+            
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-applicants">
+            <i class="fas fa-file-signature"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Pending Applicants</span>
+            <span class="stat-value" id="pendingApplicants">0</span>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Tables Row -->
+      <div class="content-grid">
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-history"></i> Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <div class="activity-list" id="hrRecentActivityList">
+              <div class="activity-item">
+                <div class="activity-dot activity-dot-gold"></div>
+                <div class="activity-info">
+                  <span class="activity-text">Loading recent HR activity...</span>
+                  <span class="activity-time">Please wait</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-calendar-check"></i> Upcoming Events</h3>
+          </div>
+          <div class="card-body">
+            <div class="event-list" id="hrUpcomingEventsList">
+              <div class="event-item">
+                <div class="event-date-box">
+                  <span class="event-date-num">--</span>
+                  <span class="event-date-month">---</span>
+                </div>
+                <div class="event-info">
+                  <span class="event-title">Loading upcoming interviews...</span>
+                  <span class="event-desc">Only scheduled applicant interviews will appear here.</span>
+                  <span class="event-time"><i class="fas fa-clock"></i> Please wait</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Employee Table Section -->
+      <div class="card" style="margin-top: 30px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-user-tie"></i> Recent Employees</h3>
+          <div class="card-header-actions">
+            <button class="btn btn-sm btn-outline" onclick="showPage('employees')">
+              View All <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Joined Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="hrRecentEmployeesBody">
+                <tr><td colspan="6" style="text-align:center;">Loading employees from the database...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- End Dashboard Content -->
+
+    <!-- ====== APPLICANTS PAGE ====== -->
+    <div class="page-content" id="page-applicants">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Applicants</h1>
+          <p class="page-subtitle">Review and manage job applications</p>
+        </div>
+      </div>
+
+      <!-- Applicant Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-employees">
+            <i class="fas fa-file-signature"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Applicants</span>
+            <span class="stat-value" id="totalApplicants">0</span>
+            
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-present">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Qualified</span>
+            <span class="stat-value" id="qualifiedCount">0</span>
+            
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-leave">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Not Qualified</span>
+            <span class="stat-value" id="notQualifiedCount">0</span>
+           
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-applicants">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">For Interview</span>
+            <span class="stat-value" id="forInterviewCount">0</span>
+          
+          </div>
+        </div>
+      </div>
+
+      <!-- Applicants Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-list"></i> All Applicants</h3>
+          <div class="card-header-actions">
+            <select class="filter-select" id="applicantFilter" onchange="filterApplicants()">
+              <option value="all">All Applicants</option>
+              <option value="pending">Pending Review</option>
+              <option value="qualified">Qualified</option>
+              <option value="rejected">Rejected</option>
+              <option value="for-interview">For Interview</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table" id="applicantsTable">
+              <thead>
+                <tr>
+                  <th>Applicant</th>
+                  <th>Position</th>
+                  <th>Applied Date</th>
+                  <th>Status</th>
+                  <th>Availability</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="applicantsTableBody">
+                <tr><td colspan="6" style="text-align:center;padding:28px;color:rgba(255,255,255,.55)"><i class="fas fa-spinner fa-spin"></i> Loading applicants...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== EMPLOYEES PAGE (hidden) ====== -->
+    <div class="page-content" id="page-employees">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employees</h1>
+          <p class="page-subtitle">Manage your workforce</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-users"></i> Employee Records</h3>
+          <span class="status-badge status-active" id="hrEmployeeCount">0 total</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Joined Date</th>
+                </tr>
+              </thead>
+              <tbody id="hrEmployeesBody">
+                <tr><td colspan="5" style="text-align:center;">Loading employees from the database...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== EMPLOYEE DOCUMENTS PAGE ====== -->
+    <div class="page-content" id="page-employee-documents">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employee Documents</h1>
+          <p class="page-subtitle">Review and verify employee government documents</p>
+        </div>
+      </div>
+
+      <div class="stats-grid employee-document-stats" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-icon stat-icon-applicants"><i class="fas fa-folder-open"></i></div><div class="stat-info"><span class="stat-label">Uploaded</span><span class="stat-value" id="hrDocTotal">0</span></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-pending"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><span class="stat-label">Pending Review</span><span class="stat-value" id="hrDocPending">0</span></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-approved"><i class="fas fa-circle-check"></i></div><div class="stat-info"><span class="stat-label">Verified</span><span class="stat-value" id="hrDocVerified">0</span></div></div>
+        <div class="stat-card"><div class="stat-icon stat-icon-rejected"><i class="fas fa-circle-xmark"></i></div><div class="stat-info"><span class="stat-label">Rejected</span><span class="stat-value" id="hrDocRejected">0</span></div></div>
+      </div>
+
+      <div class="filters-bar employee-document-filters">
+        <div class="filter-search"><i class="fas fa-search"></i><input type="text" id="hrDocumentSearch" placeholder="Search employee name..."></div>
+        <div class="employee-document-select"><i class="fas fa-file-lines"></i><select class="filter-select" id="hrDocumentTypeFilter" autocomplete="off">
+          <option value="">All Document Types</option><option value="sss">SSS</option><option value="philhealth">PhilHealth</option><option value="pagibig">Pag-IBIG</option><option value="tin">TIN</option><option value="valid_id">Valid ID</option>
+        </select><i class="fas fa-chevron-down select-chevron"></i></div>
+        <div class="employee-document-select"><i class="fas fa-circle-check"></i><select class="filter-select" id="hrDocumentStatusFilter" autocomplete="off">
+          <option value="">All Statuses</option><option value="pending">Pending Review</option><option value="verified">Verified</option><option value="rejected">Rejected</option>
+        </select><i class="fas fa-chevron-down select-chevron"></i></div>
+        <button type="button" class="employee-document-clear" onclick="clearHrDocumentFilters()"><i class="fas fa-rotate-left"></i> Clear</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3 class="card-title"><i class="fas fa-file-shield"></i> Uploaded Documents</h3><span class="status-badge status-pending" id="hrDocumentShowing">0 records</span></div>
+        <div class="card-body"><div class="table-wrapper"><table class="data-table employee-documents-table"><thead><tr>
+          <th>Employee Name</th><th>Document Type</th><th>Upload Date</th><th>Verification Status</th><th>Verified By</th><th>Verification Date</th><th>Action</th>
+        </tr></thead><tbody id="hrEmployeeDocumentsBody"><tr><td colspan="7" style="text-align:center;">Loading employee documents...</td></tr></tbody></table></div></div>
+      </div>
+    </div>
+
+    <!-- ====== JOB POSTING PAGE (hidden) ====== -->
+    <div class="page-content" id="page-jobposting">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Job Posting</h1>
+          <p class="page-subtitle">Create and publish job openings</p>
+        </div>
+      </div>
+
+      <div class="job-flow" aria-label="Job posting progress">
+        <div class="job-flow-step active" id="jobFlowCreate"><span>1</span><div><strong>Create</strong><small>Enter job details</small></div></div>
+        <i class="fas fa-chevron-right"></i>
+        <div class="job-flow-step" id="jobFlowReview"><span>2</span><div><strong>Review</strong><small>Check before publishing</small></div></div>
+        <i class="fas fa-chevron-right"></i>
+        <div class="job-flow-step" id="jobFlowPublish"><span>3</span><div><strong>Publish</strong><small>Receive applications</small></div></div>
+      </div>
+
+      <!-- Create Post Card -->
+      <div class="card" id="jobPostFormCard">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-briefcase"></i> Create Job Post</h3>
+        </div>
+        <div class="card-body">
+          <form id="jobPostForm" onsubmit="return false;">
+            <div class="form-group">
+              <label class="form-label" for="jpTitle"><i class="fas fa-heading"></i> Job Title</label>
+              <select id="jpTitle" class="form-input" required>
+                <option value="" selected disabled>Select a position</option>
+                <option value="barista">Barista</option>
+                <option value="cashier">Cashier</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="jpSalary"><i class="fas fa-peso-sign"></i> Salary</label>
+              <input type="text" id="jpSalary" class="form-input" placeholder="e.g. PHP 15,000 - PHP 18,000 / month" maxlength="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="jpQualification"><i class="fas fa-graduation-cap"></i> Qualifications</label>
+              <textarea id="jpQualification" class="form-textarea" placeholder="List the required education, experience, and skills..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="jpDescription"><i class="fas fa-align-left"></i> Job Description</label>
+              <textarea id="jpDescription" class="form-textarea" placeholder="Describe the responsibilities, schedule, and expectations for this role..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-gold" onclick="reviewJobPost()">
+                <i class="fas fa-clipboard-list"></i> Review Details
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Review Card (hidden until review) -->
+      <div class="card" id="jobPostReviewCard" style="margin-top: 25px; display: none;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-clipboard-check"></i> Review Job Post</h3>
+        </div>
+        <div class="card-body">
+          <div class="review-row">
+            <span class="review-label">Job Title</span>
+            <span class="review-value" id="reviewTitle"></span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Salary</span>
+            <span class="review-value" id="reviewSalary"></span>
+          </div>
+          <div class="review-row review-row-block">
+            <span class="review-label">Qualifications</span>
+            <span class="review-value" id="reviewQualification"></span>
+          </div>
+          <div class="review-row review-row-block">
+            <span class="review-label">Job Description</span>
+            <span class="review-value" id="reviewDescription"></span>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="editJobPost()">
+              <i class="fas fa-pen"></i> Edit Details
+            </button>
+            <button type="button" class="btn btn-gold" onclick="publishJobPost()">
+              <i class="fas fa-paper-plane"></i> Publish
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Published Posts Card -->
+      <div class="card" id="jobPostListCard" style="margin-top: 25px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-list"></i> Manage Job Posts</h3>
+          <div class="card-header-actions">
+            <span class="status-badge status-pending" id="jpCount">0 Open</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table" id="jobPostTable">
+              <thead>
+                <tr>
+                  <th>Job Title</th>
+                  <th>Salary</th>
+                  <th>Applications</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="jobPostTableBody">
+                <tr id="jpEmptyRow">
+                  <td colspan="5">
+                    <div class="placeholder-content" style="padding: 40px 20px;">
+                      <i class="fas fa-briefcase"></i>
+                      <h3>No Job Posts Yet</h3>
+                      <p>Create a job post above and publish it to start receiving applications.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Notification Dropdown -->
+<div class="notif-dropdown" id="notifDropdown">
+  <div class="notif-dropdown-header">
+    <h4>Notifications</h4>
+    <button class="notif-mark-read">Mark all as read</button>
+  </div>
+  <div class="notif-list" id="hrNotificationList">
+    <div class="notif-item">
+      <div class="notif-icon notif-icon-gold"><i class="fas fa-bell"></i></div>
+      <div class="notif-content">
+        <p class="notif-text">No database notifications yet.</p>
+        <span class="notif-time">Live HR updates will appear here</span>
+      </div>
+    </div>
+  </div>
+  <div class="notif-dropdown-footer">
+    <a href="#">View all notifications</a>
+  </div>
+</div>
+
+<div class="signout-modal-overlay" id="rejectEmployeeDocumentModal">
+  <div class="signout-modal" style="max-width:520px;">
+    <div class="signout-modal-icon"><i class="fas fa-file-circle-xmark"></i></div>
+    <h2 class="signout-modal-title">Reject Employee Document</h2>
+    <p class="signout-modal-desc" id="rejectEmployeeDocumentDesc">Enter the reason the employee must replace this document.</p>
+    <textarea id="employeeDocumentRejectionReason" class="document-rejection-input" maxlength="1000" rows="4" placeholder="Rejection reason (required)"></textarea>
+    <div class="signout-modal-actions">
+      <button type="button" class="signout-modal-btn signout-btn-cancel" onclick="closeEmployeeDocumentReject()">Cancel</button>
+      <button type="button" class="signout-modal-btn signout-btn-confirm" onclick="confirmEmployeeDocumentReject()">Reject Document</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== VIEW APPLICANT MODAL ====== -->
+<div class="signout-modal-overlay" id="viewApplicantModal">
+  <div class="signout-modal" style="max-width: 600px;">
+    <div class="signout-modal-icon" style="width: 60px; height: 60px; font-size: 28px;">
+      <i class="fas fa-user"></i>
+    </div>
+    <h2 class="signout-modal-title" id="viewApplicantName">Applicant Name</h2>
+    <div class="applicant-summary">
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-envelope"></i> Email</span>
+        <span class="applicant-summary-value" id="viewApplicantEmail"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-briefcase"></i> Position Applied</span>
+        <span class="applicant-summary-value" id="viewApplicantPosition"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-calendar-day"></i> Applied Date</span>
+        <span class="applicant-summary-value" id="viewApplicantDate"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-info-circle"></i> Status</span>
+        <span class="applicant-summary-value" id="viewApplicantStatus"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-clock"></i> Availability</span>
+        <span class="applicant-summary-value" id="viewApplicantAvailability"></span>
+      </div>
+    </div>
+    <div class="applicant-details-block">
+      <h4 class="applicant-details-heading"><i class="fas fa-file-alt"></i> Application Details</h4>
+      <div class="app-details" id="viewApplicantDetails"></div>
+    </div>
+    <div class="signout-modal-actions" style="margin-top: 20px;">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeViewApplicant()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== REVIEW APPLICANT MODAL ====== -->
+<div class="signout-modal-overlay" id="reviewApplicantModal">
+  <div class="signout-modal" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
+    <div class="signout-modal-icon" style="width: 60px; height: 60px; font-size: 28px;">
+      <i class="fas fa-clipboard-check"></i>
+    </div>
+    <h2 class="signout-modal-title">Review Applicant</h2>
+    <p class="signout-modal-desc" id="reviewApplicantDesc">Review selected applicant</p>
+    <div class="applicant-summary" style="margin-top: 12px;">
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-envelope"></i> Email</span>
+        <span class="applicant-summary-value" id="reviewApplicantEmail"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-briefcase"></i> Position</span>
+        <span class="applicant-summary-value" id="reviewApplicantPosition"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-business-time"></i> Experience</span>
+        <span class="applicant-summary-value" id="reviewApplicantExperience"></span>
+      </div>
+      <div class="applicant-summary-item">
+        <span class="applicant-summary-label"><i class="fas fa-calendar-day"></i> Applied Date</span>
+        <span class="applicant-summary-value" id="reviewApplicantDate"></span>
+      </div>
+    </div>
+    <div class="applicant-details-block">
+      <h4 class="applicant-details-heading"><i class="fas fa-id-card"></i> Applicant Information</h4>
+      <div class="app-details" id="reviewApplicantDetails"></div>
+      <div style="margin-top: 14px;" id="reviewApplicantResume"></div>
+    </div>
+    <div style="text-align: left; margin: 15px 0;">
+      <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 8px;">Decision:</label>
+      <div style="display: flex; gap: 12px; margin-bottom: 15px;">
+        <button class="btn btn-sm" style="flex:1; background: rgba(52,168,83,0.15); color: #34A853; border: 1px solid rgba(52,168,83,0.3);" onclick="markQualified()">
+          <i class="fas fa-user-check"></i> Accept Applicant
+        </button>
+        <button class="btn btn-sm" style="flex:1; background: rgba(234,67,53,0.15); color: #EA4335; border: 1px solid rgba(234,67,53,0.3);" onclick="markNotQualified()">
+          <i class="fas fa-user-times"></i> Reject Applicant
+        </button>
+      </div>
+      <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 5px;">Remarks / Notes:</label>
+      <textarea id="reviewRemarks" style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(214,174,98,0.15); color: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif; font-size: 13px; resize: vertical; min-height: 80px; outline: none;" placeholder="Enter your remarks..."></textarea>
+    </div>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeReviewApplicant()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SCHEDULE INTERVIEW MODAL ====== -->
+<div class="signout-modal-overlay" id="scheduleInterviewModal">
+  <div class="signout-modal" style="max-width: 500px;">
+    <div class="signout-modal-icon" style="width: 60px; height: 60px; font-size: 28px;">
+      <i class="fas fa-calendar-plus"></i>
+    </div>
+    <h2 class="signout-modal-title" id="scheduleInterviewTitle">Schedule Interview</h2>
+    <p class="signout-modal-desc" id="scheduleInterviewDesc">Set interview schedule for <strong style="color: #E9C27D;">Michael Brown</strong></p>
+    <div style="text-align: left; margin: 15px 0;">
+      <div style="margin-bottom: 15px;">
+        <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 5px;">Interview Date:</label>
+        <input type="date" id="interviewDate" min="" style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(214,174,98,0.15); color: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;">
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 5px;">Interview Time:</label>
+        <input type="time" id="interviewTime" style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(214,174,98,0.15); color: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;">
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 5px;">Interview Type:</label>
+        <select id="interviewType" style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(214,174,98,0.15); color: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;">
+          <option value="In-Person">In-Person</option>
+          <option value="Video Call">Video Call</option>
+          <option value="Phone Call">Phone Call</option>
+        </select>
+      </div>
+      <div>
+        <label style="color: rgba(255,255,255,0.6); font-size: 13px; display: block; margin-bottom: 5px;">Location / Link:</label>
+        <input type="text" id="interviewLocation" placeholder="Office address or video link" style="width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(214,174,98,0.15); color: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;">
+      </div>
+    </div>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeScheduleInterview()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" id="scheduleConfirmBtn" onclick="confirmScheduleInterview()">Set Schedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== QUALIFIED/NOT QUALIFIED CONFIRMATION MODAL ====== -->
+<div class="signout-modal-overlay" id="qualifyConfirmModal">
+  <div class="signout-modal" style="max-width: 420px;">
+    <div class="signout-modal-icon">
+      <i class="fas fa-question-circle"></i>
+    </div>
+    <h2 class="signout-modal-title" id="qualifyConfirmTitle">Confirm Decision</h2>
+    <p class="signout-modal-desc" id="qualifyConfirmDesc">Are you sure you want to send this to admin?</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeQualifyConfirm()">No</button>
+      <button class="signout-modal-btn signout-btn-confirm" id="qualifyConfirmBtn" onclick="confirmQualifyAction()">Yes, Mark</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== QUALIFIED/NOT QUALIFIED RESULT MODAL ====== -->
+<div class="signout-modal-overlay" id="qualifyResultModal">
+  <div class="signout-modal" style="max-width: 420px;">
+    <div class="signout-modal-icon" id="qualifyResultIcon" style="background: rgba(52,168,83,0.15);">
+      <i class="fas fa-check-circle" id="qualifyResultIconTag" style="color: #34A853;"></i>
+    </div>
+    <h2 class="signout-modal-title" id="qualifyResultTitle">Marked as Qualified</h2>
+    <p class="signout-modal-desc" id="qualifyResultDesc"></p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-confirm" onclick="closeQualifyResult()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== HIRE CONFIRMATION MODAL ====== -->
+<div class="signout-modal-overlay" id="hireConfirmModal">
+  <div class="signout-modal" style="max-width: 440px;">
+    <div class="signout-modal-icon" style="background: rgba(52,168,83,0.15); border-color: rgba(52,168,83,0.25);">
+      <i class="fas fa-user-check" style="color: #34A853;"></i>
+    </div>
+    <h2 class="signout-modal-title">Confirm Hiring</h2>
+    <p class="signout-modal-desc" id="hireConfirmDesc">Are you sure you want to hire this applicant?</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeHireConfirm()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="confirmHireApplicant()">Yes, Hire</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign-Out Confirmation Modal -->
+<div class="signout-modal-overlay" id="signoutModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon">
+      <i class="fas fa-sign-out-alt"></i>
+    </div>
+    <h2 class="signout-modal-title">Sign Out</h2>
+    <p class="signout-modal-desc">Are you sure you want to sign out of your account? You will be redirected to the login page.</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="hideSignoutModal()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="confirmSignout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- HR employee-account form -->
+<div class="signout-modal-overlay" id="createEmployeeModal">
+  <div class="signout-modal" style="max-width:560px; text-align:left;">
+    <h2 class="signout-modal-title"><i class="fas fa-user-plus"></i> Create Employee Account</h2>
+    <p class="signout-modal-desc">The account will stay pending until an administrator accepts it.</p>
+    <form id="createEmployeeForm">
+      <input name="full_name" required placeholder="Full name" style="width:100%; box-sizing:border-box; margin:6px 0; padding:12px; border-radius:7px;">
+      <input name="email" type="email" required placeholder="Email address" style="width:100%; box-sizing:border-box; margin:6px 0; padding:12px; border-radius:7px;">
+      <input name="username" required placeholder="Username" style="width:100%; box-sizing:border-box; margin:6px 0; padding:12px; border-radius:7px;">
+      <input name="position" required placeholder="Position (e.g. Barista)" style="width:100%; box-sizing:border-box; margin:6px 0; padding:12px; border-radius:7px;">
+      <p class="signout-modal-desc" style="margin:10px 0 0;">A 6-digit access PIN will be generated automatically and emailed to the employee after account creation.</p>
+      <div class="signout-modal-actions">
+        <button type="button" class="signout-modal-btn signout-btn-cancel" onclick="closeCreateEmployeeModal()">Cancel</button>
+        <button type="submit" class="signout-modal-btn signout-btn-confirm">Send for Approval</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+/* ============================================
+   QUALIFIED / NOT QUALIFIED BUTTONS
+   ============================================ */
+.btn-qualified {
+  background: rgba(52,168,83,0.2) !important;
+  color: #34A853 !important;
+  border: 1px solid rgba(52,168,83,0.3) !important;
+}
+.btn-qualified:hover {
+  background: rgba(52,168,83,0.35) !important;
+}
+.btn-not-qualified {
+  background: rgba(234,67,53,0.15) !important;
+  color: #EA4335 !important;
+  border: 1px solid rgba(234,67,53,0.3) !important;
+}
+.btn-not-qualified:hover {
+  background: rgba(234,67,53,0.3) !important;
+}
+</style>
+
+<script>
+
+// ============================================
+// APPLICANTS DATA
+// ============================================
+const applicantsData = [];
+let hrEmployeesData = [];
+
+let currentApplicantIndex = -1;
+
+// ============================================
+// LOAD APPLICATIONS FROM apply.html (localStorage)
+// ============================================
+function loadExternalApplications() {
+  let external = [];
+  try {
+    external = JSON.parse(localStorage.getItem('qc_applications')) || [];
+  } catch (e) {
+    external = [];
+  }
+
+  external.forEach(app => {
+    const lines = [
+      'Application ID: ' + (app.applicationId || '—'),
+      'Full Name: ' + (app.fullName || app.name || '—'),
+      'Date of Birth: ' + (app.birthdate || '—'),
+      'Gender: ' + (app.gender || '—'),
+      'Civil Status: ' + (app.civilStatus || '—'),
+      'Email: ' + (app.email || '—'),
+      'Contact Number: ' + (app.contactNo || '—'),
+      'Complete Address: ' + (app.address || '—'),
+      'Position Applying For: ' + (app.position || '—'),
+      'Employment Type: ' + (app.employmentType || '—'),
+      'Years of Experience: ' + (app.yearsExp || '—'),
+      'Preferred Work Shift: ' + (app.shift || '—'),
+      'Highest Educational Attainment: ' + (app.education || '—'),
+      'School / University: ' + (app.school || '—'),
+      'Course / Program: ' + (app.course || '—'),
+      'Year Graduated: ' + (app.yearGrad || '—'),
+      'High School: ' + (app.highSchool || '—'),
+      'High School Year: ' + (app.highSchoolYear || '—'),
+      'Academic Honors: ' + (app.honors || '—'),
+      'Resume / CV: ' + (app.resumeName || 'Not uploaded')
+    ];
+
+    applicantsData.push({
+      name: app.fullName || app.name || 'Applicant',
+      email: app.email || '—',
+      position: app.position || '—',
+      date: app.date || '—',
+      status: app.status || 'Pending',
+      availability: app.availability === 'not-available' ? 'Not Available' : (app.availability === 'available' ? 'Available' : 'Not Set'),
+      yearsExp: app.yearsExp || '',
+      details: lines.join('\n')
+    });
+  });
+}
+
+// ============================================
+// VIEW APPLICANT
+// ============================================
+function viewApplicant(index) {
+  const app = applicantsData[index];
+  document.getElementById('viewApplicantName').textContent = app.name;
+  document.getElementById('viewApplicantEmail').textContent = app.email;
+  document.getElementById('viewApplicantPosition').textContent = app.position;
+  document.getElementById('viewApplicantDate').textContent = app.date;
+  document.getElementById('viewApplicantStatus').textContent = app.status;
+  document.getElementById('viewApplicantAvailability').textContent = app.availability;
+  document.getElementById('viewApplicantDetails').innerHTML = renderApplicantDetails(app.details);
+  document.getElementById('viewApplicantModal').classList.add('show');
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function hrFormatDate(value) {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function hrInferDepartment(position) {
+  const value = String(position || '').toLowerCase();
+  if (value.includes('barista') || value.includes('cashier')) return 'Operations';
+  return 'Operations';
+}
+
+function hrEmployeeStatusLabel(status) {
+  if (status === 'approved') return 'Active';
+  if (status === 'inactive') return 'Not Active / Resigned';
+  return status ? status.charAt(0).toUpperCase() + status.slice(1) : '-';
+}
+
+function hrEmployeeStatusClass(status) {
+  if (status === 'approved') return 'status-active';
+  if (status === 'inactive') return 'status-leave';
+  return 'status-pending';
+}
+
+function relativeDateLabel(value) {
+  if (!value) return 'Recently';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Recently';
+  const diffMs = Date.now() - date.getTime();
+  const minutes = Math.max(0, Math.floor(diffMs / 60000));
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return minutes + ' minute' + (minutes === 1 ? '' : 's') + ' ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + ' hour' + (hours === 1 ? '' : 's') + ' ago';
+  const days = Math.floor(hours / 24);
+  return days + ' day' + (days === 1 ? '' : 's') + ' ago';
+}
+
+function renderHrDashboardActivity() {
+  const list = document.getElementById('hrRecentActivityList');
+  if (!list) return;
+
+  const activities = [];
+  applicantsData.forEach(app => {
+    activities.push({
+      text: 'Applicant ' + app.name + ' is ' + app.status,
+      time: app.createdAt || '',
+      dot: app.status === 'Rejected' || app.status === 'Interview Not Passed' ? 'activity-dot-red' : 'activity-dot-blue'
+    });
+  });
+  hrEmployeesData.forEach(employee => {
+    activities.push({
+      text: employee.full_name + ' is ' + hrEmployeeStatusLabel(employee.status),
+      time: employee.created_at || '',
+      dot: employee.status === 'approved' ? 'activity-dot-green' : 'activity-dot-gold'
+    });
+  });
+
+  activities.sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
+  const visible = activities.slice(0, 6);
+  if (!visible.length) {
+    list.innerHTML = '<div class="activity-item"><div class="activity-dot activity-dot-gold"></div><div class="activity-info"><span class="activity-text">No employee or applicant activity yet.</span><span class="activity-time">Database is empty</span></div></div>';
+    return;
+  }
+
+  list.innerHTML = visible.map(item =>
+    '<div class="activity-item">' +
+      '<div class="activity-dot ' + item.dot + '"></div>' +
+      '<div class="activity-info">' +
+        '<span class="activity-text">' + escapeHtml(item.text) + '</span>' +
+        '<span class="activity-time">' + escapeHtml(relativeDateLabel(item.time)) + '</span>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function renderHrUpcomingEvents() {
+  const list = document.getElementById('hrUpcomingEventsList');
+  if (!list) return;
+
+  const events = applicantsData
+    .filter(app => app.interviewDate && app.interviewTime)
+    .map(app => {
+      const date = new Date(app.interviewDate + 'T' + app.interviewTime);
+      return { app, date };
+    })
+    .filter(item => !Number.isNaN(item.date.getTime()) && item.date >= new Date())
+    .sort((a, b) => a.date - b.date)
+    .slice(0, 4);
+
+  if (!events.length) {
+    list.innerHTML = '<div class="event-item"><div class="event-date-box"><span class="event-date-num">--</span><span class="event-date-month">---</span></div><div class="event-info"><span class="event-title">No upcoming interviews</span><span class="event-desc">Scheduled applicant interviews will appear here.</span><span class="event-time"><i class="fas fa-clock"></i> None scheduled</span></div></div>';
+    return;
+  }
+
+  list.innerHTML = events.map(item => {
+    const date = item.date;
+    return '<div class="event-item">' +
+      '<div class="event-date-box"><span class="event-date-num">' + date.getDate() + '</span><span class="event-date-month">' + date.toLocaleString('en-US', { month: 'short' }).toUpperCase() + '</span></div>' +
+      '<div class="event-info">' +
+        '<span class="event-title">' + escapeHtml(item.app.status.replace('Scheduled', '').trim() || 'Interview') + '</span>' +
+        '<span class="event-desc">' + escapeHtml(item.app.name + ' - ' + item.app.position) + '</span>' +
+        '<span class="event-time"><i class="fas fa-clock"></i> ' + escapeHtml(date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })) + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderHrNotifications() {
+  const list = document.getElementById('hrNotificationList');
+  const badge = document.querySelector('.notif-badge');
+  if (!list || !badge) return;
+
+  const items = applicantsData
+    .filter(app => app.status === 'Pending' || app.status === 'Final Interview Passed' || app.status === 'Inactive / Resigned')
+    .slice(0, 5);
+
+  badge.textContent = String(items.length);
+  if (!items.length) {
+    list.innerHTML = '<div class="notif-item"><div class="notif-icon notif-icon-gold"><i class="fas fa-bell"></i></div><div class="notif-content"><p class="notif-text">No database notifications yet.</p><span class="notif-time">Live HR updates will appear here</span></div></div>';
+    return;
+  }
+
+  list.innerHTML = items.map(app => {
+    const iconClass = app.status === 'Inactive / Resigned' ? 'notif-icon-red' : (app.status === 'Final Interview Passed' ? 'notif-icon-green' : 'notif-icon-blue');
+    const icon = app.status === 'Inactive / Resigned' ? 'fa-user-slash' : (app.status === 'Final Interview Passed' ? 'fa-check-circle' : 'fa-file-alt');
+    return '<div class="notif-item notif-unread">' +
+      '<div class="notif-icon ' + iconClass + '"><i class="fas ' + icon + '"></i></div>' +
+      '<div class="notif-content"><p class="notif-text">' + escapeHtml(app.name + ' - ' + app.status) + '</p><span class="notif-time">' + escapeHtml(relativeDateLabel(app.createdAt)) + '</span></div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderHrEmployeeRows(employees, includeAction) {
+  if (!employees.length) {
+    return '<tr><td colspan="' + (includeAction ? '6' : '5') + '" style="text-align:center;">No employee records in the database yet.</td></tr>';
+  }
+
+  return employees.map(employee => {
+    const status = employee.status || '';
+    const cells = [
+      '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeHtml(employee.full_name) + '</span><span class="emp-email">' + escapeHtml(employee.email) + '</span></div></div></td>',
+      '<td>' + escapeHtml(employee.position || '-') + '</td>',
+      '<td>' + escapeHtml(hrInferDepartment(employee.position)) + '</td>',
+      '<td><span class="status-badge ' + hrEmployeeStatusClass(status) + '">' + hrEmployeeStatusLabel(status) + '</span></td>',
+      '<td>' + escapeHtml(hrFormatDate(employee.created_at)) + '</td>'
+    ];
+    if (includeAction) {
+      cells.push('<td><button class="btn btn-sm btn-gold" onclick="showPage(\'employees\')"><i class="fas fa-eye"></i></button></td>');
+    }
+    return '<tr>' + cells.join('') + '</tr>';
+  }).join('');
+}
+
+async function loadHrEmployees() {
+  const recentBody = document.getElementById('hrRecentEmployeesBody');
+  const fullBody = document.getElementById('hrEmployeesBody');
+  const count = document.getElementById('hrEmployeeCount');
+  if (!recentBody && !fullBody) return;
+
+  try {
+    const response = await fetch('../php/accounts.php?action=list');
+    if (response.status === 401 || response.status === 403) {
+      showSystemAlert('HR Session Required', 'Please sign in again using an HR or Administrator PIN to view employees.', false);
+      setTimeout(() => { window.location.href = 'Login.html'; }, 1800);
+      return;
+    }
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message);
+
+    const employees = result.accounts.filter(account => {
+      const position = String(account.position || '').toLowerCase();
+      return ['approved', 'inactive'].includes(account.status) &&
+        position !== 'administrator' &&
+        !position.includes('hr') &&
+        position !== 'human resources';
+    });
+
+    hrEmployeesData = employees;
+    document.getElementById('totalEmployees').textContent = employees.filter(employee => employee.status === 'approved').length;
+    if (count) count.textContent = employees.length + ' total';
+    if (recentBody) recentBody.innerHTML = renderHrEmployeeRows(employees.slice(0, 5), true);
+    if (fullBody) fullBody.innerHTML = renderHrEmployeeRows(employees, false);
+    renderHrDashboardActivity();
+  } catch (error) {
+    if (recentBody) recentBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Unable to load employees from the database.</td></tr>';
+    if (fullBody) fullBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Unable to load employees from the database.</td></tr>';
+  }
+}
+
+const detailSkipLabels = ['Email', 'Position Applying For'];
+
+function renderApplicantDetails(text) {
+  if (!text || !text.trim()) {
+    return '<p class="app-details-empty">No additional details provided.</p>';
+  }
+  const lines = text.split('\n');
+  let html = '';
+  lines.forEach(line => {
+    const idx = line.indexOf(':');
+    if (idx > 0 && idx < 60) {
+      const label = line.substring(0, idx).trim();
+      const value = line.substring(idx + 1).trim();
+      if (detailSkipLabels.includes(label)) return;
+      html += '<div class="app-detail-row">' +
+                '<span class="app-detail-label">' + escapeHtml(label) + '</span>' +
+                '<span class="app-detail-value">' + escapeHtml(value) + '</span>' +
+              '</div>';
+    } else if (line.trim()) {
+      html += '<p class="app-detail-para">' + escapeHtml(line) + '</p>';
+    }
+  });
+  return html;
+}
+
+function closeViewApplicant() {
+  document.getElementById('viewApplicantModal').classList.remove('show');
+}
+
+// ============================================
+// REVIEW APPLICANT
+// ============================================
+function reviewApplicant(index) {
+  currentApplicantIndex = index;
+  const app = applicantsData[index];
+  document.getElementById('reviewApplicantDesc').innerHTML = 'Review application for <strong style="color: #E9C27D;">' + app.name + '</strong>';
+  document.getElementById('reviewApplicantEmail').textContent = app.email || 'Not provided';
+  document.getElementById('reviewApplicantPosition').textContent = app.position || 'Not provided';
+  document.getElementById('reviewApplicantExperience').textContent = app.yearsExp || 'Not provided';
+  document.getElementById('reviewApplicantDate').textContent = app.date || 'Not provided';
+  document.getElementById('reviewApplicantDetails').innerHTML = renderApplicantDetails(app.details);
+  document.getElementById('reviewApplicantResume').innerHTML = app.resumePath
+    ? '<a class="btn btn-sm btn-gold" href="../' + encodeURI(app.resumePath) + '" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Open Resume / CV</a>'
+    : '<span style="color:rgba(255,255,255,0.45); font-size:13px;"><i class="fas fa-file-circle-xmark"></i> No resume uploaded.</span>';
+  document.getElementById('reviewRemarks').value = '';
+  document.getElementById('reviewApplicantModal').classList.add('show');
+}
+
+function closeReviewApplicant() {
+  document.getElementById('reviewApplicantModal').classList.remove('show');
+  currentApplicantIndex = -1;
+}
+
+function markQualified() {
+  if (currentApplicantIndex === -1) return;
+  const idx = currentApplicantIndex;
+  closeReviewApplicant();
+  showQualifyConfirm(idx, 'qualified');
+}
+
+function markNotQualified() {
+  if (currentApplicantIndex === -1) return;
+  const idx = currentApplicantIndex;
+  closeReviewApplicant();
+  showQualifyConfirm(idx, 'not-qualified');
+}
+
+// ============================================
+// QUALIFY CONFIRM / RESULT MODALS
+// ============================================
+let qualifyPendingIndex = -1;
+let qualifyPendingAction = ''; // 'qualified' or 'not-qualified'
+
+function showQualifyConfirm(index, action) {
+  qualifyPendingIndex = index;
+  qualifyPendingAction = action;
+  const app = applicantsData[index];
+  const title = document.getElementById('qualifyConfirmTitle');
+  const desc = document.getElementById('qualifyConfirmDesc');
+  const btn = document.getElementById('qualifyConfirmBtn');
+
+  if (action === 'qualified') {
+    title.textContent = 'Confirm Qualified Applicant';
+    desc.innerHTML = 'Is <strong style="color: #E9C27D;">' + app.name + '</strong> qualified to proceed to Admin review?';
+    btn.innerHTML = '<i class="fas fa-user-check"></i> Yes';
+    btn.style.background = 'rgba(52,168,83,0.2)';
+    btn.style.color = '#34A853';
+    btn.style.borderColor = 'rgba(52,168,83,0.3)';
+  } else {
+    title.textContent = 'Reject Applicant';
+    desc.innerHTML = 'Are you sure you want to reject <strong style="color: #E9C27D;">' + app.name + '</strong>?';
+    btn.innerHTML = '<i class="fas fa-user-times"></i> Yes';
+    btn.style.background = 'rgba(234,67,53,0.15)';
+    btn.style.color = '#EA4335';
+    btn.style.borderColor = 'rgba(234,67,53,0.3)';
+  }
+  document.getElementById('qualifyConfirmModal').classList.add('show');
+}
+
+function closeQualifyConfirm() {
+  document.getElementById('qualifyConfirmModal').classList.remove('show');
+  qualifyPendingIndex = -1;
+  qualifyPendingAction = '';
+}
+
+function confirmQualifyAction() {
+  if (qualifyPendingIndex === -1) return;
+  const app = applicantsData[qualifyPendingIndex];
+
+  if (qualifyPendingAction === 'qualified') {
+    app.status = 'Accepted';
+    // Show success modal
+    const icon = document.getElementById('qualifyResultIcon');
+    const iconTag = document.getElementById('qualifyResultIconTag');
+    icon.style.background = 'rgba(52,168,83,0.15)';
+    iconTag.className = 'fas fa-user-check';
+    iconTag.style.color = '#34A853';
+    document.getElementById('qualifyResultTitle').textContent = 'Application Sent To Admin';
+  } else {
+    app.status = 'Rejected';
+    // Show result modal
+    const icon = document.getElementById('qualifyResultIcon');
+    const iconTag = document.getElementById('qualifyResultIconTag');
+    icon.style.background = 'rgba(234,67,53,0.15)';
+    iconTag.className = 'fas fa-user-times';
+    iconTag.style.color = '#EA4335';
+    document.getElementById('qualifyResultTitle').textContent = 'Application Rejected';
+    document.getElementById('qualifyResultDesc').innerHTML = '<strong style="color: #E9C27D;">' + app.name + '</strong> has been rejected.<br><br>Their application will be archived.';
+  }
+
+  closeQualifyConfirm();
+  updateApplicantTable();
+  setTimeout(() => {
+    document.getElementById('qualifyResultModal').classList.add('show');
+  }, 300);
+}
+
+function closeQualifyResult() {
+  document.getElementById('qualifyResultModal').classList.remove('show');
+}
+
+// ============================================
+// DIRECT QUALIFIED / NOT QUALIFIED (from table)
+// ============================================
+function markQualifiedDirect(index) {
+  showQualifyConfirm(index, 'qualified');
+}
+
+function markNotQualifiedDirect(index) {
+  showQualifyConfirm(index, 'not-qualified');
+}
+
+// ============================================
+// SCHEDULE INTERVIEW
+// ============================================
+function scheduleInterview(index) {
+  currentApplicantIndex = index;
+  const app = applicantsData[index];
+  if (!['Initial Interview Pending', 'Final Interview Pending'].includes(app.status)) {
+    currentApplicantIndex = -1;
+    alert('This interview cannot be scheduled yet. The applicant must complete the required previous stage first.');
+    return;
+  }
+  const isFinalInterview = app.status === 'Final Interview Pending';
+  document.getElementById('scheduleInterviewTitle').textContent = isFinalInterview ? 'Schedule Final Interview' : 'Schedule Initial Interview';
+  document.getElementById('scheduleInterviewDesc').innerHTML = 'Set the ' + (isFinalInterview ? 'final' : 'initial') + ' interview schedule for <strong style="color: #E9C27D;">' + app.name + '</strong>';
+  // Set default date to tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  // Set min date to today (cannot select past dates)
+  const today = new Date();
+  document.getElementById('interviewDate').setAttribute('min', today.toISOString().split('T')[0]);
+  // Initial interviews must be scheduled within one week from today.
+  if (app.status === 'Initial Interview Pending') {
+    const lastInitialInterviewDate = new Date();
+    lastInitialInterviewDate.setDate(lastInitialInterviewDate.getDate() + 7);
+    document.getElementById('interviewDate').setAttribute('max', lastInitialInterviewDate.toISOString().split('T')[0]);
+  } else {
+    document.getElementById('interviewDate').removeAttribute('max');
+  }
+  document.getElementById('interviewDate').value = tomorrow.toISOString().split('T')[0];
+  document.getElementById('interviewTime').value = '10:00';
+  document.getElementById('interviewType').value = 'In-Person';
+  document.getElementById('interviewLocation').value = '';
+  document.getElementById('scheduleInterviewModal').classList.add('show');
+}
+
+function closeScheduleInterview() {
+  document.getElementById('scheduleInterviewModal').classList.remove('show');
+  currentApplicantIndex = -1;
+}
+
+function confirmScheduleInterview() {
+  if (currentApplicantIndex === -1) return;
+  const app = applicantsData[currentApplicantIndex];
+  const date = document.getElementById('interviewDate').value;
+  const time = document.getElementById('interviewTime').value;
+  const type = document.getElementById('interviewType').value;
+  const location = document.getElementById('interviewLocation').value.trim();
+
+  if (!date || !time || !location) {
+    alert('Please provide the interview date, time, and venue or meeting link.');
+    return;
+  }
+
+  app.status = 'For Interview';
+  const dateObj = new Date(date + 'T' + time);
+  const formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+  let msg = '📅 Interview Scheduled!\n\n';
+  msg += 'Applicant: ' + app.name + '\n';
+  msg += 'Date: ' + formattedDate + '\n';
+  msg += 'Time: ' + formattedTime + '\n';
+  msg += 'Type: ' + type + '\n';
+  if (location) msg += 'Location/Link: ' + location + '\n';
+
+  alert(msg);
+  updateApplicantTable();
+  closeScheduleInterview();
+}
+
+// ============================================
+// HIRE APPLICANT
+// ============================================
+let pendingHireIndex = -1;
+
+function hireApplicantNative(index) {
+  hireApplicant(index);
+  return;
+  const app = applicantsData[index];
+  if (app.status !== 'Final Interview Passed') {
+    showSystemAlert('Hiring Not Available', 'This applicant cannot be hired yet. The initial and final interviews must be completed and the final interview must be marked as passed.', false);
+    return;
+  }
+  if (confirm('Are you sure you want to hire ' + app.name + ' as ' + app.position + '?\n\nThis will move the applicant to the employees list.')) {
+    app.status = 'Hired';
+    alert('🎉 ' + app.name + ' has been HIRED as ' + app.position + '!\n\nPlease proceed to the Employees page to complete onboarding.');
+    updateApplicantTable();
+  }
+}
+
+function hireApplicant(index) {
+  const app = applicantsData[index];
+  if (app.status !== 'Final Interview Passed') {
+    showSystemAlert('Hiring Not Available', 'This applicant cannot be hired yet. The initial and final interviews must be completed and the final interview must be marked as passed.', false);
+    return;
+  }
+  pendingHireIndex = index;
+  document.getElementById('hireConfirmDesc').innerHTML = 'Are you sure you want to hire <strong style="color:#E9C27D;">' + escapeHtml(app.name) + '</strong> as <strong style="color:#E9C27D;">' + escapeHtml(app.position) + '</strong>?<br><br>This will move the applicant to the employees list.';
+  document.getElementById('hireConfirmModal').classList.add('show');
+}
+
+function closeHireConfirm() {
+  pendingHireIndex = -1;
+  document.getElementById('hireConfirmModal').classList.remove('show');
+}
+
+function confirmHireApplicant() {
+  if (pendingHireIndex < 0) return;
+  const app = applicantsData[pendingHireIndex];
+  app.status = 'Hired';
+  closeHireConfirm();
+  updateApplicantTable();
+  showSystemAlert('Applicant Hired', app.name + ' has been hired as ' + app.position + '. Please proceed to the Employees page to complete onboarding.', true);
+}
+
+// ============================================
+// SEND TO ADMIN
+// ============================================
+function sendToAdmin(index) {
+  const app = applicantsData[index];
+  if (app.sentToAdmin) {
+    alert('📨 ' + app.name + ' has already been sent to the Admin.');
+    return;
+  }
+  const applicationId = app.applicationId || ('QC-' + Date.now());
+  let sent = [];
+  try { sent = JSON.parse(localStorage.getItem('qc_to_admin')) || []; } catch (e) { sent = []; }
+  sent.push({
+    applicationId: applicationId,
+    fullName: app.name,
+    email: app.email,
+    position: app.position,
+    date: app.date,
+    yearsExp: app.yearsExp || '',
+    details: app.details
+  });
+  localStorage.setItem('qc_to_admin', JSON.stringify(sent));
+  app.sentToAdmin = true;
+  alert('📨 ' + app.name + ' has been sent to the Admin for final approval.');
+  updateApplicantTable();
+}
+
+// ============================================
+// UPDATE APPLICANT TABLE
+// ============================================
+function updateApplicantTable() {
+  const tbody = document.getElementById('applicantsTableBody');
+  tbody.innerHTML = '';
+  applicantsData.forEach((app, index) => {
+    let statusClass = 'status-pending';
+    let statusText = app.status;
+    if (app.status === 'Final Interview Passed' || app.status === 'Hired') { statusClass = 'status-active'; }
+    else if (app.status === 'Rejected' || app.status === 'Interview Not Passed' || app.status === 'Inactive / Resigned') { statusClass = 'status-leave'; }
+    else if (app.status.includes('Interview')) { statusClass = 'status-pending'; }
+
+    let availClass = 'status-active';
+    let availText = app.availability || 'Available';
+    if (availText === 'Not Available') availClass = 'status-leave';
+    if (availText === 'Not Set') availClass = 'status-pending';
+
+    let statusAttr = getApplicantCategory(app.status);
+    const ageReference = new Date(String(app.updatedAt || app.createdAt || '').replace(' ', 'T'));
+    const waitingDays = Number.isNaN(ageReference.getTime()) ? 0 : Math.max(0, Math.floor((Date.now() - ageReference.getTime()) / 86400000));
+    const needsFollowUp = waitingDays >= 7 && ['Pending', 'Initial Interview Pending', 'Final Interview Pending'].includes(app.status);
+
+    let actionBtns = '';
+    if (app.status === 'Pending') {
+      actionBtns = '<button class="btn btn-sm btn-outline" onclick="reviewApplicant(' + index + ')" title="Review applicant"><i class="fas fa-clipboard-check"></i> Review</button>';
+    } else if (app.status === 'Initial Interview Pending' || app.status === 'Final Interview Pending') {
+      actionBtns = '<button class="btn btn-sm btn-gold" onclick="viewApplicant(' + index + ')"><i class="fas fa-eye"></i></button> ' +
+        (app.availability === 'Not Available'
+          ? '<button class="btn btn-sm btn-outline" disabled style="opacity:.65;cursor:not-allowed"><i class="fas fa-ban"></i> Not Available</button>'
+          : '<button class="btn btn-sm btn-outline" onclick="scheduleInterview(' + index + ')" title="Schedule and email interview"><i class="fas fa-calendar-plus"></i> Schedule</button>');
+    } else if (app.status === 'Initial Interview Scheduled' || app.status === 'Final Interview Scheduled') {
+      const scheduledAt = new Date(app.interviewDate + 'T' + app.interviewTime);
+      const resultAvailable = !Number.isNaN(scheduledAt.getTime()) && new Date() >= scheduledAt;
+      actionBtns = '<button class="btn btn-sm btn-gold" onclick="viewApplicant(' + index + ')"><i class="fas fa-eye"></i></button> ' +
+        (resultAvailable
+          ? '<button class="btn btn-sm" style="background:rgba(52,168,83,.15);color:#34A853" onclick="recordInterviewResult(' + index + ', true, this)"><i class="fas fa-check"></i> Yes</button> ' +
+            '<button class="btn btn-sm" style="background:rgba(234,67,53,.15);color:#EA4335" onclick="recordInterviewResult(' + index + ', false, this)"><i class="fas fa-times"></i> No</button>'
+          : '<button class="btn btn-sm" disabled title="Interview result will be available at the scheduled time" style="opacity:.65;cursor:not-allowed"><i class="fas fa-clock"></i> ' + escapeHtml(formatInterviewSchedule(app.interviewDate, app.interviewTime)) + '</button>');
+    } else if (app.status === 'Final Interview Passed') {
+      actionBtns = '<button class="btn btn-sm btn-gold" onclick="viewApplicant(' + index + ')"><i class="fas fa-eye"></i></button> ' +
+                   '<button class="btn btn-sm" style="background: rgba(52,168,83,0.2); color: #34A853; border: 1px solid rgba(52,168,83,0.3);" onclick="hireApplicant(' + index + ')" title="Hire Applicant"><i class="fas fa-user-check"></i> Hire</button>';
+    } else {
+      actionBtns = '<button class="btn btn-sm btn-gold" onclick="viewApplicant(' + index + ')"><i class="fas fa-eye"></i></button>';
+    }
+
+    const row = '<tr data-status="' + statusAttr + '">' +
+      '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + app.name + '</span><span class="emp-email">' + app.email + '</span></div></div></td>' +
+      '<td>' + app.position + '</td>' +
+      '<td>' + app.date + '</td>' +
+      '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span>' + (needsFollowUp ? '<div style="margin-top:5px;color:#E9C27D;font-size:10px"><i class="fas fa-clock"></i> Follow up: ' + waitingDays + ' days</div>' : '') + '</td>' +
+      '<td><span class="status-badge ' + availClass + '">' + availText + '</span></td>' +
+      '<td>' + actionBtns + '</td>' +
+      '</tr>';
+    tbody.innerHTML += row;
+  });
+  updateApplicantStats();
+  // Re-apply filter
+  filterApplicants();
+}
+
+function getApplicantCategory(status) {
+  if (status === 'Pending') return 'pending';
+  if (status === 'Rejected' || status === 'Interview Not Passed' || status === 'Inactive / Resigned') return 'rejected';
+  if (['Initial Interview Pending', 'Initial Interview Scheduled', 'Final Interview Pending', 'Final Interview Scheduled'].includes(status)) return 'for-interview';
+  if (status === 'Final Interview Passed' || status === 'Hired') return 'qualified';
+  return 'pending';
+}
+
+function updateApplicantStats() {
+  const counts = { total: applicantsData.length, pending: 0, qualified: 0, rejected: 0, interview: 0 };
+  applicantsData.forEach(app => {
+    const category = getApplicantCategory(app.status);
+    if (category === 'pending') counts.pending++;
+    if (category === 'qualified') counts.qualified++;
+    if (category === 'rejected') counts.rejected++;
+    if (category === 'for-interview') counts.interview++;
+  });
+  document.getElementById('totalApplicants').textContent = counts.total;
+  document.getElementById('qualifiedCount').textContent = counts.qualified;
+  document.getElementById('notQualifiedCount').textContent = counts.rejected;
+  document.getElementById('forInterviewCount').textContent = counts.interview;
+  const pendingDashboard = document.getElementById('pendingApplicants');
+  if (pendingDashboard) pendingDashboard.textContent = counts.pending;
+}
+
+// ============================================
+// FILTER APPLICANTS
+// ============================================
+function filterApplicants() {
+  const filter = document.getElementById('applicantFilter').value;
+  const rows = document.querySelectorAll('#applicantsTableBody tr');
+  rows.forEach(row => {
+    if (filter === 'all') {
+      row.style.display = '';
+    } else {
+      row.style.display = row.dataset.status === filter ? '' : 'none';
+    }
+  });
+}
+
+// ============================================
+// SIGN-OUT CONFIRMATION MODAL
+// ============================================
+function showSignoutModal() {
+  document.getElementById('signoutModal').classList.add('show');
+}
+
+function hideSignoutModal() {
+  document.getElementById('signoutModal').classList.remove('show');
+}
+
+function confirmSignout() {
+  securePortalLogout();
+}
+
+function openCreateEmployeeModal() {
+  document.getElementById('createEmployeeModal').classList.add('show');
+}
+
+function closeCreateEmployeeModal() {
+  document.getElementById('createEmployeeModal').classList.remove('show');
+}
+
+document.getElementById('createEmployeeForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const response = await fetch('../php/create_employee.php', {
+    method: 'POST',
+    body: new FormData(this)
+  });
+  const data = await response.json();
+  alert(data.message);
+  if (data.success) {
+    this.reset();
+    closeCreateEmployeeModal();
+  }
+});
+
+document.getElementById('createEmployeeModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCreateEmployeeModal();
+});
+
+// Close modal on overlay click
+document.getElementById('signoutModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    hideSignoutModal();
+  }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    hideSignoutModal();
+    closeViewApplicant();
+    closeReviewApplicant();
+    closeScheduleInterview();
+    closeQualifyConfirm();
+    closeQualifyResult();
+    closeHireConfirm();
+  }
+});
+
+// ============================================
+// SET CURRENT DATE
+// ============================================
+function updateDate() {
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+}
+updateDate();
+
+// ============================================
+// JOB POSTING
+// ============================================
+const jobPostsData = [];
+let editingJobPostId = 0;
+
+function setJobFlow(step) {
+  ['Create', 'Review', 'Publish'].forEach((name, index) => {
+    const item = document.getElementById('jobFlow' + name);
+    if (!item) return;
+    item.classList.toggle('active', index + 1 === step);
+    item.classList.toggle('complete', index + 1 < step);
+  });
+}
+
+function reviewJobPost() {
+  const titleSelect = document.getElementById('jpTitle');
+  const positionKey = titleSelect.value;
+  const title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
+  const salary = document.getElementById('jpSalary').value.trim();
+  const qualification = document.getElementById('jpQualification').value.trim();
+  const description = document.getElementById('jpDescription').value.trim();
+
+  if (!positionKey || !salary || !qualification || !description) {
+    showSystemAlert('Incomplete Job Post', 'Please complete the job title, salary, qualifications, and job description before reviewing.', false);
+    return;
+  }
+
+  document.getElementById('reviewTitle').textContent = title;
+  document.getElementById('reviewSalary').textContent = salary;
+  document.getElementById('reviewQualification').textContent = qualification;
+  document.getElementById('reviewDescription').textContent = description;
+
+  document.getElementById('jobPostReviewCard').style.display = 'block';
+  setJobFlow(2);
+  document.getElementById('jobPostReviewCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function editJobPost() {
+  document.getElementById('jobPostReviewCard').style.display = 'none';
+  setJobFlow(1);
+  document.getElementById('jobPostFormCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+async function publishJobPost() {
+  const titleSelect = document.getElementById('jpTitle');
+  const positionKey = titleSelect.value;
+  const title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
+  const salary = document.getElementById('jpSalary').value.trim();
+  const qualification = document.getElementById('jpQualification').value.trim();
+  const description = document.getElementById('jpDescription').value.trim();
+  const publishButton = document.querySelector('#jobPostReviewCard .btn-gold');
+  if (publishButton) publishButton.disabled = true;
+
+  try {
+    const body = new URLSearchParams({ action: 'publish', id: String(editingJobPostId), position_key: positionKey, title, salary, qualification, description });
+    const response = await fetch('../php/job_posts.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to publish this job posting.');
+    editingJobPostId = 0;
+    document.getElementById('jobPostForm').reset();
+    document.getElementById('jobPostReviewCard').style.display = 'none';
+    document.querySelector('#jobPostFormCard .card-title').innerHTML = '<i class="fas fa-briefcase"></i> Create Job Post';
+    setJobFlow(3);
+    await loadJobPosts();
+    document.getElementById('jobPostListCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showSystemAlert('Job Post Published', result.message, true);
+  } catch (error) {
+    showSystemAlert('Job Post Not Published', error.message, false);
+  } finally {
+    if (publishButton) publishButton.disabled = false;
+  }
+}
+
+function renderJobPosts() {
+  const tbody = document.getElementById('jobPostTableBody');
+  const emptyRow = document.getElementById('jpEmptyRow');
+  tbody.querySelectorAll('.jp-data-row').forEach(r => r.remove());
+
+  if (jobPostsData.length === 0) {
+    emptyRow.style.display = '';
+  } else {
+    emptyRow.style.display = 'none';
+    jobPostsData.forEach((post, index) => {
+      const row = document.createElement('tr');
+      row.className = 'jp-data-row';
+      const isOpen = post.status === 'published';
+      row.innerHTML =
+        '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-briefcase"></i></div><div><span class="emp-name">' + escapeHtml(post.title) + '</span><span class="emp-email">' + escapeHtml(post.description) + '</span></div></div></td>' +
+        '<td>' + escapeHtml(post.salary) + '</td>' +
+        '<td><button class="job-app-count" onclick="openJobApplications(\'' + escapeHtml(post.position_key) + '\')"><strong>' + Number(post.application_count || 0) + '</strong><span>received</span></button></td>' +
+        '<td><span class="status-badge ' + (isOpen ? 'status-active' : 'status-leave') + '">' + (isOpen ? 'Open' : 'Closed') + '</span></td>' +
+        '<td><div class="job-row-actions"><button class="btn btn-sm btn-outline" onclick="editPublishedPost(' + index + ')" title="Edit"><i class="fas fa-pen"></i></button>' +
+        '<button class="btn btn-sm btn-outline" onclick="setJobPostStatus(' + post.id + ', \'' + (isOpen ? 'closed' : 'published') + '\')" title="' + (isOpen ? 'Close' : 'Reopen') + '"><i class="fas ' + (isOpen ? 'fa-lock' : 'fa-lock-open') + '"></i></button></div></td>';
+      tbody.appendChild(row);
+    });
+  }
+
+  const openCount = jobPostsData.filter(post => post.status === 'published').length;
+  document.getElementById('jpCount').textContent = openCount + ' Open';
+}
+
+function editPublishedPost(index) {
+  const post = jobPostsData[index];
+  editingJobPostId = Number(post.id);
+  document.getElementById('jpTitle').value = post.position_key;
+  document.getElementById('jpSalary').value = post.salary;
+  document.getElementById('jpQualification').value = post.qualification;
+  document.getElementById('jpDescription').value = post.description;
+  document.getElementById('jobPostReviewCard').style.display = 'none';
+  document.querySelector('#jobPostFormCard .card-title').innerHTML = '<i class="fas fa-pen"></i> Edit Job Post';
+  setJobFlow(1);
+  document.getElementById('jobPostFormCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+async function loadJobPosts() {
+  try {
+    const response = await fetch('../php/job_posts.php?action=list');
+    if (response.status === 401 || response.status === 403) {
+      showSystemAlert('HR Session Required', 'Please sign in again to manage job postings.', false);
+      return;
+    }
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load job postings.');
+    jobPostsData.length = 0;
+    jobPostsData.push(...result.posts);
+    renderJobPosts();
+  } catch (error) {
+    showSystemAlert('Job Posts Not Loaded', error.message, false);
+  }
+}
+
+async function setJobPostStatus(id, status) {
+  try {
+    const body = new URLSearchParams({ action: 'set_status', id: String(id), status });
+    const response = await fetch('../php/job_posts.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to update the posting.');
+    await loadJobPosts();
+    showSystemAlert(status === 'published' ? 'Job Post Reopened' : 'Job Post Closed', result.message, true);
+  } catch (error) {
+    showSystemAlert('Status Not Changed', error.message, false);
+  }
+}
+
+function openJobApplications(positionKey) {
+  showPage('applicants');
+  const search = document.querySelector('#page-applicants input[type="search"], #page-applicants .topbar-search input');
+  if (search) {
+    search.value = positionKey;
+    search.dispatchEvent(new Event('input'));
+  }
+}
+
+// ============================================
+// EMPLOYEE DOCUMENTS
+// ============================================
+let hrEmployeeDocuments = [];
+let pendingDocumentRejectionId = 0;
+let hrDocumentFiltersInitialized = false;
+
+function hrDocumentDate(value, includeTime = false) {
+  if (!value) return '—';
+  const date = new Date(String(value).replace(' ', 'T'));
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('en-PH', includeTime ? { dateStyle: 'medium', timeStyle: 'short' } : { dateStyle: 'medium' });
+}
+
+function hrDocumentStatus(document) {
+  if (document.verification_status === 'verified') return { label: 'Verified', badge: 'status-active' };
+  if (document.verification_status === 'rejected') return { label: 'Rejected', badge: 'status-leave' };
+  return { label: 'Pending Review', badge: 'status-pending' };
+}
+
+function updateHrDocumentStats() {
+  document.getElementById('hrDocTotal').textContent = hrEmployeeDocuments.length;
+  document.getElementById('hrDocPending').textContent = hrEmployeeDocuments.filter(item => item.verification_status === 'pending').length;
+  document.getElementById('hrDocVerified').textContent = hrEmployeeDocuments.filter(item => item.verification_status === 'verified').length;
+  document.getElementById('hrDocRejected').textContent = hrEmployeeDocuments.filter(item => item.verification_status === 'rejected').length;
+}
+
+function filterHrEmployeeDocuments() {
+  const search = document.getElementById('hrDocumentSearch').value.trim().toLowerCase();
+  const type = document.getElementById('hrDocumentTypeFilter').value;
+  const statusFilter = document.getElementById('hrDocumentStatusFilter').value;
+  const rows = hrEmployeeDocuments.filter(item =>
+    (!search || String(item.employee_name || '').toLowerCase().includes(search)) &&
+    (!type || item.document_type === type) &&
+    (!statusFilter || item.verification_status === statusFilter)
+  );
+  document.getElementById('hrDocumentShowing').textContent = rows.length + ' record' + (rows.length === 1 ? '' : 's');
+  const body = document.getElementById('hrEmployeeDocumentsBody');
+  body.innerHTML = rows.length ? rows.map(item => {
+    const status = hrDocumentStatus(item);
+    const reason = item.verification_status === 'rejected' && item.rejection_reason
+      ? '<small class="hr-document-reason" title="' + escapeHtml(item.rejection_reason) + '"><i class="fas fa-circle-info"></i> ' + escapeHtml(item.rejection_reason) + '</small>' : '';
+    const actions = '<div class="document-review-actions">' +
+      '<a class="btn btn-sm btn-outline" href="../php/employee_documents.php?action=file&document_id=' + Number(item.document_id) + '" target="_blank" rel="noopener" title="Preview"><i class="fas fa-eye"></i></a>' +
+      '<a class="btn btn-sm btn-outline" href="../php/employee_documents.php?action=file&download=1&document_id=' + Number(item.document_id) + '" title="Download"><i class="fas fa-download"></i></a>' +
+      (item.verification_status === 'pending' ? '<button class="btn btn-sm document-approve-btn" onclick="reviewEmployeeDocument(' + Number(item.document_id) + ',\'verified\')" title="Approve"><i class="fas fa-check"></i></button><button class="btn btn-sm document-reject-btn" onclick="openEmployeeDocumentReject(' + Number(item.document_id) + ')" title="Reject"><i class="fas fa-times"></i></button>' : '') + '</div>';
+    return '<tr><td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeHtml(item.employee_name) + '</span><span class="emp-email">Employee ID: ' + Number(item.employee_id) + '</span></div></div></td>' +
+      '<td>' + escapeHtml(item.document_label) + '</td><td>' + hrDocumentDate(item.uploaded_at, true) + '</td>' +
+      '<td><span class="status-badge ' + status.badge + '">' + status.label + '</span>' + reason + '</td>' +
+      '<td>' + escapeHtml(item.verified_by_name || '—') + '</td><td>' + hrDocumentDate(item.verified_at, true) + '</td><td>' + actions + '</td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;padding:30px;color:rgba(255,255,255,.5)">No uploaded documents match these filters.</td></tr>';
+}
+
+function clearHrDocumentFilters() {
+  document.getElementById('hrDocumentSearch').value = '';
+  document.getElementById('hrDocumentTypeFilter').value = '';
+  document.getElementById('hrDocumentStatusFilter').value = '';
+  filterHrEmployeeDocuments();
+}
+
+async function loadHrEmployeeDocuments() {
+  try {
+    if (!hrDocumentFiltersInitialized) {
+      clearHrDocumentFilters();
+      hrDocumentFiltersInitialized = true;
+    }
+    const response = await fetch('../php/employee_documents.php?action=hr_list', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load employee documents.');
+    hrEmployeeDocuments = result.documents || [];
+    updateHrDocumentStats();
+    filterHrEmployeeDocuments();
+  } catch (error) {
+    document.getElementById('hrEmployeeDocumentsBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Employee documents could not be loaded.</td></tr>';
+    showSystemAlert('Documents Not Loaded', error.message, false);
+  }
+}
+
+async function reviewEmployeeDocument(documentId, decision, rejectionReason = '') {
+  try {
+    const body = new URLSearchParams({ action: 'review', document_id: String(documentId), decision, rejection_reason: rejectionReason });
+    const response = await fetch('../php/employee_documents.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to review this document.');
+    await loadHrEmployeeDocuments();
+    showSystemAlert(decision === 'verified' ? 'Document Verified' : 'Document Rejected', result.message, decision === 'verified');
+  } catch (error) {
+    showSystemAlert('Document Not Reviewed', error.message, false);
+  }
+}
+
+function openEmployeeDocumentReject(documentId) {
+  pendingDocumentRejectionId = documentId;
+  const item = hrEmployeeDocuments.find(document => Number(document.document_id) === Number(documentId));
+  const label = item ? item.employee_name + ' - ' + item.document_label : 'this employee document';
+  document.getElementById('rejectEmployeeDocumentDesc').textContent = 'Reject ' + label + '. Enter the reason the employee must replace this document.';
+  document.getElementById('employeeDocumentRejectionReason').value = '';
+  document.getElementById('rejectEmployeeDocumentModal').classList.add('show');
+}
+
+function closeEmployeeDocumentReject() {
+  pendingDocumentRejectionId = 0;
+  document.getElementById('rejectEmployeeDocumentModal').classList.remove('show');
+}
+
+function confirmEmployeeDocumentReject() {
+  const id = pendingDocumentRejectionId;
+  const reason = document.getElementById('employeeDocumentRejectionReason').value.trim();
+  if (!id || !reason) return showSystemAlert('Rejection Reason Required', 'Enter a rejection reason before rejecting this document.', false);
+  closeEmployeeDocumentReject();
+  reviewEmployeeDocument(id, 'rejected', reason);
+}
+
+document.getElementById('hrDocumentSearch').addEventListener('input', filterHrEmployeeDocuments);
+document.getElementById('hrDocumentTypeFilter').addEventListener('change', filterHrEmployeeDocuments);
+document.getElementById('hrDocumentStatusFilter').addEventListener('change', filterHrEmployeeDocuments);
+document.getElementById('rejectEmployeeDocumentModal').addEventListener('click', function(event) { if (event.target === this) closeEmployeeDocumentReject(); });
+
+// ============================================
+// SIDEBAR NAVIGATION
+// ============================================
+function showPage(page) {
+  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  if (page === 'dashboard' || page === 'employees') {
+    loadHrEmployees();
+  }
+  if (page === 'applicants') {
+    loadExternalApplications();
+  }
+  if (page === 'jobposting') {
+    loadJobPosts();
+  }
+  if (page === 'employee-documents') {
+    loadHrEmployeeDocuments();
+  }
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    this.classList.add('active');
+
+    showPage(this.dataset.page);
+  });
+});
+
+// ============================================
+// MOBILE MENU TOGGLE
+// ============================================
+document.getElementById('menuToggle').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('show');
+});
+
+// Close sidebar on outside click (mobile)
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menuToggle');
+  if (window.innerWidth <= 992) {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('show');
+    }
+  }
+});
+
+// ============================================
+// NOTIFICATION DROPDOWN
+// ============================================
+const notifToggle = document.getElementById('notifToggle');
+const notifDropdown = document.getElementById('notifDropdown');
+
+notifToggle.addEventListener('click', function(e) {
+  e.stopPropagation();
+  notifDropdown.classList.toggle('show');
+});
+
+document.addEventListener('click', function(e) {
+  if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+    notifDropdown.classList.remove('show');
+  }
+});
+
+// ============================================
+// ANIMATED COUNTERS FOR STATS
+// ============================================
+function animateCounters() {
+  document.querySelectorAll('.stat-value').forEach(el => {
+    const target = parseInt(el.textContent.replace(/,/g, ''));
+    const duration = 1000;
+    const step = Math.ceil(target / 30);
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = current.toLocaleString();
+    }, duration / (target / step));
+  });
+}
+
+// Trigger counter animation when dashboard is visible
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      observer.disconnect();
+    }
+  });
+});
+
+const dashboardPage = document.getElementById('page-dashboard');
+if (dashboardPage) {
+  observer.observe(dashboardPage);
+}
+
+// ============================================
+// SEARCH PLACEHOLDER
+// ============================================
+document.getElementById('globalSearch').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) {
+    alert('🔍 Searching for: ' + this.value.trim());
+  }
+});
+
+// ============================================
+// CLOSE MODALS ON OVERLAY CLICK
+// ============================================
+document.getElementById('viewApplicantModal').addEventListener('click', function(e) {
+  if (e.target === this) closeViewApplicant();
+});
+document.getElementById('reviewApplicantModal').addEventListener('click', function(e) {
+  if (e.target === this) closeReviewApplicant();
+});
+document.getElementById('scheduleInterviewModal').addEventListener('click', function(e) {
+  if (e.target === this) closeScheduleInterview();
+});
+
+// Close modals on overlay click
+document.getElementById('qualifyConfirmModal').addEventListener('click', function(e) {
+  if (e.target === this) closeQualifyConfirm();
+});
+document.getElementById('qualifyResultModal').addEventListener('click', function(e) {
+  if (e.target === this) closeQualifyResult();
+});
+document.getElementById('hireConfirmModal').addEventListener('click', function(e) {
+  if (e.target === this) closeHireConfirm();
+});
+
+// ============================================
+// LOAD APPLICATIONS FROM apply.html + AUTO-OPEN
+// ============================================
+loadHrEmployees();
+loadExternalApplications();
+updateApplicantTable();
+
+setInterval(() => {
+  if (document.getElementById('page-dashboard')?.classList.contains('active') ||
+      document.getElementById('page-employees')?.classList.contains('active')) {
+    loadHrEmployees();
+  }
+  if (document.getElementById('page-applicants')?.classList.contains('active')) {
+    loadExternalApplications();
+  }
+}, 10000);
+
+if (localStorage.getItem('qc_open_applicants') === '1') {
+  localStorage.removeItem('qc_open_applicants');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.dataset.page === 'applicants') n.classList.add('active');
+  });
+  showPage('applicants');
+}
+
+// Always start at the top after a reload (don't restore scroll position)
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
+// Database-backed applicant workflow. Qualified applicants become visible to Admin.
+async function loadExternalApplications() {
+  try {
+    const response = await fetch('../php/applicants.php?action=list&view=hr');
+    if (response.status === 401 || response.status === 403) {
+      showSystemAlert('HR Session Required', 'Please sign in again using an HR or Administrator PIN to view applicants.', false);
+      setTimeout(() => { window.location.href = 'Login.html'; }, 1800);
+      return;
+    }
+    if (!response.ok) throw new Error('Server returned ' + response.status);
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message);
+    applicantsData.length = 0;
+    result.applicants.forEach(app => {
+      const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+      const mappedStatus = ({
+        pending: 'Pending', rejected: 'Rejected', hr_rejected: 'Rejected', admin_rejected: 'Rejected', initial_interview_pending: 'Initial Interview Pending',
+        initial_interview_scheduled: 'Initial Interview Scheduled', final_interview_pending: 'Final Interview Pending',
+        final_interview_scheduled: 'Final Interview Scheduled', final_interview_passed: 'Final Interview Passed',
+        interview_failed: 'Interview Not Passed', hired: 'Hired'
+      })[app.status] || app.status;
+      const displayStatus = app.employee_status === 'inactive' ? 'Inactive / Resigned' : mappedStatus;
+      const unavailableStatuses = ['Rejected', 'Interview Not Passed', 'Inactive / Resigned'];
+      const displayAvailability = unavailableStatuses.includes(displayStatus)
+        ? 'Not Available'
+        : (app.availability === 'not-available' ? 'Not Available' : (app.availability === 'available' ? 'Available' : 'Not Set'));
+      const details = [
+        'Application ID: ' + app.application_code, 'Full Name: ' + name, 'Email: ' + app.email,
+        'Contact Number: ' + app.contact_no, 'Address: ' + app.address,
+        'Employment Type: ' + (app.employment_type || '-'),
+        'Availability: ' + displayAvailability,
+        'Preferred Work Shift: ' + (app.preferred_shift || '-'),
+        'Education: ' + app.education,
+        'School: ' + app.school, 'Course: ' + app.course, 'Experience: ' + app.years_experience,
+        'Resume: ' + (app.resume_name || 'Not uploaded')
+      ].join('\n');
+      applicantsData.push({
+        dbId: app.id, name: name, email: app.email, position: app.position,
+        date: new Date(app.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+        createdAt: app.created_at || '',
+        updatedAt: app.updated_at || app.created_at || '',
+        status: displayStatus,
+        availability: displayAvailability, yearsExp: app.years_experience, details: details,
+        interviewDate: app.interview_date || '', interviewTime: app.interview_time || '',
+        resumePath: app.resume_path || '',
+        sentToAdmin: false
+      });
+    });
+    updateApplicantTable();
+    renderHrDashboardActivity();
+    renderHrUpcomingEvents();
+    renderHrNotifications();
+  } catch (error) {
+    document.getElementById('applicantsTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:rgba(255,255,255,.55)"><i class="fas fa-spinner fa-spin"></i> Reconnecting to the applicant database...</td></tr>';
+    setTimeout(loadExternalApplications, 3000);
+  }
+}
+
+async function confirmQualifyAction() {
+  if (qualifyPendingIndex === -1) return;
+  const app = applicantsData[qualifyPendingIndex];
+  const decision = qualifyPendingAction === 'qualified' ? 'qualified' : 'rejected';
+  try {
+    const body = new URLSearchParams({ action: 'hr_decision', id: app.dbId, decision: decision, remarks: document.getElementById('reviewRemarks')?.value || '' });
+    const response = await fetch('../php/applicants.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body });
+    const result = await response.json();
+    if (!result.success) { showSystemAlert('Decision Not Saved', result.message, false); return; }
+    closeQualifyConfirm();
+    await loadExternalApplications();
+    showSystemAlert(decision === 'qualified' ? 'Applicant Accepted' : 'Applicant Rejected', decision === 'qualified' ? result.message : result.message + ' Availability was automatically set to Not Available.', decision === 'qualified');
+  } catch (error) {
+    showSystemAlert('Decision Not Saved', 'Unable to save the HR decision.', false);
+  }
+}
+
+// HR-owned interview workflow. These definitions intentionally replace the old local-only flow.
+function showSystemAlert(title, message, success = true) {
+  const icon = document.getElementById('qualifyResultIcon');
+  const iconTag = document.getElementById('qualifyResultIconTag');
+  icon.style.background = success ? 'rgba(52,168,83,0.15)' : 'rgba(234,67,53,0.15)';
+  iconTag.className = success ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  iconTag.style.color = success ? '#34A853' : '#EA4335';
+  document.getElementById('qualifyResultTitle').textContent = title;
+  document.getElementById('qualifyResultDesc').textContent = message;
+  document.getElementById('qualifyResultModal').classList.add('show');
+}
+
+function formatInterviewSchedule(date, time) {
+  if (!date || !time) return 'Waiting for interview time';
+  const value = new Date(date + 'T' + time);
+  if (Number.isNaN(value.getTime())) return 'Waiting for interview time';
+  return 'Available ' + value.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' + value.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function scheduleInterview(index) {
+  currentApplicantIndex = index;
+  const app = applicantsData[index];
+  if (!app || !['Initial Interview Pending', 'Final Interview Pending'].includes(app.status)) {
+    currentApplicantIndex = -1;
+    showSystemAlert('Interview Not Available', 'The applicant must complete the previous interview stage first.', false);
+    return;
+  }
+  const finalStage = app.status === 'Final Interview Pending';
+  document.getElementById('scheduleInterviewTitle').textContent = finalStage ? 'Schedule Final Interview' : 'Schedule Initial Interview';
+  document.getElementById('scheduleInterviewDesc').innerHTML = 'Set the ' + (finalStage ? 'final' : 'initial') + ' interview schedule for <strong style="color:#E9C27D">' + escapeHtml(app.name) + '</strong>. An email will be sent automatically.';
+  const today = new Date();
+  const tomorrowDate = new Date(today);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const maxDate = new Date(today);
+  maxDate.setDate(maxDate.getDate() + 7);
+  const tomorrow = tomorrowDate.toISOString().slice(0, 10);
+  document.getElementById('interviewDate').min = today.toISOString().slice(0, 10);
+  document.getElementById('interviewDate').max = maxDate.toISOString().slice(0, 10);
+  document.getElementById('interviewDate').value = tomorrow;
+  document.getElementById('interviewTime').value = '10:00';
+  document.getElementById('interviewType').value = 'In-Person';
+  document.getElementById('interviewLocation').value = '';
+  document.getElementById('scheduleInterviewModal').classList.add('show');
+}
+
+async function confirmScheduleInterview() {
+  if (currentApplicantIndex < 0) return;
+  const app = applicantsData[currentApplicantIndex];
+  const date = document.getElementById('interviewDate').value;
+  const time = document.getElementById('interviewTime').value;
+  const type = document.getElementById('interviewType').value;
+  const location = document.getElementById('interviewLocation').value.trim();
+  if (!date || !time || !location) {
+    showSystemAlert('Incomplete Schedule', 'Please provide the interview date, time, and venue or meeting link.', false);
+    return;
+  }
+  const selectedDateTime = new Date(date + 'T' + time);
+  const maxDateTime = new Date();
+  maxDateTime.setDate(maxDateTime.getDate() + 7);
+  maxDateTime.setHours(23, 59, 59, 999);
+  if (Number.isNaN(selectedDateTime.getTime()) || selectedDateTime > maxDateTime) {
+    showSystemAlert('Schedule Not Allowed', 'Interview schedule must be within 1 week from today only.', false);
+    return;
+  }
+  const stage = app.status === 'Final Interview Pending' ? 'final' : 'initial';
+  const scheduleButton = document.getElementById('scheduleConfirmBtn');
+  if (scheduleButton.disabled) return;
+  scheduleButton.disabled = true;
+  scheduleButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  try {
+    const body = new URLSearchParams({ action: 'schedule_interview', id: app.dbId, stage, interview_date: date, interview_time: time, interview_type: type, interview_location: location });
+    const response = await fetch('../php/applicants.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!result.success) return showSystemAlert('Schedule Not Sent', result.message, false);
+    closeScheduleInterview();
+    app.status = stage === 'final' ? 'Final Interview Scheduled' : 'Initial Interview Scheduled';
+    app.interviewDate = date;
+    app.interviewTime = time;
+    updateApplicantTable();
+    showSystemAlert('Interview Scheduled', result.message, true);
+    loadExternalApplications();
+
+    if (result.email_pending) {
+      const emailBody = new URLSearchParams({ action: 'send_interview_email', id: app.dbId, stage });
+      fetch('../php/applicants.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: emailBody,
+        keepalive: true
+      }).then(response => response.json().then(data => ({ ok: response.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok || !data.success) showSystemAlert('Email Not Sent', data.message || 'The schedule was saved, but the email could not be sent.', false);
+        }).catch(() => showSystemAlert('Email Not Sent', 'The schedule was saved, but the email service could not be reached.', false));
+    }
+  } catch (error) {
+    showSystemAlert('Schedule Error', 'The schedule could not be saved. Please try again.', false);
+  } finally {
+    scheduleButton.disabled = false;
+    scheduleButton.textContent = 'Set Schedule';
+  }
+}
+
+async function recordInterviewResult(index, passed, clickedButton) {
+  const app = applicantsData[index];
+  const stage = app.status === 'Final Interview Scheduled' ? 'final' : 'initial';
+  const actionButtons = clickedButton?.parentElement?.querySelectorAll('button') || [];
+  actionButtons.forEach(button => { button.disabled = true; });
+  try {
+    const body = new URLSearchParams({ action: 'interview_result', id: app.dbId, stage, result: passed ? 'passed' : 'failed' });
+    const response = await fetch('../php/applicants.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!result.success) return showSystemAlert('Result Not Saved', result.message, false);
+    app.status = passed ? (stage === 'final' ? 'Final Interview Passed' : 'Final Interview Pending') : 'Interview Not Passed';
+    app.availability = passed ? 'Available' : 'Not Available';
+    updateApplicantTable();
+    showSystemAlert(passed ? 'Interview Passed' : 'Interview Not Passed', result.message, passed);
+    loadExternalApplications();
+
+    if (result.email_pending) {
+      const emailBody = new URLSearchParams({ action: 'send_result_email', id: app.dbId });
+      fetch('../php/applicants.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: emailBody,
+        keepalive: true
+      }).then(response => response.json().then(data => ({ ok: response.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok || !data.success) showSystemAlert('Email Not Sent', data.message || 'The result was saved, but the email could not be sent.', false);
+        }).catch(() => showSystemAlert('Email Not Sent', 'The result was saved, but the email service could not be reached.', false));
+    }
+  } catch (error) {
+    showSystemAlert('Save Error', 'Unable to save the interview result. Please try again.', false);
+  } finally {
+    actionButtons.forEach(button => { button.disabled = false; });
+  }
+}
+
+// Reveal the result buttons automatically when the scheduled time is reached.
+setInterval(() => {
+  if (document.getElementById('page-applicants')?.classList.contains('active')) updateApplicantTable();
+}, 15000);
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,2491 @@
+<?php require_once dirname(__DIR__) . '/php/portal_guard.php'; requirePortalRole('admin'); ?>
+<!DOCTYPE html>
+<html lang="en" data-portal-role="admin">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../js/portal-security.js" defer></script>
+
+<title>Quadra Cafe HRMS - Admin Dashboard</title>
+
+<link rel="stylesheet" href="../css/Admin.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles">
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+</div>
+
+<!-- Decorative corner accents -->
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<div class="dashboard-wrapper">
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-wrapper">
+        <div class="sidebar-logo-glow"></div>
+        <img src="../images/logo.png" class="sidebar-logo" alt="Quadra Cafe">
+      </div>
+      <h3 class="sidebar-brand">Quadra Cafe</h3>
+      <span class="sidebar-sub">Admin Panel</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="Admin.html?page=dashboard" class="nav-item active" data-page="dashboard">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="Admin.html?page=applicants" class="nav-item" data-page="applicants" style="display:none;">
+        <i class="fas fa-file-signature"></i>
+        <span>Applicants Approval</span>
+      </a>
+      <a href="Admin.html?page=attendance" class="nav-item" data-page="attendance">
+        <i class="fas fa-clock"></i>
+        <span>Attendance</span>
+      </a>
+      <a href="Admin.html?page=employees" class="nav-item" data-page="employees">
+        <i class="fas fa-users"></i>
+        <span>Employee Management</span>
+      </a>
+      <a href="Admin.html?page=payroll" class="nav-item" data-page="payroll">
+        <i class="fas fa-wallet"></i>
+        <span>Payroll</span>
+      </a>
+      <a href="Admin.html?page=leave" class="nav-item" data-page="leave">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Leave Requests</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">
+          <i class="fas fa-user-cog"></i>
+        </div>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name">Admin</span>
+          <span class="sidebar-user-role">System Administrator</span>
+        </div>
+      </div>
+      <a href="#" class="sidebar-logout" title="Sign Out" onclick="showSignoutModal(); return false;">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="topbar-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search across all modules..." id="globalSearch">
+      </div>
+
+      <div class="topbar-right">
+        <div class="topbar-notif" id="notifToggle">
+          <i class="fas fa-bell"></i>
+          <span class="notif-badge" id="adminNotifBadge">0</span>
+        </div>
+        <div class="topbar-date">
+          <i class="fas fa-calendar-day"></i>
+          <span id="currentDate"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================================ -->
+    <!-- DASHBOARD PAGE                                                    -->
+    <!-- ================================================================ -->
+    <div class="page-content active" id="page-dashboard">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Admin Dashboard</h1>
+          <p class="page-subtitle">Full system overview at a glance</p>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-employees">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Employees</span>
+            <span class="stat-value" id="totalEmployees">0</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-present">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Present Today</span>
+            <span class="stat-value" id="presentToday">0</span>
+
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-leave">
+            <i class="fas fa-calendar-minus"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">On Leave</span>
+            <span class="stat-value" id="onLeave">0</span>
+
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-applicants">
+            <i class="fas fa-file-signature"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Accounts To Create</span>
+            <span class="stat-value" id="pendingApplicants">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity & Events -->
+      <div class="content-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-history"></i> Recent Activity</h3>
+          </div>
+          <div class="card-body">
+            <div class="activity-list" id="adminRecentActivity">
+              <div class="activity-item"><div class="activity-info"><span class="activity-text">No employee attendance activity yet.</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-calendar-check"></i> Upcoming Events</h3>
+          </div>
+          <div class="card-body">
+            <div class="event-list" id="adminUpcomingEvents">
+              <div class="event-item"><div class="event-info"><span class="event-title">Loading database events...</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Table -->
+      <div class="card" style="margin-top:30px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-user-tie"></i> Department Summary</h3>
+          <div class="card-header-actions">
+            <button class="btn btn-sm btn-outline" onclick="switchPage('employees')">
+              Full Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Total Staff</th>
+                  <th>Present</th>
+                  <th>On Leave</th>
+                  <th>Attendance Rate</th>
+                </tr>
+              </thead>
+              <tbody id="adminDepartmentSummary">
+                <tr><td colspan="5" style="text-align:center;">Loading department summary...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- APPLICANTS APPROVAL PAGE                                          -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-applicants">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Applicants Approval</h1>
+          <p class="page-subtitle">Review and process job applications</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-applicants"><i class="fas fa-file-signature"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Applicants</span>
+            <span class="stat-value">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-pending"><i class="fas fa-hourglass-half"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Pending Review</span>
+            <span class="stat-value">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-approved"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Approved</span>
+            <span class="stat-value">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-rejected"><i class="fas fa-times-circle"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Rejected</span>
+            <span class="stat-value">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchApplicantTab(this, 'all')"><i class="fas fa-list"></i> All</button>
+        <button class="tab" onclick="switchApplicantTab(this, 'pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
+        <button class="tab" onclick="switchApplicantTab(this, 'approved')"><i class="fas fa-check-circle"></i> Approved</button>
+        <button class="tab" onclick="switchApplicantTab(this, 'rejected')"><i class="fas fa-times-circle"></i> Rejected</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <select class="filter-select" id="appFilterPosition">
+          <option value="">All Positions</option>
+          <option value="barista">Barista</option>
+          <option value="cashier">Cashier</option>
+        </select>
+        <select class="filter-select" id="appFilterDate">
+          <option value="">All Dates</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+        </select>
+        <div class="filter-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search applicants..." id="appSearch">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-users"></i> Applicant List</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;">Click <i class="fas fa-eye"></i> to view details</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table" id="applicantsTable">
+              <thead>
+                <tr>
+                  <th>Applicant</th>
+                  <th>Position</th>
+                  <th>Experience</th>
+                  <th>Date Applied</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-status="pending">
+                  <td>
+                    <div class="emp-cell">
+                      <div class="emp-avatar"><i class="fas fa-user"></i></div>
+                      <div>
+                        <span class="emp-name">Louie Chan</span>
+                        <span class="emp-email">louie.chan@email.com</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Barista</td>
+                  <td>1 - 2 yrs</td>
+                  <td>Jul 11, 2026</td>
+                  <td><span class="status-badge status-pending">Pending</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="action-btn action-btn-view" onclick="viewApplicant('Louie Chan')" title="View"><i class="fas fa-eye"></i></button>
+                      <button class="action-btn action-btn-approve" onclick="approveApplicant(this)" title="Approve"><i class="fas fa-check"></i></button>
+                      <button class="action-btn action-btn-reject" onclick="rejectApplicant(this)" title="Reject"><i class="fas fa-times"></i></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ATTENDANCE PAGE                                                   -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-attendance">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Attendance</h1>
+          <p class="page-subtitle">Monitor daily employee attendance</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-gold" onclick="alert('Export attendance report')">
+            <i class="fas fa-download"></i> Export
+          </button>
+        </div>
+      </div>
+
+      <!-- Date Selector -->
+      <div class="filters-bar">
+        <input type="date" class="filter-select" id="attendanceDate" style="min-width:200px;">
+        <select class="filter-select" id="attFilterDept">
+          <option value="">All Departments</option>
+          <option value="operations">Operations</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="management">Management</option>
+          <option value="admin">Admin & Finance</option>
+        </select>
+        <select class="filter-select" id="attFilterStatus">
+          <option value="">All Status</option>
+          <option value="present">Present</option>
+          <option value="late">Late</option>
+          <option value="absent">Absent</option>
+          <option value="leave">On Leave</option>
+          <option value="halfday">Half Day</option>
+        </select>
+        <div class="filter-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search employee..." id="attSearch">
+        </div>
+      </div>
+
+      <!-- Attendance Stats -->
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-present"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Present</span>
+            <span class="stat-value" id="attPresent">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-leave"><i class="fas fa-clock"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Late</span>
+            <span class="stat-value" id="attLate">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-pending"><i class="fas fa-calendar-minus"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">On Leave</span>
+            <span class="stat-value">0</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-rejected"><i class="fas fa-times-circle"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Absent</span>
+            <span class="stat-value" id="attAbsent">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-clipboard-list"></i> Attendance Log</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;" id="attLogDate"></span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table" id="attendanceTable">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Time In</th>
+                  <th>Lunch Out</th>
+                  <th>Lunch In</th>
+                  <th>Time Out</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>Review</th>
+                </tr>
+              </thead>
+              <tbody id="adminAttendanceBody">
+                <tr><td colspan="9" style="text-align:center;">No attendance records for this date.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- EMPLOYEE MANAGEMENT PAGE                                          -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-employees">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Employee Management</h1>
+          <p class="page-subtitle">Manage your workforce</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-gold" onclick="openAdminCreateEmployee()">
+            <i class="fas fa-plus"></i> Add Employee
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:22px;">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-user-check"></i> Hired Applicants for Account Creation</h3>
+          <span style="color:rgba(255,255,255,0.5);font-size:13px;" id="hiredApplicantCount">Loading...</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>Applicant</th><th>Position</th><th>Final Result</th><th>Applied</th><th>Action</th></tr></thead>
+              <tbody id="hiredApplicantsBody"><tr><td colspan="5" style="text-align:center;">Loading hired applicants...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <select class="filter-select" id="empFilterDept">
+          <option value="">All Departments</option>
+          <option value="operations">Operations</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="management">Management</option>
+          <option value="admin">Admin & Finance</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
+        <select class="filter-select" id="empFilterStatus">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Not Active / Resigned</option>
+        </select>
+        <select class="filter-select" id="empFilterPosition">
+          <option value="">All Positions</option>
+          <option value="barista">Barista</option>
+          <option value="cashier">Cashier</option>
+        </select>
+        <div class="filter-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search employees..." id="empSearch">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-users"></i> All Employees</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;" id="empCount">Loading...</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Joined Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="employeesTableBody">
+                <tr><td colspan="6" style="text-align:center;">Loading employees from the database...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Employee Detail Modal -->
+      <div class="modal-overlay" id="empModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 class="modal-title"><i class="fas fa-user-circle"></i> <span id="empModalName">Employee Name</span></h3>
+            <button class="modal-close" onclick="closeModal('empModal')"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body">
+            <div class="detail-row">
+              <span class="detail-label">Full Name</span>
+              <span class="detail-value" id="empDetailName">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Position</span>
+              <span class="detail-value" id="empDetailPos">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Department</span>
+              <span class="detail-value" id="empDetailDept">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email</span>
+              <span class="detail-value" id="empDetailEmail">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Contact</span>
+              <span class="detail-value" id="empDetailContact">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status</span>
+              <span class="detail-value" id="empDetailStatus">—</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Joined Date</span>
+              <span class="detail-value" id="empDetailJoined">—</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-sm btn-outline" onclick="closeModal('empModal')">Close</button>
+            <button class="btn btn-sm btn-gold" onclick="openEmployeeEditFromView()"><i class="fas fa-edit"></i> Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="empEditModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 class="modal-title"><i class="fas fa-user-edit"></i> Edit Employee</h3>
+            <button class="modal-close" onclick="closeModal('empEditModal')"><i class="fas fa-times"></i></button>
+          </div>
+          <form id="employeeEditForm">
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editEmployeeId">
+              <input name="full_name" id="editEmployeeName" required placeholder="Full name" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+              <input name="email" id="editEmployeeEmail" type="email" required placeholder="Email address" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+              <input name="contact_no" id="editEmployeeContact" type="tel" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" required placeholder="11-digit contact number" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+              <select name="position" id="editEmployeePosition" required style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+                <option value="barista">Barista</option>
+                <option value="cashier">Cashier</option>
+              </select>
+              <select name="status" id="editEmployeeStatus" required style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+                <option value="approved">Active</option>
+                <option value="inactive">Not Active / Resigned</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-outline" onclick="closeModal('empEditModal')">Cancel</button>
+              <button type="submit" class="btn btn-sm btn-gold"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+
+    <!-- ================================================================ -->
+    <!-- PAYROLL PAGE                                                      -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-payroll">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Payroll</h1>
+          <p class="page-subtitle">Manage salaries and payroll processing</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-green" id="processPayrollBtn" onclick="issueAdminPayroll()">
+            <i class="fas fa-calculator"></i> Process Payroll
+          </button>
+        </div>
+      </div>
+
+      <!-- Payroll Summary -->
+      <div class="payroll-summary">
+        <div class="payroll-card">
+          <div class="payroll-icon payroll-icon-green"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="payroll-info">
+            <span class="payroll-label">Total Payroll This Cutoff</span>
+            <span class="payroll-amount" id="payrollTotalNet">₱0.00</span>
+            <span class="payroll-period" id="payrollSummaryPeriod">Current period</span>
+          </div>
+        </div>
+        <div class="payroll-card">
+          <div class="payroll-icon payroll-icon-gold"><i class="fas fa-users"></i></div>
+          <div class="payroll-info">
+            <span class="payroll-label">Employees on Payroll</span>
+            <span class="payroll-amount" id="payrollEmployeeCount">0</span>
+            <span class="payroll-period">Active employees</span>
+          </div>
+        </div>
+        <div class="payroll-card">
+          <div class="payroll-icon payroll-icon-blue"><i class="fas fa-chart-line"></i></div>
+          <div class="payroll-info">
+            <span class="payroll-label">Average Salary</span>
+            <span class="payroll-amount" id="payrollAverageNet">₱0.00</span>
+            <span class="payroll-period">Per employee</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payroll Period Selector -->
+      <div class="filters-bar">
+        <select class="filter-select" id="payrollPeriod"></select>
+        <select class="filter-select" id="payrollDept">
+          <option value="">All Departments</option>
+          <option value="operations">Operations</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="management">Management</option>
+          <option value="admin">Admin</option>
+        </select>
+        <select class="filter-select" id="payrollStatus">
+          <option value="">All Status</option>
+          <option value="paid">Paid</option>
+          <option value="pending">Pending</option>
+        </select>
+        <div class="filter-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search employee..." id="payrollSearch">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-wallet"></i> Salary Breakdown</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;" id="payrollShowingPeriod">Showing current period</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Gross Salary</th>
+                  <th>Deductions</th>
+                  <th>Net Pay</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="payrollTableBody">
+                <tr><td colspan="7" style="text-align:center;">Loading payroll from the database...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">4</button>
+            <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- LEAVE REQUESTS PAGE                                               -->
+    <!-- ================================================================ -->
+    <div class="page-content" id="page-leave">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Leave Requests</h1>
+          <p class="page-subtitle">Approve or decline employee leave applications</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-gold" onclick="loadAdminLeaves()">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Leave Stats -->
+      <div class="leave-stats-grid">
+        <div class="leave-stat-card leave-stat-green">
+          <span class="leave-stat-count" id="adminLeaveApproved">0</span>
+          <span class="leave-stat-label">Approved</span>
+        </div>
+        <div class="leave-stat-card leave-stat-yellow">
+          <span class="leave-stat-count" id="adminLeavePending">0</span>
+          <span class="leave-stat-label">Pending</span>
+        </div>
+        <div class="leave-stat-card leave-stat-blue">
+          <span class="leave-stat-count" id="adminLeaveTotal">0</span>
+          <span class="leave-stat-label">Total Requests</span>
+        </div>
+        <div class="leave-stat-card leave-stat-red">
+          <span class="leave-stat-count" id="adminLeaveRejected">0</span>
+          <span class="leave-stat-label">Rejected</span>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchLeaveTab(this, 'all')"><i class="fas fa-list"></i> All</button>
+        <button class="tab" onclick="switchLeaveTab(this, 'pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
+        <button class="tab" onclick="switchLeaveTab(this, 'approved')"><i class="fas fa-check-circle"></i> Approved</button>
+        <button class="tab" onclick="switchLeaveTab(this, 'rejected')"><i class="fas fa-times-circle"></i> Rejected</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <select class="filter-select" id="leaveFilterType">
+          <option value="">All Types</option>
+          <option value="sick">Sick Leave</option>
+          <option value="vacation">Vacation Leave</option>
+          <option value="personal">Personal Leave</option>
+          <option value="emergency">Emergency Leave</option>
+          <option value="maternity">Maternity Leave</option>
+        </select>
+        <select class="filter-select" id="leaveFilterDept">
+          <option value="">All Departments</option>
+          <option value="operations">Operations</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="management">Management</option>
+          <option value="admin">Admin</option>
+        </select>
+        <div class="filter-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search employee..." id="leaveSearch">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Leave Applications</h3>
+          <span style="color:rgba(255,255,255,0.3);font-size:13px;">Click approve/reject to process</span>
+        </div>
+        <div class="card-body">
+          <div class="table-wrapper">
+            <table class="data-table" id="leaveTable">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Leave Type</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Days</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminLeaveBody">
+                <tr><td colspan="7" style="text-align:center;">No leave requests yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Notification Dropdown -->
+<div class="notif-dropdown" id="notifDropdown">
+  <div class="notif-dropdown-header">
+    <h4>Notifications</h4>
+    <button class="notif-mark-read">Mark all as read</button>
+  </div>
+  <div class="notif-list" id="adminNotifList">
+    <div class="notif-item">
+      <div class="notif-content">
+        <p class="notif-text">Loading database notifications...</p>
+      </div>
+    </div>
+  </div>
+  <div class="notif-dropdown-footer">
+    <a href="#">View all notifications</a>
+  </div>
+</div>
+
+<!-- Sign-Out Confirmation Modal -->
+<div class="signout-modal-overlay" id="adminCreateEmployeeModal">
+  <div class="signout-modal" style="max-width:560px;text-align:left;">
+    <h2 class="signout-modal-title"><i class="fas fa-user-plus"></i> Create Employee Account</h2>
+    <form id="adminCreateEmployeeForm">
+      <input type="hidden" name="applicant_id" id="adminApplicantId">
+      <input name="full_name" required placeholder="Full name" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+      <input name="email" type="email" required placeholder="Email address" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+      <input name="contact_no" type="tel" inputmode="numeric" maxlength="11" pattern="[0-9]{11}" required placeholder="11-digit contact number" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+      <input name="username" required placeholder="Username" style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+      <select name="position" id="adminCreatePosition" required style="width:100%;box-sizing:border-box;margin:6px 0;padding:12px;border-radius:7px;">
+        <option value="barista">Barista</option>
+        <option value="cashier">Cashier</option>
+      </select>
+      <p class="signout-modal-desc" style="margin:10px 0 0;">A 6-digit access PIN will be generated automatically and emailed to the employee.</p>
+      <div class="signout-modal-actions" style="margin-top:18px;">
+        <button type="button" class="signout-modal-btn signout-btn-cancel" onclick="closeAdminCreateEmployee()">Cancel</button>
+        <button type="submit" class="signout-modal-btn signout-btn-confirm">Create Account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Admin Alert Modal -->
+<div class="signout-modal-overlay" id="attendanceReviewModal">
+  <div class="signout-modal" style="max-width:460px;text-align:left;">
+    <h2 class="signout-modal-title" id="attendanceReviewTitle">Review Attendance</h2>
+    <p class="signout-modal-desc" id="attendanceReviewSummary"></p>
+    <textarea id="attendanceReviewNote" maxlength="1000" placeholder="Add an Admin note (required when rejecting)" style="width:100%;min-height:100px;box-sizing:border-box;margin-top:12px;padding:12px;border-radius:8px;resize:vertical;"></textarea>
+    <div class="signout-modal-actions" style="margin-top:18px;">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="closeAttendanceReview()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" id="attendanceReviewSubmit" onclick="submitAttendanceReview()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Alert Modal -->
+<div class="signout-modal-overlay" id="adminAlertModal">
+  <div class="signout-modal" style="max-width:420px;">
+    <div class="signout-modal-icon" id="adminAlertIcon">
+      <i class="fas fa-check-circle" id="adminAlertIconTag"></i>
+    </div>
+    <h2 class="signout-modal-title" id="adminAlertTitle">Success</h2>
+    <p class="signout-modal-desc" id="adminAlertDesc"></p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-confirm" onclick="closeAdminAlert()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign-Out Confirmation Modal -->
+<div class="signout-modal-overlay" id="signoutModal">
+  <div class="signout-modal">
+    <div class="signout-modal-icon">
+      <i class="fas fa-sign-out-alt"></i>
+    </div>
+    <h2 class="signout-modal-title">Sign Out</h2>
+    <p class="signout-modal-desc">Are you sure you want to sign out of your account? You will be redirected to the login page.</p>
+    <div class="signout-modal-actions">
+      <button class="signout-modal-btn signout-btn-cancel" onclick="hideSignoutModal()">Cancel</button>
+      <button class="signout-modal-btn signout-btn-confirm" onclick="confirmSignout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Applicant Details Modal (sent from HR) -->
+<div class="modal-overlay" id="applicantViewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fas fa-file-alt"></i> <span id="applicantViewName">Applicant Name</span></h3>
+      <button class="modal-close" onclick="closeApplicantView()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-row">
+        <span class="detail-label">Email</span>
+        <span class="detail-value" id="applicantViewEmail"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Position</span>
+        <span class="detail-value" id="applicantViewPosition"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Date Applied</span>
+        <span class="detail-value" id="applicantViewDate"></span>
+      </div>
+      <div style="border-top: 1px solid rgba(214,174,98,0.1); margin-top: 8px; padding-top: 14px;">
+        <h4 style="color: #E9C27D; font-family: 'Cormorant Garamond', serif; font-size: 17px; margin-bottom: 6px;"><i class="fas fa-info-circle"></i> Application Details</h4>
+        <div id="applicantViewDetails"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm btn-outline" onclick="closeApplicantView()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ============================================
+// SIGN-OUT CONFIRMATION MODAL
+// ============================================
+function showSignoutModal() {
+  document.getElementById('signoutModal').classList.add('show');
+}
+
+function hideSignoutModal() {
+  document.getElementById('signoutModal').classList.remove('show');
+}
+
+function confirmSignout() {
+  securePortalLogout();
+}
+
+// Close modal on overlay click
+document.getElementById('signoutModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    hideSignoutModal();
+  }
+});
+document.getElementById('adminAlertModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeAdminAlert();
+  }
+});
+document.getElementById('adminCreateEmployeeModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeAdminCreateEmployee();
+  }
+});
+document.getElementById('empEditModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal('empEditModal');
+  }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    hideSignoutModal();
+    closeAdminAlert();
+    closeAdminCreateEmployee();
+    closeModal('empEditModal');
+  }
+});
+
+// ============================================
+// SET CURRENT DATE
+// ============================================
+function updateDate() {
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+  document.getElementById('attendanceDate').valueAsDate = now;
+  document.getElementById('attLogDate').textContent = 'Date: ' + now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+updateDate();
+
+// ============================================
+// SIDEBAR NAVIGATION
+// ============================================
+function resetAdminPageScroll() {
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo(0, 0);
+  const main = document.querySelector('.main-content');
+  if (main) main.scrollTop = 0;
+}
+
+function normalizeAdminPages() {
+  const main = document.querySelector('.main-content');
+  const topbar = document.querySelector('.topbar');
+  if (!main || !topbar) return;
+  document.querySelectorAll('.page-content').forEach(page => {
+    if (page.parentElement !== main) {
+      main.appendChild(page);
+    }
+  });
+}
+
+function forceAdminPage(page) {
+  normalizeAdminPages();
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
+  document.querySelectorAll('.page-content').forEach(p => {
+    p.classList.remove('active');
+    p.style.setProperty('display', 'none', 'important');
+  });
+  const target = document.getElementById('page-' + page);
+  if (target) {
+    target.classList.add('active');
+    target.style.setProperty('display', 'block', 'important');
+    target.style.setProperty('visibility', 'visible', 'important');
+    target.style.setProperty('opacity', '1', 'important');
+    target.style.setProperty('min-height', '650px');
+    target.removeAttribute('hidden');
+  }
+  resetAdminPageScroll();
+  setTimeout(resetAdminPageScroll, 0);
+  if (page === 'employees') {
+    loadEmployees();
+    loadHiredApplicantsForAccounts();
+  }
+  if (page === 'attendance') loadAdminAttendance();
+  if (page === 'payroll') {
+    const payrollBody = document.getElementById('payrollTableBody');
+    if (payrollBody && !payrollBody.textContent.trim()) {
+      payrollBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Loading payroll from the database...</td></tr>';
+    }
+    loadAdminPayroll();
+  }
+  if (page === 'leave') loadAdminLeaves();
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    const page = this.dataset.page;
+    if (page === 'payroll') {
+      window.location.href = this.href;
+      return;
+    }
+    if (this.href) {
+      window.history.replaceState(null, '', this.href);
+    }
+    forceAdminPage(page);
+    // Close sidebar on mobile
+    if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('show');
+  });
+});
+
+function switchPage(page) {
+  forceAdminPage(page);
+}
+
+normalizeAdminPages();
+
+// ============================================
+// MOBILE MENU TOGGLE
+// ============================================
+document.getElementById('menuToggle').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('show');
+});
+
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menuToggle');
+  if (window.innerWidth <= 992) {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('show');
+    }
+  }
+});
+
+// ============================================
+// NOTIFICATION DROPDOWN
+// ============================================
+const notifToggle = document.getElementById('notifToggle');
+const notifDropdown = document.getElementById('notifDropdown');
+
+notifToggle.addEventListener('click', function(e) {
+  e.stopPropagation();
+  notifDropdown.classList.toggle('show');
+});
+
+document.addEventListener('click', function(e) {
+  if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+    notifDropdown.classList.remove('show');
+  }
+});
+
+document.querySelector('.notif-mark-read')?.addEventListener('click', function() {
+  document.querySelectorAll('.notif-unread').forEach(n => n.classList.remove('notif-unread'));
+  document.querySelector('.notif-badge').textContent = '0';
+  this.textContent = 'All marked as read';
+});
+
+// ============================================
+// ANIMATED COUNTERS
+// ============================================
+function animateCounters() {
+  document.querySelectorAll('#page-dashboard .stat-value').forEach(el => {
+    const target = parseInt(el.textContent.replace(/[₱,]/g, ''));
+    if (isNaN(target)) return;
+    const step = Math.ceil(target / 30);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = current.toLocaleString();
+    }, 1000 / (target / step));
+  });
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateCounters(); observer.disconnect(); }
+  });
+});
+const dashPage = document.getElementById('page-dashboard');
+if (dashPage) observer.observe(dashPage);
+
+// ============================================
+// APPLICANT FUNCTIONS
+// ============================================
+let currentApplicantTab = 'all';
+
+function switchApplicantTab(btn, tab) {
+  document.querySelectorAll('#page-applicants .tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentApplicantTab = tab;
+  filterApplicants();
+}
+
+function filterApplicants() {
+  const rows = document.querySelectorAll('#applicantsTable tbody tr');
+  rows.forEach(row => {
+    const status = row.dataset.status;
+    if (currentApplicantTab === 'all' || currentApplicantTab === status) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+function approveApplicant(btn) {
+  if (confirm('Approve this applicant?')) {
+    const row = btn.closest('tr');
+    const name = row.querySelector('.emp-name').textContent;
+    row.dataset.status = 'approved';
+    row.querySelector('.status-badge').className = 'status-badge status-approved';
+    row.querySelector('.status-badge').textContent = 'Approved';
+    btn.closest('.action-btns').innerHTML = '<button class="action-btn action-btn-view" onclick="viewApplicant(\'' + name + '\')" title="View"><i class="fas fa-eye"></i></button>';
+    alert('✅ ' + name + ' has been approved!');
+  }
+}
+
+function rejectApplicant(btn) {
+  if (confirm('Reject this applicant?')) {
+    const row = btn.closest('tr');
+    const name = row.querySelector('.emp-name').textContent;
+    row.dataset.status = 'rejected';
+    row.querySelector('.status-badge').className = 'status-badge status-rejected';
+    row.querySelector('.status-badge').textContent = 'Rejected';
+    btn.closest('.action-btns').innerHTML = '<button class="action-btn action-btn-view" onclick="viewApplicant(\'' + name + '\')" title="View"><i class="fas fa-eye"></i></button>';
+    alert('❌ ' + name + ' has been rejected.');
+  }
+}
+
+function viewApplicant(name) {
+  alert('📋 Viewing application of: ' + name + '\n\nYou can view full application details here.');
+}
+
+// ============================================
+// LOAD APPLICANTS SENT FROM HR (localStorage)
+// ============================================
+let adminSentApplicants = [];
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+const expMap = {
+  'none': 'No experience',
+  'less-1': 'Less than 1 yr',
+  '1-2': '1 - 2 yrs',
+  '3-5': '3 - 5 yrs',
+  '5-10': '5 - 10 yrs',
+  '10+': '10+ yrs'
+};
+
+function loadSentToAdmin() {
+  let sent = [];
+  try { sent = JSON.parse(localStorage.getItem('qc_to_admin')) || []; } catch (e) { sent = []; }
+  if (!sent.length) return;
+
+  adminSentApplicants = [];
+  const tbody = document.querySelector('#applicantsTable tbody');
+  if (!tbody) return;
+
+  const seen = new Set();
+  sent.forEach(app => {
+    const id = app.applicationId || app.fullName || app.email;
+    if (seen.has(id)) return;
+    seen.add(id);
+
+    const index = adminSentApplicants.length;
+    adminSentApplicants.push(app);
+
+    const name = app.fullName || app.name || 'Applicant';
+    const exp = expMap[app.yearsExp] || (app.yearsExp ? app.yearsExp : '—');
+    const tr = document.createElement('tr');
+    tr.dataset.status = 'pending';
+    tr.innerHTML =
+      '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div>' +
+        '<span class="emp-name">' + escapeHtml(name) + '</span>' +
+        '<span class="emp-email">' + escapeHtml(app.email || '') + '</span>' +
+      '</div></div></td>' +
+      '<td>' + escapeHtml(app.position || '—') + '</td>' +
+      '<td>' + escapeHtml(exp) + '</td>' +
+      '<td>' + escapeHtml(app.date || '—') + '</td>' +
+      '<td><span class="status-badge status-pending">Pending</span></td>' +
+      '<td><div class="action-btns">' +
+        '<button class="action-btn action-btn-view" onclick="viewSentApplicant(' + index + ')" title="View"><i class="fas fa-eye"></i></button>' +
+        '<button class="action-btn action-btn-approve" onclick="approveApplicant(this)" title="Approve"><i class="fas fa-check"></i></button>' +
+        '<button class="action-btn action-btn-reject" onclick="rejectApplicant(this)" title="Reject"><i class="fas fa-times"></i></button>' +
+      '</div></td>';
+    tbody.appendChild(tr);
+  });
+
+  filterApplicants();
+}
+
+// ============================================
+// VIEW SENT APPLICANT DETAILS (from HR)
+// ============================================
+function viewSentApplicant(index) {
+  const app = adminSentApplicants[index];
+  if (!app) { alert('Application details not found.'); return; }
+  document.getElementById('applicantViewName').textContent = app.fullName || app.name || 'Applicant';
+  document.getElementById('applicantViewEmail').textContent = app.email || '—';
+  document.getElementById('applicantViewPosition').textContent = app.position || '—';
+  document.getElementById('applicantViewDate').textContent = app.date || '—';
+  document.getElementById('applicantViewDetails').innerHTML = renderSentDetails(app.details);
+  document.getElementById('applicantViewModal').classList.add('show');
+}
+
+function closeApplicantView() {
+  document.getElementById('applicantViewModal').classList.remove('show');
+}
+
+function renderSentDetails(text) {
+  if (!text || !text.trim()) {
+    return '<p style="color: rgba(255,255,255,0.4); font-style: italic;">No additional details provided.</p>';
+  }
+  const skip = ['Email', 'Position Applying For'];
+  const lines = text.split('\n');
+  let html = '';
+  lines.forEach(line => {
+    const idx = line.indexOf(':');
+    if (idx > 0 && idx < 60) {
+      const label = line.substring(0, idx).trim();
+      const value = line.substring(idx + 1).trim();
+      if (skip.includes(label)) return;
+      html += '<div class="detail-row"><span class="detail-label">' + escapeHtml(label) + '</span><span class="detail-value">' + escapeHtml(value) + '</span></div>';
+    } else if (line.trim()) {
+      html += '<p style="color: rgba(255,255,255,0.7); font-size: 13px; margin: 6px 0;">' + escapeHtml(line) + '</p>';
+    }
+  });
+  return html;
+}
+
+// Close applicant detail modal on overlay click
+document.getElementById('applicantViewModal').addEventListener('click', function(e) {
+  if (e.target === this) closeApplicantView();
+});
+
+// Search applicants
+document.getElementById('appSearch')?.addEventListener('keyup', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('#applicantsTable tbody tr').forEach(row => {
+    const name = row.querySelector('.emp-name')?.textContent.toLowerCase() || '';
+    const pos = row.cells[1]?.textContent.toLowerCase() || '';
+    row.style.display = (name.includes(q) || pos.includes(q)) ? '' : 'none';
+  });
+});
+
+// ============================================
+// LEAVE FUNCTIONS
+// ============================================
+let currentLeaveTab = 'all';
+let adminLeaveData = [];
+
+function switchLeaveTab(btn, tab) {
+  document.querySelectorAll('#page-leave .tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentLeaveTab = tab;
+  filterLeaves();
+}
+
+function filterLeaves() {
+  renderAdminLeaves();
+}
+
+function adminLeaveDate(value) {
+  const date = new Date(String(value).replace(' ', 'T'));
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function adminLeaveType(value) {
+  return ({ vacation: 'Vacation Leave', sick: 'Sick Leave', personal: 'Personal Leave', emergency: 'Emergency Leave', maternity: 'Maternity Leave' })[value] || value;
+}
+
+function renderAdminLeaves() {
+  const type = document.getElementById('leaveFilterType').value;
+  const department = document.getElementById('leaveFilterDept').value;
+  const search = document.getElementById('leaveSearch').value.trim().toLowerCase();
+  const requests = adminLeaveData.filter(request => {
+    const dept = departmentOptionValue(employeeDepartmentValue(request));
+    return (currentLeaveTab === 'all' || request.status === currentLeaveTab) &&
+      (!type || request.leave_type === type) && (!department || dept === department) &&
+      (!search || request.full_name.toLowerCase().includes(search) || request.reference_code.toLowerCase().includes(search));
+  });
+  const body = document.getElementById('adminLeaveBody');
+  body.innerHTML = requests.length ? requests.map(request => {
+    const statusLabel = request.status.charAt(0).toUpperCase() + request.status.slice(1);
+    const days = Number(request.days) % 1 ? Number(request.days).toFixed(1) : String(Number(request.days));
+    const actions = request.status === 'pending'
+      ? '<button class="action-btn action-btn-approve" onclick="decideLeave(' + request.id + ',\'approved\',this)" title="Approve"><i class="fas fa-check"></i></button><button class="action-btn action-btn-reject" onclick="decideLeave(' + request.id + ',\'rejected\',this)" title="Reject"><i class="fas fa-times"></i></button>'
+      : '<button class="action-btn action-btn-view" onclick="viewAdminLeave(' + request.id + ')" title="View details"><i class="fas fa-eye"></i></button>';
+    return '<tr data-leave-status="' + escapeHtml(request.status) + '"><td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeHtml(request.full_name) + '</span><span class="emp-email">' + escapeHtml(request.email) + '</span></div></div></td><td>' + escapeHtml(adminLeaveType(request.leave_type)) + '</td><td>' + adminLeaveDate(request.start_date + ' 00:00:00') + '</td><td>' + adminLeaveDate(request.end_date + ' 00:00:00') + '</td><td>' + days + (Number(request.days) === 1 ? ' day' : ' days') + '</td><td><span class="status-badge status-' + escapeHtml(request.status) + '">' + statusLabel + '</span></td><td><div class="action-btns">' + actions + '</div></td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;">No matching leave requests.</td></tr>';
+}
+
+async function loadAdminLeaves() {
+  try {
+    const response = await fetch('../php/leave_requests.php?action=admin', { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load leave requests.');
+    adminLeaveData = result.requests;
+    populateDepartmentSelect('leaveFilterDept', adminLeaveData);
+    document.getElementById('adminLeaveApproved').textContent = result.stats.approved;
+    document.getElementById('adminLeavePending').textContent = result.stats.pending;
+    document.getElementById('adminLeaveTotal').textContent = result.stats.total;
+    document.getElementById('adminLeaveRejected').textContent = result.stats.rejected;
+    renderAdminLeaves();
+  } catch (error) {
+    document.getElementById('adminLeaveBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Leave requests could not be loaded.</td></tr>';
+  }
+}
+
+async function decideLeave(requestId, decision, button) {
+  const buttons = button.closest('.action-btns').querySelectorAll('button');
+  buttons.forEach(item => item.disabled = true);
+  try {
+    const body = new URLSearchParams({ action: 'decision', request_id: requestId, decision });
+    const response = await fetch('../php/leave_requests.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to process leave request.');
+    await loadAdminLeaves();
+    showAdminAlert(decision === 'approved' ? 'Leave Approved' : 'Leave Rejected', result.message, decision === 'approved');
+  } catch (error) {
+    buttons.forEach(item => item.disabled = false);
+    showAdminAlert('Leave Not Processed', error.message, false);
+  }
+}
+
+function viewAdminLeave(requestId) {
+  const request = adminLeaveData.find(item => Number(item.id) === Number(requestId));
+  if (!request) return;
+  showAdminAlert('Leave ' + request.reference_code, request.full_name + ' — ' + adminLeaveType(request.leave_type) + ', ' + request.days + ' day(s), ' + request.pay_type.replace('-', ' ') + '. Reason: ' + request.reason, request.status === 'approved');
+}
+
+// ============================================
+// EMPLOYEE FUNCTIONS
+// ============================================
+let adminEmployees = [];
+let selectedEmployeeId = null;
+
+function findEmployee(id) {
+  return adminEmployees.find(employee => String(employee.id) === String(id));
+}
+
+function formatDate(value) {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function normalizePositionValue(position) {
+  const value = String(position || '').toLowerCase();
+  if (value.includes('barista')) return 'barista';
+  if (value.includes('cashier')) return 'cashier';
+  return '';
+}
+
+function positionDisplayName(value) {
+  if (value === 'barista') return 'Barista';
+  if (value === 'cashier') return 'Cashier';
+  return value || '';
+}
+
+async function loadAdminPositionAvailability() {
+  const select = document.getElementById('adminCreatePosition');
+  if (!select) return null;
+
+  try {
+    const response = await fetch('../php/positions.php');
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message || 'Unable to load positions.');
+
+    Array.from(select.options).forEach(option => {
+      if (!option.value) return;
+      const info = result.positions[option.value];
+      if (!info) return;
+      option.disabled = !info.available;
+      option.textContent = info.available
+        ? info.label + ' - ' + info.remaining + ' slot' + (info.remaining === 1 ? '' : 's') + ' left'
+        : info.label + ' - Full';
+    });
+
+    if (!select.value || select.selectedOptions[0]?.disabled) {
+      const firstAvailable = Array.from(select.options).find(option => option.value && !option.disabled);
+      select.value = firstAvailable ? firstAvailable.value : '';
+    }
+
+    return result.positions;
+  } catch (error) {
+    showAdminAlert('Position Availability Unavailable', 'Unable to check Barista/Cashier slots right now. Please refresh and try again.', false);
+    return null;
+  }
+}
+
+function viewEmployee(id) {
+  const employee = findEmployee(id);
+  if (!employee) return showAdminAlert('Employee Not Found', 'Unable to find this employee record in the database.', false);
+  selectedEmployeeId = employee.id;
+  document.getElementById('empModalName').textContent = employee.full_name;
+  document.getElementById('empDetailName').textContent = employee.full_name;
+  document.getElementById('empDetailPos').textContent = employee.position;
+  document.getElementById('empDetailDept').textContent = employeeDepartmentValue(employee);
+  document.getElementById('empDetailEmail').textContent = employee.email;
+  document.getElementById('empDetailContact').textContent = employee.contact_no || '-';
+  document.getElementById('empDetailStatus').textContent = employeeStatusLabel(employee.status);
+  document.getElementById('empDetailJoined').textContent = formatDate(employee.created_at);
+  document.getElementById('empModal').classList.add('show');
+}
+
+function openEmployeeEdit(id) {
+  const employee = findEmployee(id);
+  if (!employee) return showAdminAlert('Employee Not Found', 'Unable to find this employee record in the database.', false);
+  selectedEmployeeId = employee.id;
+  document.getElementById('editEmployeeId').value = employee.id;
+  document.getElementById('editEmployeeName').value = employee.full_name || '';
+  document.getElementById('editEmployeeEmail').value = employee.email || '';
+  document.getElementById('editEmployeeContact').value = employee.contact_no || '';
+  document.getElementById('editEmployeePosition').value = normalizePositionValue(employee.position);
+  document.getElementById('editEmployeeStatus').value = employee.status === 'inactive' ? 'inactive' : 'approved';
+  document.getElementById('empEditModal').classList.add('show');
+}
+
+function openEmployeeEditFromView() {
+  closeModal('empModal');
+  openEmployeeEdit(selectedEmployeeId);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function escapeAccountHtml(value) {
+  const div = document.createElement('div');
+  div.textContent = value || '';
+  return div.innerHTML;
+}
+
+function inferEmployeeDepartment(position) {
+  const value = (position || '').toLowerCase();
+  if (value.includes('cook') || value.includes('chef') || value.includes('kitchen')) return 'Kitchen';
+  if (value.includes('manager') || value.includes('supervisor')) return 'Management';
+  if (value.includes('finance') || value.includes('admin')) return 'Admin & Finance';
+  if (value.includes('maintenance')) return 'Maintenance';
+  return 'Operations';
+}
+
+function employeeDepartmentValue(row) {
+  return row?.department || inferEmployeeDepartment(row?.position);
+}
+
+function departmentOptionValue(department) {
+  return String(department || '').toLowerCase().replace(/\s*&\s*/g, '-').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function populateDepartmentSelect(selectId, rows) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  const current = select.value;
+  const departments = Array.from(new Set((rows || []).map(employeeDepartmentValue).filter(Boolean))).sort();
+  select.innerHTML = '<option value="">All Departments</option>' + departments.map(dept =>
+    '<option value="' + escapeAccountHtml(departmentOptionValue(dept)) + '">' + escapeAccountHtml(dept) + '</option>'
+  ).join('');
+  if (Array.from(select.options).some(option => option.value === current)) select.value = current;
+}
+
+function employeeStatusLabel(status) {
+  if (status === 'approved') return 'Active';
+  if (status === 'inactive') return 'Not Active / Resigned';
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function employeeStatusClass(status) {
+  if (status === 'approved') return 'status-active';
+  if (status === 'inactive') return 'status-rejected';
+  if (status === 'rejected') return 'status-rejected';
+  return 'status-pending';
+}
+
+async function loadEmployees() {
+  const tbody = document.getElementById('employeesTableBody');
+  const count = document.getElementById('empCount');
+  if (!tbody || !count) return;
+  try {
+    const response = await fetch('../php/accounts.php?action=list');
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message);
+    const employees = data.accounts.filter(account => {
+      const position = account.position || '';
+      return ['approved', 'inactive'].includes(account.status) &&
+        position !== 'Administrator' &&
+        !position.toLowerCase().includes('hr') &&
+        position.toLowerCase() !== 'human resources';
+    });
+    adminEmployees = employees;
+    populateDepartmentSelect('empFilterDept', employees);
+    count.textContent = employees.length + (employees.length === 1 ? ' total' : ' total');
+    renderAdminEmployees();
+  } catch (error) {
+    count.textContent = 'Unavailable';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Unable to load employees from the database.</td></tr>';
+  }
+}
+
+function renderAdminEmployees() {
+  const tbody = document.getElementById('employeesTableBody');
+  const dept = document.getElementById('empFilterDept')?.value || '';
+  const status = document.getElementById('empFilterStatus')?.value || '';
+  const position = document.getElementById('empFilterPosition')?.value || '';
+  const search = document.getElementById('empSearch')?.value.trim().toLowerCase() || '';
+  const employees = adminEmployees.filter(employee => {
+    const employeeDept = departmentOptionValue(employeeDepartmentValue(employee));
+    const employeeStatus = employee.status === 'inactive' ? 'inactive' : 'active';
+    const employeePosition = normalizePositionValue(employee.position);
+    return (!dept || dept === employeeDept) &&
+      (!status || status === employeeStatus) &&
+      (!position || position === employeePosition) &&
+      (!search || employee.full_name.toLowerCase().includes(search) || employee.email.toLowerCase().includes(search));
+  });
+  tbody.innerHTML = employees.length ? employees.map(employee => {
+    const joined = formatDate(employee.created_at);
+    const department = employeeDepartmentValue(employee);
+    return '<tr>' +
+      '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeAccountHtml(employee.full_name) + '</span><span class="emp-email">' + escapeAccountHtml(employee.email) + '</span></div></div></td>' +
+      '<td>' + escapeAccountHtml(employee.position) + '</td>' +
+      '<td>' + escapeAccountHtml(department) + '</td>' +
+      '<td><span class="status-badge ' + employeeStatusClass(employee.status) + '">' + employeeStatusLabel(employee.status) + '</span></td>' +
+      '<td>' + escapeAccountHtml(joined) + '</td>' +
+      '<td><div class="action-btns"><button class="action-btn action-btn-view" onclick="viewEmployee(' + employee.id + ')" title="View"><i class="fas fa-eye"></i></button><button class="action-btn action-btn-edit" onclick="openEmployeeEdit(' + employee.id + ')" title="Edit"><i class="fas fa-edit"></i></button></div></td>' +
+    '</tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;">No matching employee records.</td></tr>';
+}
+
+function showAdminAlert(title, message, success = true) {
+  const icon = document.getElementById('adminAlertIcon');
+  const iconTag = document.getElementById('adminAlertIconTag');
+  icon.style.background = success ? 'rgba(52,168,83,0.15)' : 'rgba(234,67,53,0.15)';
+  icon.style.borderColor = success ? 'rgba(52,168,83,0.25)' : 'rgba(234,67,53,0.25)';
+  iconTag.className = success ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  iconTag.style.color = success ? '#34A853' : '#EA4335';
+  document.getElementById('adminAlertTitle').textContent = title;
+  document.getElementById('adminAlertDesc').textContent = message;
+  document.getElementById('adminAlertModal').classList.add('show');
+}
+
+function closeAdminAlert() {
+  document.getElementById('adminAlertModal').classList.remove('show');
+}
+
+function enforceElevenDigitPhone(input) {
+  if (!input) return;
+  input.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 11);
+  });
+}
+
+enforceElevenDigitPhone(document.querySelector('#adminCreateEmployeeForm input[name="contact_no"]'));
+enforceElevenDigitPhone(document.getElementById('editEmployeeContact'));
+
+document.getElementById('employeeEditForm')?.addEventListener('submit', async function(event) {
+  event.preventDefault();
+  const contact = document.getElementById('editEmployeeContact').value.trim();
+  const position = document.getElementById('editEmployeePosition').value;
+  if (!/^\d{11}$/.test(contact)) {
+    showAdminAlert('Invalid Contact Number', 'Contact number must be exactly 11 digits.', false);
+    return;
+  }
+  if (!position) {
+    showAdminAlert('Position Required', 'Please select Barista or Cashier for this employee.', false);
+    return;
+  }
+  try {
+    const body = new FormData(this);
+    body.append('action', 'update');
+    const response = await fetch('../php/accounts.php', { method: 'POST', body });
+    const result = await response.json();
+    if (!result.success) return showAdminAlert('Update Not Saved', result.message, false);
+    closeModal('empEditModal');
+    await loadEmployees();
+    loadAdminDashboard();
+    showAdminAlert('Employee Updated', result.message, true);
+  } catch (error) {
+    showAdminAlert('Update Not Saved', 'Unable to update the employee record.', false);
+  }
+});
+
+// ============================================
+// SEARCH
+// ============================================
+document.getElementById('globalSearch')?.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) {
+    alert('🔍 Searching for: ' + this.value.trim());
+  }
+});
+
+loadEmployees();
+loadHiredApplicantsForAccounts();
+
+setInterval(() => {
+  if (document.getElementById('page-employees')?.classList.contains('active')) {
+    loadEmployees();
+    loadHiredApplicantsForAccounts();
+  }
+  if (document.getElementById('page-attendance')?.classList.contains('active') || document.getElementById('page-dashboard')?.classList.contains('active')) {
+    loadAdminAttendance();
+  }
+  if (document.getElementById('page-payroll')?.classList.contains('active')) loadAdminPayroll();
+  if (document.getElementById('page-leave')?.classList.contains('active')) loadAdminLeaves();
+}, 10000);
+
+// ============================================
+// GENERATE REPORT
+// ============================================
+function generateReport() {
+  alert('📊 Generating comprehensive report...\n\nReport will be available for download shortly.');
+}
+
+// ============================================
+// ATTENDANCE SEARCH
+// ============================================
+let adminAttendanceData = [];
+
+function adminAttendanceTime(value) {
+  if (!value) return '—';
+  const date = new Date(String(value).replace(' ', 'T'));
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function adminAttendanceMinutes(value) {
+  if (!value) return null;
+  const match = String(value).match(/\s(\d{2}):(\d{2}):\d{2}$/);
+  return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+}
+
+function renderAdminAttendance() {
+  const body = document.getElementById('adminAttendanceBody');
+  const selectedDate = document.getElementById('attendanceDate').value;
+  const today = new Date().toLocaleDateString('en-CA');
+  const deptFilter = document.getElementById('attFilterDept').value;
+  const statusFilter = document.getElementById('attFilterStatus').value;
+  const search = document.getElementById('attSearch').value.trim().toLowerCase();
+  const records = adminAttendanceData.filter(record => {
+    const dept = departmentOptionValue(employeeDepartmentValue(record));
+    const displayStatus = record.status === 'not_clocked_in' && selectedDate < today ? 'absent' : record.status;
+    const statusMatch = !statusFilter || statusFilter === displayStatus || (statusFilter === 'present' && displayStatus === 'on_time') || (statusFilter === 'leave' && displayStatus === 'on_leave') || (statusFilter === 'halfday' && (record.day_status === 'half_day' || String(record.leave_during || '').startsWith('half-day')));
+    return (!deptFilter || deptFilter === dept) && statusMatch && (!search || record.full_name.toLowerCase().includes(search));
+  });
+  body.innerHTML = records.length ? records.map(record => {
+    let label = 'Not Clocked In';
+    let badge = 'status-pending';
+    let remark = 'No attendance record';
+    const timeInMinutes = adminAttendanceMinutes(record.clock_in);
+    const timeOutMinutes = adminAttendanceMinutes(record.clock_out);
+    const arrivedLate = timeInMinutes !== null && timeInMinutes >= 8 * 60 + 30;
+    const endedEarly = timeOutMinutes !== null && timeOutMinutes < 17 * 60;
+    const reviewable = ['full_day', 'half_day', 'undertime'].includes(record.day_status);
+    if (record.clock_in) {
+      if (record.clock_out && endedEarly) {
+        label = arrivedLate ? 'Late / Early Out' : 'Incomplete Shift';
+        badge = arrivedLate ? 'status-late' : 'status-absent';
+        remark = (arrivedLate ? 'Late arrival at ' + adminAttendanceTime(record.clock_in) + '. ' : '') + 'Ended shift early at ' + adminAttendanceTime(record.clock_out) + '; required end is 5:00 PM.';
+      } else if (record.clock_out) {
+        label = arrivedLate ? 'Late' : 'Completed';
+        badge = arrivedLate ? 'status-late' : 'status-ontime';
+        remark = (arrivedLate ? 'Late arrival at ' + adminAttendanceTime(record.clock_in) + '. ' : '') + 'Full shift completed at ' + adminAttendanceTime(record.clock_out) + '.';
+      } else if (selectedDate < today || (selectedDate === today && new Date().getHours() >= 17)) {
+        label = arrivedLate ? 'Late / Incomplete' : 'Incomplete Shift';
+        badge = arrivedLate ? 'status-late' : 'status-absent';
+        remark = (arrivedLate ? 'Late arrival at ' + adminAttendanceTime(record.clock_in) + '. ' : '') + 'No end-shift time was recorded.';
+      } else {
+        label = arrivedLate ? 'Late' : 'Present';
+        badge = arrivedLate ? 'status-late' : 'status-ontime';
+        remark = (arrivedLate ? 'Late arrival at ' + adminAttendanceTime(record.clock_in) + '. ' : '') + (record.break_start && !record.break_end ? 'Currently on break.' : 'Shift is still in progress.');
+      }
+    }
+    else if (record.status === 'on_leave') { label = String(record.leave_during || '').startsWith('half-day') ? 'Half-Day Leave' : 'On Leave'; badge = 'status-approved'; remark = adminLeaveType(record.leave_type) + ' (' + String(record.leave_pay_type || '').replace('-', ' ') + ')'; }
+    else if (record.status === 'day_off') { label = 'Day Off'; badge = 'status-approved'; remark = 'Scheduled Tuesday day off'; }
+    else if (selectedDate < today) { label = 'Absent'; badge = 'status-absent'; remark = 'No time-in record'; }
+    if (record.clock_out) {
+      label = record.approval_status === 'pending' ? 'Pending Admin Review' : (record.approval_status === 'rejected' ? 'Rejected' : 'Approved');
+      badge = record.approval_status === 'pending' ? 'status-pending' : (record.approval_status === 'rejected' ? 'status-rejected' : 'status-approved');
+      const metrics = [];
+      if (Number(record.late_minutes)) metrics.push('Late ' + Number(record.late_minutes) + 'm');
+      if (Number(record.undertime_minutes)) metrics.push('Undertime ' + Number(record.undertime_minutes) + 'm');
+      if (Number(record.overtime_minutes)) metrics.push('Overtime ' + Number(record.overtime_minutes) + 'm');
+      metrics.push('Worked ' + attendanceDurationLabel(record.duration_seconds));
+      remark = escapeHtml(record.attendance_remark || 'Completed') + ' — ' + metrics.join(', ');
+      if (record.admin_note) remark += '<br><small>Admin: ' + escapeHtml(record.admin_note) + '</small>';
+      if (record.reviewed_by_name) remark += '<br><small>Reviewed by ' + escapeHtml(record.reviewed_by_name) + '</small>';
+    }
+    const reviewActions = record.approval_status === 'pending'
+      ? '<button class="action-btn action-btn-approve" onclick="reviewAttendance(' + Number(record.record_id) + ',\'approved\')" title="Approve attendance"><i class="fas fa-check"></i></button> <button class="action-btn action-btn-reject" onclick="reviewAttendance(' + Number(record.record_id) + ',\'rejected\')" title="Disapprove attendance"><i class="fas fa-times"></i></button>'
+      : (reviewable ? '<span class="status-badge ' + (record.approval_status === 'approved' ? 'status-approved' : 'status-rejected') + '">' + escapeHtml(record.approval_status) + '</span>' : '—');
+    return '<tr><td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeHtml(record.full_name) + '</span><span class="emp-email">' + escapeHtml(record.email) + '</span></div></div></td>' +
+      '<td>' + escapeHtml(employeeDepartmentValue(record)) + '</td><td>' + adminAttendanceTime(record.clock_in) + '</td><td>' + adminAttendanceTime(record.break_start) + '</td><td>' + adminAttendanceTime(record.break_end) + '</td><td>' + adminAttendanceTime(record.clock_out) + '</td>' +
+      '<td><span class="status-badge ' + badge + '">' + label + '</span></td><td>' + remark + '</td><td>' + reviewActions + '</td></tr>';
+  }).join('') : '<tr><td colspan="9" style="text-align:center;">No matching attendance records for this date.</td></tr>';
+}
+
+function attendanceDurationLabel(seconds) {
+  const minutes = Math.max(0, Math.floor(Number(seconds || 0) / 60));
+  return Math.floor(minutes / 60) + 'h ' + (minutes % 60) + 'm';
+}
+
+let attendanceReviewState = null;
+
+function reviewAttendance(id, decision) {
+  const record = adminAttendanceData.find(item => Number(item.record_id) === Number(id));
+  attendanceReviewState = { id, decision };
+  document.getElementById('attendanceReviewTitle').textContent = decision === 'approved' ? 'Approve Attendance' : 'Reject Attendance';
+  document.getElementById('attendanceReviewSummary').textContent = (record?.full_name || 'Employee') + ' — ' + (record?.attendance_remark || 'Attendance record');
+  document.getElementById('attendanceReviewNote').value = record?.admin_note || '';
+  document.getElementById('attendanceReviewSubmit').textContent = decision === 'approved' ? 'Approve' : 'Reject';
+  document.getElementById('attendanceReviewModal').classList.add('show');
+}
+
+function closeAttendanceReview() {
+  document.getElementById('attendanceReviewModal').classList.remove('show');
+  attendanceReviewState = null;
+}
+
+async function submitAttendanceReview() {
+  if (!attendanceReviewState) return;
+  const { id, decision } = attendanceReviewState;
+  const adminNote = document.getElementById('attendanceReviewNote').value.trim();
+  if (decision === 'rejected' && !adminNote) {
+    showAdminAlert('Rejection Note Required', 'Enter the reason why this attendance is being rejected.', false);
+    return;
+  }
+  try {
+    const body = new URLSearchParams({ action: 'attendance_decision', id: String(id), decision, admin_note: adminNote });
+    const response = await fetch('../php/attendance.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to review attendance.');
+    closeAttendanceReview();
+    await loadAdminAttendance();
+    showAdminAlert(decision === 'approved' ? 'Attendance Approved' : 'Attendance Disapproved', result.message, decision === 'approved');
+  } catch (error) {
+    showAdminAlert('Attendance Not Reviewed', error.message, false);
+  }
+}
+
+function renderAdminAttendanceActivity(items) {
+  const list = document.getElementById('adminRecentActivity');
+  list.innerHTML = items.length ? items.map(item => {
+    const late = item.type === 'late_clock_in';
+    const out = item.type === 'clock_out';
+    const action = item.type === 'break_start' ? 'recorded Lunch Out' : (item.type === 'break_end' ? 'recorded Lunch In' : (out ? 'ended the shift' : (late ? 'timed in late' : 'timed in')));
+    const occurred = new Date(String(item.occurred_at).replace(' ', 'T'));
+    return '<div class="activity-item"><div class="activity-dot ' + (late ? 'activity-dot-red' : 'activity-dot-green') + '"></div><div class="activity-info"><span class="activity-text">' + escapeHtml(item.employee) + ' ' + action + ' at ' + adminAttendanceTime(item.occurred_at) + '</span><span class="activity-time">' + occurred.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</span></div></div>';
+  }).join('') : '<div class="activity-item"><div class="activity-info"><span class="activity-text">No employee attendance activity yet.</span></div></div>';
+}
+
+async function loadAdminAttendance() {
+  const date = document.getElementById('attendanceDate').value || new Date().toLocaleDateString('en-CA');
+  try {
+    const response = await fetch('../php/attendance.php?action=admin&date=' + encodeURIComponent(date), { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load attendance.');
+    adminAttendanceData = result.records;
+    populateDepartmentSelect('attFilterDept', adminAttendanceData);
+    document.getElementById('attPresent').textContent = result.stats.present;
+    document.getElementById('attLate').textContent = result.stats.late;
+    document.getElementById('attAbsent').textContent = result.stats.absent;
+    document.getElementById('attLogDate').textContent = 'Date: ' + new Date(result.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (result.date === new Date().toLocaleDateString('en-CA')) document.getElementById('presentToday').textContent = result.stats.present;
+    renderAdminAttendance();
+    renderAdminAttendanceActivity(result.activities);
+  } catch (error) {
+    document.getElementById('adminAttendanceBody').innerHTML = '<tr><td colspan="9" style="text-align:center;">Attendance data could not be loaded.</td></tr>';
+  }
+}
+
+document.getElementById('attendanceDate')?.addEventListener('change', loadAdminAttendance);
+document.getElementById('attFilterDept')?.addEventListener('change', renderAdminAttendance);
+document.getElementById('attFilterStatus')?.addEventListener('change', renderAdminAttendance);
+document.getElementById('attSearch')?.addEventListener('keyup', function() {
+  renderAdminAttendance();
+});
+
+loadAdminAttendance();
+
+// ============================================
+// EMPLOYEE SEARCH
+// ============================================
+document.getElementById('empSearch')?.addEventListener('keyup', function() {
+  renderAdminEmployees();
+});
+document.getElementById('empFilterDept')?.addEventListener('change', renderAdminEmployees);
+document.getElementById('empFilterStatus')?.addEventListener('change', renderAdminEmployees);
+document.getElementById('empFilterPosition')?.addEventListener('change', renderAdminEmployees);
+
+// ============================================
+// PAYROLL SEARCH
+// ============================================
+let adminPayrollRecords = [];
+
+function payrollMoney(value) {
+  return '₱' + Number(value || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function payrollPeriodLabel(period) {
+  const parts = String(period || '').match(/^(\d{4}-\d{2})(?:-(15|30))?$/);
+  if (!parts) return period;
+  const date = new Date(parts[1] + '-01T00:00:00');
+  if (Number.isNaN(date.getTime())) return period;
+  const month = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  if (parts[2] === '15') return month + ' (1-15)';
+  if (parts[2] === '30') {
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    return month + ' (16-' + lastDay + ')';
+  }
+  return month;
+}
+
+function payrollCutoffDate(period) {
+  const parts = String(period || '').match(/^(\d{4})-(\d{2})-(15|30)$/);
+  if (!parts) return null;
+  const year = Number(parts[1]);
+  const monthIndex = Number(parts[2]) - 1;
+  if (parts[3] === '15') return new Date(year, monthIndex, 15);
+  return new Date(year, monthIndex + 1, 0);
+}
+
+function payrollCutoffReached(period) {
+  const cutoff = payrollCutoffDate(period);
+  if (!cutoff) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  cutoff.setHours(0, 0, 0, 0);
+  return today >= cutoff;
+}
+
+function payrollCutoffDateLabel(period) {
+  const cutoff = payrollCutoffDate(period);
+  return cutoff ? cutoff.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+}
+
+function latestClosedPayrollPeriod(now = new Date()) {
+  const localMonth = date => date.toLocaleDateString('en-CA').slice(0, 7);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  if (now.getDate() >= lastDay) return localMonth(now) + '-30';
+  if (now.getDate() >= 15) return localMonth(now) + '-15';
+  return localMonth(new Date(now.getFullYear(), now.getMonth() - 1, 1)) + '-30';
+}
+
+function updatePayrollProcessState() {
+  const select = document.getElementById('payrollPeriod');
+  const button = document.getElementById('processPayrollBtn');
+  if (!select || !button) return;
+  const ready = payrollCutoffReached(select.value);
+  button.disabled = !ready;
+  button.title = ready ? 'Process payroll for this cutoff' : 'Cutoff is not reached yet. Available on ' + payrollCutoffDateLabel(select.value);
+  button.style.opacity = ready ? '1' : '0.55';
+  button.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
+
+function setupPayrollPeriods() {
+  const select = document.getElementById('payrollPeriod');
+  if (!select || select.options.length) return;
+  const now = new Date();
+  for (let i = 0; i < 3; i++) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const month = date.toLocaleDateString('en-CA').slice(0, 7);
+    ['30', '15'].forEach(cutoff => {
+      const value = month + '-' + cutoff;
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = payrollPeriodLabel(value);
+      select.appendChild(option);
+    });
+  }
+  select.value = latestClosedPayrollPeriod(now);
+  updatePayrollProcessState();
+}
+
+function payrollStatusLabel(status) {
+  return status === 'issued' ? 'Issued' : 'Pending';
+}
+
+function payrollStatusClass(status) {
+  return status === 'issued' ? 'status-approved' : 'status-pending';
+}
+
+function filterAdminPayroll() {
+  const departmentFilter = document.getElementById('payrollDept').value.toLowerCase();
+  const statusFilter = document.getElementById('payrollStatus').value;
+  const search = document.getElementById('payrollSearch').value.trim().toLowerCase();
+  const body = document.getElementById('payrollTableBody');
+  const filtered = adminPayrollRecords.filter(row => {
+    const dept = departmentOptionValue(employeeDepartmentValue(row));
+    const status = row.status === 'issued' ? 'paid' : 'pending';
+    return (!departmentFilter || dept === departmentFilter) &&
+      (!statusFilter || statusFilter === status) &&
+      (!search || row.full_name.toLowerCase().includes(search) || row.email.toLowerCase().includes(search));
+  });
+
+  body.innerHTML = filtered.length ? filtered.map(row => {
+    const dept = employeeDepartmentValue(row);
+    return '<tr><td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeAccountHtml(row.full_name) + '</span><span class="emp-email">' + escapeAccountHtml(row.email) + '</span></div></div></td>' +
+      '<td>' + escapeAccountHtml(dept) + '</td>' +
+      '<td>' + payrollMoney(row.gross_pay) + '</td>' +
+      '<td>' + payrollMoney(row.total_deductions) + '</td>' +
+      '<td><strong>' + payrollMoney(row.net_pay) + '</strong></td>' +
+      '<td><span class="status-badge ' + payrollStatusClass(row.status) + '">' + payrollStatusLabel(row.status) + '</span></td>' +
+      '<td><div class="action-btns"><button class="action-btn action-btn-view" onclick="viewAdminPayslip(' + row.employee_id + ')" title="View Payslip"><i class="fas fa-file-invoice"></i></button></div></td></tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;">No payroll records match this filter.</td></tr>';
+}
+
+async function loadAdminPayroll() {
+  setupPayrollPeriods();
+  const now = new Date();
+  const currentPeriod = latestClosedPayrollPeriod(now);
+  const period = document.getElementById('payrollPeriod').value || currentPeriod;
+  try {
+    const response = await fetch('../php/payroll.php?action=preview&period=' + encodeURIComponent(period), { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to load payroll.');
+    adminPayrollRecords = result.records || [];
+    populateDepartmentSelect('payrollDept', adminPayrollRecords);
+    document.getElementById('payrollTotalNet').textContent = payrollMoney(result.summary.total_net);
+    document.getElementById('payrollEmployeeCount').textContent = result.summary.employees;
+    document.getElementById('payrollAverageNet').textContent = payrollMoney(result.summary.average_net);
+    document.getElementById('payrollSummaryPeriod').textContent = result.period_label || payrollPeriodLabel(result.period);
+    document.getElementById('payrollShowingPeriod').textContent = 'Showing ' + (result.period_label || payrollPeriodLabel(result.period));
+    updatePayrollProcessState();
+    filterAdminPayroll();
+  } catch (error) {
+    document.getElementById('payrollTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Payroll could not be loaded.</td></tr>';
+    showAdminAlert('Payroll Not Loaded', error.message, false);
+  }
+}
+
+async function issueAdminPayroll() {
+  const now = new Date();
+  const currentPeriod = latestClosedPayrollPeriod(now);
+  const period = document.getElementById('payrollPeriod').value || currentPeriod;
+  if (!payrollCutoffReached(period)) {
+    showAdminAlert('Payroll Not Ready', 'You cannot process ' + payrollPeriodLabel(period) + ' yet. Cutoff date is ' + payrollCutoffDateLabel(period) + '.', false);
+    return;
+  }
+  try {
+    const body = new URLSearchParams({ action: 'issue', period });
+    const response = await fetch('../php/payroll.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const result = await response.json();
+    if (!response.ok || !result.success) throw new Error(result.message || 'Unable to process payroll.');
+    await loadAdminPayroll();
+    showAdminAlert('Payroll Issued', result.message, true);
+  } catch (error) {
+    showAdminAlert('Payroll Not Issued', error.message, false);
+  }
+}
+
+function viewAdminPayslip(employeeId) {
+  const row = adminPayrollRecords.find(item => Number(item.employee_id) === Number(employeeId));
+  if (!row) return showAdminAlert('Payslip Not Found', 'Unable to find this payroll record.', false);
+  const message =
+    row.full_name + ' - ' + payrollPeriodLabel(row.period) + '\n\n' +
+    'EARNINGS\n' +
+    'Basic Pay: ' + payrollMoney(row.basic_pay) + '\n' +
+    'Rice Allowance: ' + payrollMoney(row.rice_allowance) + '\n' +
+    'Transportation Allowance: ' + payrollMoney(row.transport_allowance) + '\n' +
+    'Overtime Pay: ' + payrollMoney(row.overtime_pay) + '\n' +
+    'Gross Pay: ' + payrollMoney(row.gross_pay) + '\n' +
+    '\nDEDUCTIONS\n' +
+    'SSS: ' + payrollMoney(row.sss) + '\n' +
+    'PhilHealth: ' + payrollMoney(row.philhealth) + '\n' +
+    'Pag-IBIG: ' + payrollMoney(row.pagibig) + '\n' +
+    'Withholding Tax: ' + payrollMoney(row.withholding_tax) + '\n' +
+    'Absence Deduction: ' + payrollMoney(row.absence_deduction) + '\n' +
+    'Unpaid Leave Deduction: ' + payrollMoney(row.unpaid_leave_deduction) + '\n' +
+    'Late Deduction: ' + payrollMoney(row.late_deduction) + '\n' +
+    'Total Deductions: ' + payrollMoney(row.total_deductions) + '\n\n' +
+    'ATTENDANCE BASIS\n' +
+    'Working Days: ' + Number(row.working_days || 0) + '\n' +
+    'Days Present: ' + Number(row.days_present || 0) + '\n' +
+    'Late Count: ' + Number(row.late_count || 0) + '\n\n' +
+    'Net Pay: ' + payrollMoney(row.net_pay) + '\n' +
+    'Employee copy: ' + (row.status === 'issued' ? 'Available in Employee Portal' : 'Issue payroll first');
+  showAdminAlert('Payslip Breakdown', message, row.status === 'issued');
+}
+
+document.getElementById('payrollSearch')?.addEventListener('keyup', filterAdminPayroll);
+document.getElementById('payrollDept')?.addEventListener('change', filterAdminPayroll);
+document.getElementById('payrollStatus')?.addEventListener('change', filterAdminPayroll);
+document.getElementById('payrollPeriod')?.addEventListener('change', function() {
+  updatePayrollProcessState();
+  loadAdminPayroll();
+});
+loadAdminPayroll();
+
+function restoreVisibleAdminPage() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedPage = params.get('page');
+  const activeNav = document.querySelector('.nav-item.active[data-page]');
+  forceAdminPage(requestedPage || activeNav?.dataset.page || 'dashboard');
+}
+
+window.addEventListener('load', () => {
+  restoreVisibleAdminPage();
+  setTimeout(restoreVisibleAdminPage, 100);
+  setTimeout(restoreVisibleAdminPage, 500);
+});
+
+// ============================================
+// LEAVE SEARCH & FILTER
+// ============================================
+document.getElementById('leaveSearch')?.addEventListener('keyup', function() {
+  renderAdminLeaves();
+});
+document.getElementById('leaveFilterType')?.addEventListener('change', renderAdminLeaves);
+document.getElementById('leaveFilterDept')?.addEventListener('change', renderAdminLeaves);
+loadAdminLeaves();
+
+// Load applicants sent from HR
+loadSentToAdmin();
+
+// Applicant Details Modal (sent from HR) - direct child of body
+// ============================================
+// Database-backed applicants forwarded by HR.
+let adminHiredApplicants = [];
+
+async function openAdminCreateEmployee(applicantIndex = null) {
+  const form = document.getElementById('adminCreateEmployeeForm');
+  const selectedPosition = document.getElementById('adminCreatePosition');
+  let requestedPosition = '';
+  if (applicantIndex !== null && adminHiredApplicants[applicantIndex]) {
+    const app = adminHiredApplicants[applicantIndex];
+    const fullName = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+    form.applicant_id.value = app.id;
+    form.full_name.value = fullName;
+    form.email.value = app.email || '';
+    form.contact_no.value = app.contact_no || '';
+    form.username.value = (app.email || fullName).split('@')[0].toLowerCase().replace(/[^a-z0-9._-]/g, '');
+    requestedPosition = normalizePositionValue(app.position);
+  } else {
+    form.reset();
+    form.applicant_id.value = '';
+  }
+  const positions = await loadAdminPositionAvailability();
+  if (requestedPosition) {
+    selectedPosition.value = requestedPosition;
+  }
+  if (requestedPosition && selectedPosition.selectedOptions[0]?.disabled) {
+    const label = positionDisplayName(requestedPosition);
+    showAdminAlert('Position Not Available', label + ' is already full. Set an existing employee to Not Active/Resigned first, then create this account.', false);
+    selectedPosition.value = '';
+  }
+  if (positions && !selectedPosition.value) {
+    const firstAvailable = Array.from(selectedPosition.options).find(option => option.value && !option.disabled);
+    selectedPosition.value = firstAvailable ? firstAvailable.value : '';
+  }
+  document.getElementById('adminCreateEmployeeModal').classList.add('show');
+}
+function closeAdminCreateEmployee() { document.getElementById('adminCreateEmployeeModal').classList.remove('show'); }
+document.getElementById('adminCreateEmployeeForm')?.addEventListener('submit', async function (event) {
+  event.preventDefault();
+  const contact = this.contact_no.value.trim();
+  const selectedPosition = document.getElementById('adminCreatePosition');
+  if (!/^\d{11}$/.test(contact)) {
+    showAdminAlert('Invalid Contact Number', 'Contact number must be exactly 11 digits.', false);
+    return;
+  }
+  if (!selectedPosition.value || selectedPosition.selectedOptions[0]?.disabled) {
+    showAdminAlert('Position Not Available', 'Selected position is already full. Set an existing employee to Not Active/Resigned before creating another account.', false);
+    return;
+  }
+  try {
+    const response = await fetch('../php/create_employee.php', { method: 'POST', body: new FormData(this) });
+    const result = await response.json();
+    if (result.success) {
+      this.reset();
+      closeAdminCreateEmployee();
+      loadEmployees();
+      loadHiredApplicantsForAccounts();
+      loadAdminDashboard();
+      showAdminAlert('Account Created', result.message, true);
+    } else {
+      showAdminAlert('Account Not Created', result.message, false);
+    }
+  } catch (error) { showAdminAlert('Account Not Created', 'Unable to create the employee account.', false); }
+});
+
+async function loadHiredApplicantsForAccounts() {
+  const tbody = document.getElementById('hiredApplicantsBody');
+  const count = document.getElementById('hiredApplicantCount');
+  if (!tbody || !count) return;
+  try {
+    const response = await fetch('../php/applicants.php?action=list&view=hr');
+    if (response.status === 401 || response.status === 403) {
+      showAdminAlert('Admin Session Required', 'Please sign in again using an Administrator PIN to manage hired applicants.', false);
+      setTimeout(() => { window.location.href = 'Login.html'; }, 1800);
+      return;
+    }
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message);
+    adminHiredApplicants = result.applicants.filter(app => app.status === 'final_interview_passed');
+    count.textContent = adminHiredApplicants.length + ' ready';
+    if (!adminHiredApplicants.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hired applicants need an employee account yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = adminHiredApplicants.map((app, index) => {
+      const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+      return '<tr>' +
+        '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user-check"></i></div><div><span class="emp-name">' + escapeAccountHtml(name) + '</span><span class="emp-email">' + escapeAccountHtml(app.email) + '</span></div></div></td>' +
+        '<td>' + escapeAccountHtml(app.position) + '</td>' +
+        '<td><span class="status-badge status-approved">Final Interview Passed</span></td>' +
+        '<td>' + new Date(app.created_at).toLocaleDateString() + '</td>' +
+        '<td><button class="btn btn-sm btn-gold" onclick="openAdminCreateEmployee(' + index + ')"><i class="fas fa-user-plus"></i> Create Account</button></td>' +
+      '</tr>';
+    }).join('');
+  } catch (error) {
+    count.textContent = 'Unavailable';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Unable to load hired applicants.</td></tr>';
+  }
+}
+
+async function loadSentToAdmin() {
+  const tbody = document.querySelector('#applicantsTable tbody');
+  if (!tbody) return;
+  try {
+    const response = await fetch('../php/applicants.php?action=list&view=admin');
+    if (response.status === 401 || response.status === 403) {
+      showAdminAlert('Admin Session Required', 'Please sign in again using an Administrator PIN to view applicants.', false);
+      setTimeout(() => { window.location.href = 'Login.html'; }, 1800);
+      return;
+    }
+    const result = await response.json();
+    if (!result.success) throw new Error(result.message);
+    adminSentApplicants = result.applicants;
+    tbody.innerHTML = '';
+    if (!adminSentApplicants.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No applicants are waiting for Admin approval.</td></tr>';
+      return;
+    }
+    adminSentApplicants.forEach((app, index) => {
+      const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+      const status = app.status === 'admin_approved' ? 'Interview Scheduled' : app.status === 'interview_passed' ? 'Interview Passed' : app.status === 'interview_failed' ? 'Interview Not Passed' : app.status === 'admin_rejected' ? 'Rejected' : 'Pending Admin Approval';
+      const statusClass = (app.status === 'admin_approved' || app.status === 'interview_passed') ? 'status-approved' : (app.status === 'admin_rejected' || app.status === 'interview_failed') ? 'status-rejected' : 'status-pending';
+      const row = document.createElement('tr');
+      row.dataset.status = (app.status === 'admin_approved' || app.status === 'interview_passed') ? 'approved' : (app.status === 'admin_rejected' || app.status === 'interview_failed') ? 'rejected' : 'pending';
+      row.innerHTML = '<td><div class="emp-cell"><div class="emp-avatar"><i class="fas fa-user"></i></div><div><span class="emp-name">' + escapeHtml(name) + '</span><span class="emp-email">' + escapeHtml(app.email) + '</span></div></div></td>' +
+        '<td>' + escapeHtml(app.position) + '</td><td>' + escapeHtml(app.years_experience) + '</td><td>' + new Date(app.created_at).toLocaleDateString() + '</td>' +
+        '<td><span class="status-badge ' + statusClass + '">' + status + '</span></td><td><div class="action-btns">' +
+        '<button class="action-btn action-btn-view" onclick="viewDatabaseApplicant(' + index + ')" title="View"><i class="fas fa-eye"></i></button>' +
+        (app.status === 'hr_qualified' ? '<button class="action-btn action-btn-approve" onclick="approveDatabaseApplicant(' + index + ')" title="Schedule interview and send email"><i class="fas fa-calendar-check"></i></button><button class="action-btn action-btn-reject" onclick="rejectDatabaseApplicant(' + index + ')" title="Reject"><i class="fas fa-times"></i></button>' : '') +
+        (app.status === 'admin_approved' ? '<button class="action-btn action-btn-approve" onclick="saveInterviewResult(' + index + ', true)" title="Yes - applicant passed the interview"><i class="fas fa-thumbs-up"></i></button><button class="action-btn action-btn-reject" onclick="saveInterviewResult(' + index + ', false)" title="No - applicant did not pass the interview"><i class="fas fa-thumbs-down"></i></button>' : '') +
+        '</div></td>';
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Unable to load applicants from the database.</td></tr>';
+  }
+}
+
+function viewDatabaseApplicant(index) {
+  const app = adminSentApplicants[index];
+  if (!app) return;
+  const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+  document.getElementById('applicantViewName').textContent = name;
+  document.getElementById('applicantViewEmail').textContent = app.email;
+  document.getElementById('applicantViewPosition').textContent = app.position;
+  document.getElementById('applicantViewDate').textContent = new Date(app.created_at).toLocaleDateString();
+  const resume = app.resume_path
+    ? '<a class="btn btn-sm btn-gold" href="../' + encodeURI(app.resume_path) + '" target="_blank"><i class="fas fa-file-pdf"></i> Open Resume</a>'
+    : '<span style="color:rgba(255,255,255,0.45);">No resume file was uploaded.</span>';
+  document.getElementById('applicantViewDetails').innerHTML = '<div class="detail-row"><span class="detail-label">Application ID</span><span class="detail-value">' + escapeHtml(app.application_code) + '</span></div><div class="detail-row"><span class="detail-label">Experience</span><span class="detail-value">' + escapeHtml(app.years_experience) + '</span></div><div class="detail-row"><span class="detail-label">Resume</span><span class="detail-value">' + resume + '</span></div>';
+  document.getElementById('applicantViewModal').classList.add('show');
+}
+
+async function approveDatabaseApplicant(index) {
+  const app = adminSentApplicants[index];
+  const date = prompt('Enter the initial interview date (YYYY-MM-DD):', new Date(Date.now() + 86400000).toISOString().slice(0, 10));
+  if (!date) { alert('Interview scheduling was not completed. Please provide a date.'); return; }
+  const time = prompt('Enter the initial interview time (24-hour format, HH:MM):', '10:00');
+  if (!time) { alert('Interview scheduling was not completed. Please provide a time.'); return; }
+  const location = prompt('Enter the interview venue or video-call link:', 'Quadra Cafe');
+  if (!location) { alert('Interview scheduling was not completed. Please provide a venue or meeting link.'); return; }
+  if (!confirm('Send the interview invitation to ' + app.email + '?\n\nDate: ' + date + '\nTime: ' + time + '\nVenue / link: ' + location)) return;
+  await saveAdminDecision(app.id, 'approve', date, time, location);
+}
+
+async function saveInterviewResult(index, passed) {
+  const app = adminSentApplicants[index];
+  const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+  try {
+    const body = new URLSearchParams({ action: 'interview_result', id: app.id, result: passed ? 'passed' : 'failed' });
+    const response = await fetch('../php/applicants.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body });
+    const result = await response.json();
+    alert(result.success ? (passed ? name + ' was marked as PASSED.' : name + ' was marked as NOT PASSED.') : result.message);
+    if (result.success) loadSentToAdmin();
+  } catch (error) {
+    alert('The interview result could not be saved. Please check your connection and try again.');
+  }
+}
+
+async function rejectDatabaseApplicant(index) {
+  const app = adminSentApplicants[index];
+  if (confirm('Reject this applicant?')) await saveAdminDecision(app.id, 'reject', '', '', '');
+}
+
+async function saveAdminDecision(id, decision, date, time, location) {
+  try {
+    const body = new URLSearchParams({ action: 'admin_decision', id: id, decision: decision, interview_date: date, interview_time: time, interview_location: location });
+    const response = await fetch('../php/applicants.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body });
+    const result = await response.json();
+    alert(result.message);
+    if (result.success) loadSentToAdmin();
+  } catch (error) { alert('Unable to save the Admin decision.'); }
+}
+
+function adminToday() {
+  return new Date().toLocaleDateString('en-CA');
+}
+
+function dashboardDate(value) {
+  const date = new Date(String(value || '').replace(' ', 'T'));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function dashboardTimeAgo(value) {
+  const date = dashboardDate(value);
+  if (!date) return '';
+  const seconds = Math.max(1, Math.floor((Date.now() - date.getTime()) / 1000));
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + ' min ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + ' hour' + (hours === 1 ? '' : 's') + ' ago';
+  const days = Math.floor(hours / 24);
+  return days + ' day' + (days === 1 ? '' : 's') + ' ago';
+}
+
+function dashboardLeaveActiveToday(request) {
+  if (request.status !== 'approved') return false;
+  const today = adminToday();
+  return request.start_date <= today && request.end_date >= today;
+}
+
+function dashboardEmployeeRows(accounts) {
+  return accounts.filter(account => {
+    const position = String(account.position || '').toLowerCase();
+    return ['approved', 'inactive'].includes(account.status) &&
+      position !== 'administrator' &&
+      !position.includes('hr') &&
+      position !== 'human resources';
+  });
+}
+
+function renderAdminDepartmentSummary(employees, attendanceRecords, leaveRequests) {
+  const tbody = document.getElementById('adminDepartmentSummary');
+  const groups = {};
+  employees.forEach(employee => {
+    const dept = employeeDepartmentValue(employee);
+    if (!groups[dept]) groups[dept] = { total: 0, active: 0, present: 0, leave: 0 };
+    groups[dept].total++;
+    if (employee.status === 'approved') groups[dept].active++;
+  });
+
+  attendanceRecords.forEach(record => {
+    const dept = employeeDepartmentValue(record);
+    if (!groups[dept]) groups[dept] = { total: 0, active: 0, present: 0, leave: 0 };
+    if (record.clock_in) groups[dept].present++;
+  });
+
+  leaveRequests.filter(dashboardLeaveActiveToday).forEach(request => {
+    const dept = employeeDepartmentValue(request);
+    if (!groups[dept]) groups[dept] = { total: 0, active: 0, present: 0, leave: 0 };
+    groups[dept].leave++;
+  });
+
+  const rows = Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]));
+  tbody.innerHTML = rows.length ? rows.map(([dept, data]) => {
+    const rate = data.active ? Math.round((data.present / data.active) * 1000) / 10 : 0;
+    const badge = rate >= 80 ? 'status-ontime' : (rate >= 50 ? 'status-pending' : 'status-late');
+    return '<tr><td>' + escapeAccountHtml(dept) + '</td><td>' + data.total + '</td><td>' + data.present + '</td><td>' + data.leave + '</td><td><span class="status-badge ' + badge + '">' + rate + '%</span></td></tr>';
+  }).join('') : '<tr><td colspan="5" style="text-align:center;">No employee records in the database yet.</td></tr>';
+}
+
+function renderAdminUpcomingEvents(applicants, leaveRequests) {
+  const list = document.getElementById('adminUpcomingEvents');
+  const today = adminToday();
+  const items = [];
+
+  applicants.forEach(app => {
+    if (!app.interview_date || !['initial_interview_scheduled', 'final_interview_scheduled'].includes(app.status)) return;
+    if (app.interview_date < today) return;
+    const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+    items.push({
+      date: app.interview_date,
+      time: app.interview_time || '',
+      title: (app.status === 'final_interview_scheduled' ? 'Final' : 'Initial') + ' Interview',
+      desc: name + ' - ' + app.position,
+      icon: 'fa-calendar-check'
+    });
+  });
+
+  leaveRequests.forEach(request => {
+    if (request.status !== 'pending' || request.start_date < today) return;
+    items.push({
+      date: request.start_date,
+      time: '',
+      title: 'Pending Leave Request',
+      desc: request.full_name + ' - ' + adminLeaveType(request.leave_type),
+      icon: 'fa-calendar-alt'
+    });
+  });
+
+  applicants.filter(app => app.status === 'final_interview_passed').forEach(app => {
+    const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+    items.push({
+      date: (app.created_at || today).slice(0, 10),
+      time: '',
+      title: 'Create Employee Account',
+      desc: name + ' passed final interview',
+      icon: 'fa-user-plus'
+    });
+  });
+
+  items.sort((a, b) => (a.date + ' ' + a.time).localeCompare(b.date + ' ' + b.time));
+  list.innerHTML = items.slice(0, 5).map(item => {
+    const date = new Date(item.date + 'T00:00:00');
+    return '<div class="event-item"><div class="event-date-box"><span class="event-date-num">' + date.getDate() + '</span><span class="event-date-month">' + date.toLocaleDateString('en-US', { month: 'short' }) + '</span></div><div class="event-info"><span class="event-title">' + escapeAccountHtml(item.title) + '</span><span class="event-desc">' + escapeAccountHtml(item.desc) + '</span><span class="event-time"><i class="fas ' + item.icon + '"></i> ' + escapeAccountHtml(item.time ? item.time.slice(0, 5) : 'Needs attention') + '</span></div></div>';
+  }).join('') || '<div class="event-item"><div class="event-info"><span class="event-title">No upcoming database events</span><span class="event-desc">Scheduled interviews and pending leave requests will appear here.</span></div></div>';
+}
+
+function renderAdminNotifications(applicants, leaveRequests, employees, attendanceActivities) {
+  const list = document.getElementById('adminNotifList');
+  const badge = document.getElementById('adminNotifBadge');
+  const notifications = [];
+
+  applicants.filter(app => app.status === 'final_interview_passed').forEach(app => {
+    const name = [app.first_name, app.middle_name, app.last_name].filter(Boolean).join(' ');
+    notifications.push({ icon: 'fa-user-plus', color: 'notif-icon-green', text: name + ' is ready for employee account creation.', time: app.created_at || '' });
+  });
+
+  leaveRequests.filter(request => request.status === 'pending').forEach(request => {
+    notifications.push({ icon: 'fa-calendar-alt', color: 'notif-icon-gold', text: 'Pending leave request from ' + request.full_name + '.', time: request.created_at || '' });
+  });
+
+  employees.filter(employee => employee.status === 'inactive').forEach(employee => {
+    notifications.push({ icon: 'fa-user-slash', color: 'notif-icon-red', text: employee.full_name + ' is marked Not Active / Resigned.', time: employee.created_at || '' });
+  });
+
+  attendanceActivities.forEach(item => {
+    const late = item.type === 'late_clock_in';
+    const out = item.type === 'clock_out';
+    notifications.push({
+      icon: out ? 'fa-clock' : (late ? 'fa-exclamation-circle' : 'fa-check-circle'),
+      color: late ? 'notif-icon-red' : 'notif-icon-blue',
+      text: item.employee + (out ? ' timed out.' : (late ? ' timed in late.' : ' timed in.')),
+      time: item.occurred_at || ''
+    });
+  });
+
+  notifications.sort((a, b) => String(b.time || '').localeCompare(String(a.time || '')));
+  const visible = notifications.slice(0, 8);
+  badge.textContent = String(visible.length);
+  list.innerHTML = visible.length ? visible.map(item =>
+    '<div class="notif-item notif-unread"><div class="notif-icon ' + item.color + '"><i class="fas ' + item.icon + '"></i></div><div class="notif-content"><p class="notif-text">' + escapeAccountHtml(item.text) + '</p><span class="notif-time">' + escapeAccountHtml(dashboardTimeAgo(item.time)) + '</span></div></div>'
+  ).join('') : '<div class="notif-item"><div class="notif-content"><p class="notif-text">No current database notifications.</p></div></div>';
+}
+
+async function loadAdminDashboard() {
+  try {
+    const today = adminToday();
+    const [accountsResponse, applicantsResponse, attendanceResponse, leaveResponse] = await Promise.all([
+      fetch('../php/accounts.php?action=list', { cache: 'no-store' }),
+      fetch('../php/applicants.php?action=list&view=hr', { cache: 'no-store' }),
+      fetch('../php/attendance.php?action=admin&date=' + encodeURIComponent(today), { cache: 'no-store' }),
+      fetch('../php/leave_requests.php?action=admin', { cache: 'no-store' })
+    ]);
+
+    const [accountsData, applicantsData, attendanceData, leaveData] = await Promise.all([
+      accountsResponse.json(), applicantsResponse.json(), attendanceResponse.json(), leaveResponse.json()
+    ]);
+    if (!accountsData.success || !applicantsData.success || !attendanceData.success || !leaveData.success) {
+      throw new Error('One or more dashboard sources could not be loaded.');
+    }
+
+    const employees = dashboardEmployeeRows(accountsData.accounts || []);
+    const applicants = applicantsData.applicants || [];
+    const leaveRequests = leaveData.requests || [];
+    const attendanceRecords = attendanceData.records || [];
+    const readyApplicants = applicants.filter(app => app.status === 'final_interview_passed');
+    const onLeaveToday = leaveRequests.filter(dashboardLeaveActiveToday);
+
+    document.getElementById('totalEmployees').textContent = employees.length;
+    document.getElementById('presentToday').textContent = attendanceData.stats?.present || 0;
+    document.getElementById('onLeave').textContent = onLeaveToday.length;
+    document.getElementById('pendingApplicants').textContent = readyApplicants.length;
+
+    renderAdminDepartmentSummary(employees, attendanceRecords, leaveRequests);
+    renderAdminUpcomingEvents(applicants, leaveRequests);
+    renderAdminNotifications(applicants, leaveRequests, employees, attendanceData.activities || []);
+    renderAdminAttendanceActivity(attendanceData.activities || []);
+  } catch (error) {
+    document.getElementById('adminDepartmentSummary').innerHTML = '<tr><td colspan="5" style="text-align:center;">Dashboard data could not be loaded.</td></tr>';
+    document.getElementById('adminUpcomingEvents').innerHTML = '<div class="event-item"><div class="event-info"><span class="event-title">Dashboard data unavailable</span><span class="event-desc">Please refresh the page after checking Apache and MySQL.</span></div></div>';
+    document.getElementById('adminNotifList').innerHTML = '<div class="notif-item"><div class="notif-content"><p class="notif-text">Notifications could not be loaded.</p></div></div>';
+    document.getElementById('adminNotifBadge').textContent = '0';
+  }
+}
+
+loadAdminDashboard();
+setInterval(loadAdminDashboard, 10000);
+
+</script>
+
+</body>
+
+</html>

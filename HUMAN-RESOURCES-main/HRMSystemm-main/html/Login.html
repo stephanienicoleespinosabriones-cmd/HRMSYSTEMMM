@@ -1,0 +1,335 @@
+<?php
+header('Cache-Control: no-store, no-cache, must-revalidate, private, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quadra Cafe HRMS</title>
+
+<link rel="stylesheet" href="../css/Login.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles">
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+</div>
+
+<div class="container">
+
+<div class="left">
+
+<div class="overlay"></div>
+
+<!-- Decorative gold accent lines on left -->
+<div class="deco-line dl-top"></div>
+<div class="deco-line dl-bottom"></div>
+
+<div class="content">
+
+<div class="brand-wrapper">
+  <div class="logo-glow"></div>
+  <img src="../images/logo.png" class="logo">
+</div>
+
+<h1>HRMS</h1>
+
+<h2>Human Resources <br>Management System</h2>
+
+<div class="line"></div>
+
+<p class="tagline">
+  <span>✦</span> Empowering employees. Growing together. <span>✦</span>
+</p>
+
+<div class="features">
+
+<div class="feature">
+  <div class="feature-icon">
+    <img src="../images/people.jpg">
+  </div>
+  <span>People First</span>
+</div>
+
+<div class="feature">
+  <div class="feature-icon">
+    <img src="../images/grow.jpg">
+  </div>
+  <span>Growth</span>
+</div>
+
+<div class="feature">
+  <div class="feature-icon">
+    <img src="../images/integrity.jpg">
+  </div>
+  <span>Integrity</span>
+</div>
+
+</div>
+
+<!-- Decorative bottom quote -->
+<div class="quote-line"></div>
+<p class="quote">"Excellence is not a skill, it's an attitude."</p>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="login">
+
+<div class="login-badge">
+  <i class="fas fa-user-shield"></i>
+  <span>Secure Portal</span>
+</div>
+
+<h3>Welcome Back</h3>
+
+<p class="subtitle">
+  Sign in to access your HRMS dashboard
+</p>
+
+<form id="loginForm" autocomplete="off">
+
+<div class="input float-input">
+  <label for="pin">Access PIN</label>
+  <div class="input-wrapper">
+    <i class="fas fa-key input-icon"></i>
+    <input type="password" id="pin" name="access_pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Enter your 6-digit PIN" autocomplete="new-password" required>
+    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+    <div class="input-border"></div>
+  </div>
+  <span class="error-msg"><i class="fas fa-exclamation-circle"></i> Enter a valid 6-digit PIN</span>
+</div>
+
+
+
+<button type="submit" id="signInBtn">
+  <span id="btnText">SIGN IN</span>
+  <i class="fas fa-spinner fa-spin" id="btnSpinner" style="display:none;"></i>
+  <div class="btn-shine"></div>
+</button>
+
+
+</form>
+
+<h4 class="signup-link">
+  <br><br> Join the Quadra Cafe Team <br><a href="Apply.html?v=20260713-3" id="applyNowLink">Apply Now!<i class="fas fa-arrow-right"></i></a>
+</h4>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Decorative corner accents -->
+<div class="corner-deco tl"></div>
+<div class="corner-deco tr"></div>
+<div class="corner-deco bl"></div>
+<div class="corner-deco br"></div>
+
+<!-- Custom Sweet Alert Modal - Apply -->
+<div class="sweet-overlay" id="sweetOverlay">
+  <div class="sweet-modal" id="sweetModal">
+    <div class="sweet-icon-wrap">
+      <div class="sweet-icon"><i class="fas fa-file-alt"></i></div>
+    </div>
+    <h4 class="sweet-title">Join Quadra Cafe Team!</h4>
+    <p class="sweet-text">
+      Ready to start your career with us? View our published job vacancies and choose the role that fits you.
+    </p>
+    <div class="sweet-actions">
+      <button class="sweet-btn sweet-btn-cancel" id="sweetCancel">Cancel</button>
+      <a href="Apply.html" class="sweet-btn sweet-btn-confirm">View Job Vacancies <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Sweet Alert Modal - Login Success -->
+<div class="sweet-overlay" id="sweetOverlaySuccess">
+  <div class="sweet-modal" id="sweetModalSuccess">
+    <div class="sweet-icon-wrap">
+      <div class="sweet-icon sweet-icon-success"><i class="fas fa-check"></i></div>
+    </div>
+    <h4 class="sweet-title">Welcome Back!</h4>
+    <p class="sweet-text">
+      Login successful! You are now being redirected to your dashboard.
+    </p>
+    <div class="sweet-actions">
+      <button class="sweet-btn sweet-btn-confirm" id="sweetSuccessBtn" style="margin: 0 auto;">Continue <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+let loginRedirect = 'Hr.html';
+let loginShouldRedirect = false;
+
+// Catch any old/native login alerts and show the custom modal instead.
+const nativeAlert = window.alert;
+window.alert = function(message) {
+    showLoginAlert('Login Alert', message || 'Please check your login details.', false);
+};
+
+// Password Toggle
+const togglePassword = document.getElementById('togglePassword');
+const password = document.getElementById('pin');
+
+function clearLoginSecrets() {
+    form?.reset();
+    password.value = '';
+    password.setAttribute('type', 'password');
+    password.closest('.input').classList.remove('error', 'focused');
+    togglePassword.classList.add('fa-eye');
+    togglePassword.classList.remove('fa-eye-slash');
+}
+
+// Browsers may restore form values from their back-forward cache despite
+// autocomplete settings. Always remove the PIN whenever this page is shown.
+window.addEventListener('pageshow', clearLoginSecrets);
+
+togglePassword.addEventListener('click', function() {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
+
+// Form Validation
+const form = document.getElementById('loginForm');
+const btnText = document.getElementById('btnText');
+const btnSpinner = document.getElementById('btnSpinner');
+const signInBtn = document.getElementById('signInBtn');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    if (!password.value || !/^\d{6}$/.test(password.value)) {
+        password.closest('.input').classList.add('error');
+        valid = false;
+    } else {
+        password.closest('.input').classList.remove('error');
+    }
+
+    if (valid) {
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline-block';
+        signInBtn.disabled = true;
+        signInBtn.classList.add('loading');
+
+        const body = 'pin=' + encodeURIComponent(password.value);
+
+        fetch('../php/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+        })
+        .then(r => r.json())
+        .then(data => {
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+            signInBtn.disabled = false;
+            signInBtn.classList.remove('loading');
+
+            if (data.success) {
+                showLoginAlert('Welcome Back!', 'Login successful! You are now being redirected to your dashboard.', true, data.redirect);
+            } else {
+                showLoginAlert('Login Not Allowed', data.message || 'Account does not exist.', false);
+                password.closest('.input').classList.add('error');
+            }
+        })
+        .catch(() => {
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+            signInBtn.disabled = false;
+            signInBtn.classList.remove('loading');
+            showLoginAlert('Login Server Unavailable', 'Make sure Apache and MySQL are running in XAMPP, then refresh this page.', false);
+        });
+    }
+});
+
+password.addEventListener('input', function() {
+    this.closest('.input').classList.remove('error');
+});
+
+// Sweet Alert - Apply Now
+function hideSweetAlert() {
+    document.getElementById('sweetOverlay').classList.remove('active');
+    document.getElementById('sweetModal').classList.remove('active');
+}
+
+document.getElementById('sweetCancel').addEventListener('click', hideSweetAlert);
+document.getElementById('sweetOverlay').addEventListener('click', function(e) {
+    if (e.target === this) hideSweetAlert();
+});
+
+// Sweet Alert - Login
+function showLoginAlert(title, message, success = true, redirect = '') {
+    const icon = document.querySelector('#sweetModalSuccess .sweet-icon');
+    const iconTag = icon.querySelector('i');
+    document.querySelector('#sweetModalSuccess .sweet-title').textContent = title;
+    document.querySelector('#sweetModalSuccess .sweet-text').textContent = message;
+    icon.classList.toggle('sweet-icon-success', success);
+    iconTag.className = success ? 'fas fa-check' : 'fas fa-exclamation-circle';
+    loginRedirect = redirect || '';
+    loginShouldRedirect = Boolean(redirect);
+    document.getElementById('sweetOverlaySuccess').classList.add('active');
+    document.getElementById('sweetModalSuccess').classList.add('active');
+}
+
+function hideLoginSuccess() {
+    document.getElementById('sweetOverlaySuccess').classList.remove('active');
+    document.getElementById('sweetModalSuccess').classList.remove('active');
+}
+
+document.getElementById('sweetSuccessBtn').addEventListener('click', function() {
+    hideLoginSuccess();
+    if (loginShouldRedirect && loginRedirect) {
+        window.location.replace(loginRedirect);
+    }
+});
+
+document.getElementById('sweetOverlaySuccess').addEventListener('click', function(e) {
+    if (e.target === this) hideLoginSuccess();
+});
+
+// Floating label animation on focus
+document.querySelectorAll('.float-input input').forEach(input => {
+    input.addEventListener('focus', function() {
+        this.closest('.input').classList.add('focused');
+    });
+    input.addEventListener('blur', function() {
+        if (!this.value) {
+            this.closest('.input').classList.remove('focused');
+        }
+    });
+});
+
+</script>
+
+</body>
+
+</html>
